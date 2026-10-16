@@ -12,10 +12,11 @@
  * 4. Pada "Siapa yang memiliki akses" (Who has access):
  *    -> WAJIB PILIH: "Siapa saja" (Anyone) !! Jangan pilih "Hanya saya" atau organisasi.
  * 5. Klik "Terapkan" (Deploy).
- * 6. Salin URL Web App yang berakhiran "/exec", lalu paste di web aplikasi Polytron!
+ * 6. URL Web App Aktif (Paten):
+ *    https://script.google.com/macros/s/AKfycbwkCZc3iMXLQ1957geQ-Ob4EV-wlbc5NNllPLnOInTh7wWNr8G9U4Kk-IhxSzNem4pr/exec
  * 
  * CARA SETUP PERTAMA KALI:
- * 1. Buka spreadsheet: https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit
+ * 1. Buka spreadsheet: https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762
  * 2. Masuk Ekstensi > Apps Script.
  * 3. Paste seluruh kode ini.
  * 4. Pilih fungsi "initDatabase", klik "Jalankan" (Run).
