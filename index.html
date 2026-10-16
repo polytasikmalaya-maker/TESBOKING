@@ -15,6 +15,34 @@
   <meta name="theme-color" content="#dc2626">
   <link rel="icon" type="image/svg+xml" href="icon-192.svg">
   
+  <!-- CRITICAL ANTI-FLICKER SCRIPT: Render langsung role aktif saat refresh tanpa kedipan ke Menu Utama -->
+  <script>
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var roleParam = params.get('role');
+        var savedRole = localStorage.getItem('LAST_ACTIVE_ROLE');
+        var validRoles = ['portal', 'konsumen', 'teknisi', 'sa', 'tv'];
+        var targetRole = (roleParam && validRoles.includes(roleParam)) ? roleParam :
+                         (savedRole && validRoles.includes(savedRole)) ? savedRole : 'portal';
+        
+        var css = '';
+        validRoles.forEach(function(r) {
+          if (r !== targetRole) {
+            css += '#role-section-' + r + ' { display: none !important; } ';
+          } else {
+            css += '#role-section-' + r + ' { display: flex !important; } ';
+          }
+        });
+        var style = document.createElement('style');
+        style.id = 'critical-role-style';
+        style.textContent = css;
+        document.head.appendChild(style);
+        window.__INITIAL_ACTIVE_ROLE__ = targetRole;
+      } catch(e) {}
+    })();
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -141,12 +169,30 @@
 
     @media (max-width: 768px) {
       .mobile-pb-safe {
-        padding-bottom: 75px !important;
+        padding-bottom: 16px !important;
       }
     }
     @media (min-width: 769px) {
       .mobile-pb-safe {
-        padding-bottom: 30px !important;
+        padding-bottom: 24px !important;
+      }
+    }
+
+    /* Pastikan header dan tab halaman tidak terskrol atau tersembunyi di layar HP */
+    .sticky-header-panel {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 40 !important;
+      background-color: #ffffff !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+    }
+    @media (max-width: 768px) {
+      .sticky-header-panel {
+        top: 0 !important;
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        z-index: 40 !important;
       }
     }
 
@@ -160,6 +206,7 @@
     /* ============================================================== */
     /* 3. ATURAN BACKGROUND GRADASI MERAH (KIRI MERAH TUA, KANAN MUDA) */
     /* ============================================================== */
+    html,
     body, 
     #role-section-portal,
     #role-section-sa,
@@ -322,7 +369,7 @@
       height: 100dvh !important;
       max-height: 100dvh !important;
       margin: 0 !important;
-      padding: 0 !important;
+      padding: 8px !important;
       position: fixed !important;
       top: 0 !important;
       left: 0 !important;
@@ -375,9 +422,9 @@
     .model3-card {
       background-color: #ffffff !important;
       color: #0f172a !important;
-      border-radius: 0px !important; /* Full layar edge-to-edge di HP */
-      box-shadow: none !important;
-      border: none !important;
+      border-radius: 4px !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
       width: 100% !important;
       max-width: 100% !important;
       height: 100% !important;
@@ -719,11 +766,6 @@
               </p>
             </div>
             <div class="flex items-center gap-2 self-start sm:self-auto flex-wrap">
-              <a href="https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-[3px] border border-emerald-400/50 text-xs font-bold shadow transition">
-                <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-                <span>Database Google Sheet</span>
-                <i data-lucide="external-link" class="w-3 h-3 text-emerald-200"></i>
-              </a>
               <div class="flex items-center gap-2 bg-black/25 px-3 py-2 rounded-[3px] border border-white/10 text-xs">
                 <i data-lucide="map-pin" class="w-4 h-4 text-red-300"></i>
                 <div>
@@ -962,8 +1004,8 @@
                         <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
                       </div>
                       <div class="truncate">
-                        <div class="text-[9px] uppercase font-extrabold text-slate-500">Denah Lokasi Bengkel Resmi</div>
-                        <div id="stage1MapSiteName" class="text-xs font-black text-slate-900 truncate">Polytron SC Tasikmalaya</div>
+                        <div class="text-xs font-black text-slate-900 truncate">Peta Lokasi</div>
+                        <span id="stage1MapSiteName" class="hidden"></span>
                       </div>
                     </div>
                     <span id="stage1MapCoords" class="hidden"></span>
@@ -1234,29 +1276,62 @@
       <!-- ============================================================== -->
       <!-- MODUL 2: DASHBOARD TEKNISI (UBAH STATUS PENGERJAAN STALL)      -->
       <!-- ============================================================== -->
-      <section id="role-section-teknisi" class="hidden space-y-4">
+      <section id="role-section-teknisi" class="hidden space-y-3 p-3 sm:p-5 lg:p-6 min-h-screen">
         
-        <div class="bg-white border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 bg-blue-500"></span>
-              <h2 class="text-xl font-black text-slate-900">Dashboard Teknisi Mekanik EV</h2>
+        <!-- STICKY HEADER & FILTER PANEL TEKNISI (TIDAK TERSKROL / SEMBUNYI DI HP) -->
+        <div class="sticky-header-panel border-b border-slate-200 p-3 sm:p-4 shadow-sm space-y-2.5 rounded-[3px]">
+          <!-- Baris 1: Judul, Menu Utama, Pilihan Cabang & Filter Stall -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 bg-blue-500 rounded-[2px]"></span>
+                <h2 class="text-base sm:text-xl font-black text-slate-900 uppercase">Dashboard Teknisi Mekanik EV</h2>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">Kelola status pengerjaan unit yang sedang diservis pada stall</p>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5">Kelola status pengerjaan unit yang sedang diservis pada stall</p>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <button onclick="switchRole('portal')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]">
+                <i data-lucide="home" class="w-3.5 h-3.5 text-red-600"></i>
+                <span>Menu Utama</span>
+              </button>
+
+              <!-- Dropdown Cabang Teknisi -->
+              <select id="teknisiSiteSelector" onchange="handleTeknisiSiteChange(this.value)" class="bg-white border border-slate-300 px-2.5 py-1.5 text-xs text-slate-800 font-bold outline-none cursor-pointer rounded-[2px] shadow-xs">
+                <!-- Populated via JS -->
+              </select>
+
+              <!-- Dropdown Stall Teknisi -->
+              <select id="technicianStallFilter" onchange="renderTechnicianBoard()" class="bg-white border border-slate-300 px-2.5 py-1.5 text-xs text-slate-800 font-bold outline-none cursor-pointer rounded-[2px] shadow-xs">
+                <option value="all">Semua Stall</option>
+                <option value="stall1">Stall EV 1</option>
+                <option value="stall2">Stall EV 2</option>
+                <option value="express">Express Bay</option>
+              </select>
+            </div>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button onclick="switchRole('portal')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow transition rounded-[2px]">
-              <i data-lucide="home" class="w-3.5 h-3.5 text-red-600"></i>
-              <span>Menu Utama</span>
-            </button>
-            <label class="text-xs text-slate-400 font-bold uppercase">Pilih Stall Kerja:</label>
-            <select id="technicianStallFilter" onchange="renderTechnicianBoard()" class="bg-white border border-slate-300 px-3 py-1.5 text-xs text-slate-800 font-bold outline-none cursor-pointer">
-              <option value="all">Semua Stall</option>
-              <option value="stall1">Stall EV 1</option>
-              <option value="stall2">Stall EV 2</option>
-              <option value="express">Express Bay</option>
-            </select>
+          <!-- Baris 2: Tab Filter Tanggal (Semua Jadwal, Hari Ini, Besok, Pilih Tanggal) -->
+          <div class="bg-slate-50 border border-slate-200 p-2 rounded-[3px] flex items-center justify-between gap-2 flex-wrap">
+            <div class="inline-flex items-center bg-white p-0.5 rounded-[3px] border border-slate-300 text-xs font-bold shadow-xs">
+              <button type="button" id="teknisiTab-all" onclick="setTeknisiDateFilter('all')" class="px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 flex items-center gap-1">
+                <span>Semua Jadwal</span>
+                <span id="teknisiCountAll" class="px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded">0</span>
+              </button>
+              <button type="button" id="teknisiTab-today" onclick="setTeknisiDateFilter('today')" class="px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 flex items-center gap-1">
+                <span>Hari Ini</span>
+                <span id="teknisiCountToday" class="px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded">0</span>
+              </button>
+              <button type="button" id="teknisiTab-tomorrow" onclick="setTeknisiDateFilter('tomorrow')" class="px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 flex items-center gap-1">
+                <span>Besok</span>
+                <span id="teknisiCountTomorrow" class="px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded">0</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-1.5 bg-white border border-slate-300 px-2 py-1 rounded-[2px] shadow-xs">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-red-600"></i>
+              <input type="date" id="teknisiDateInput" onchange="setTeknisiDateFilter(this.value)" class="text-xs font-bold text-slate-800 outline-none bg-transparent cursor-pointer">
+            </div>
           </div>
         </div>
 
@@ -1270,47 +1345,72 @@
       <!-- ============================================================== -->
       <!-- MODUL 3: SERVICE ADVISOR / SA (CHECK-IN KEDATANGAN & WALK-IN)  -->
       <!-- ============================================================== -->
-      <section id="role-section-sa" class="hidden space-y-4">
+      <section id="role-section-sa" class="hidden space-y-3 p-3 sm:p-5 lg:p-6 min-h-screen">
         
-        <div class="bg-white border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 bg-amber-500"></span>
-              <h2 class="text-xl font-black text-slate-900">Meja Service Advisor (SA)</h2>
+        <!-- STICKY HEADER & FILTER PANEL SERVICE ADVISOR (TIDAK TERSKROL / SEMBUNYI DI HP) -->
+        <div class="sticky-header-panel border-b border-slate-200 p-3 sm:p-4 shadow-sm space-y-2.5 rounded-[3px]">
+          <!-- Baris 1: Judul & Tombol-tombol Aksi Utama -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 bg-amber-500 rounded-[2px]"></span>
+                <h2 class="text-base sm:text-xl font-black text-slate-900 uppercase">Meja Service Advisor (SA)</h2>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">Check-in kehadiran konsumen saat tiba & input walk-in langsung</p>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5">Check-in kehadiran konsumen saat tiba & input walk-in langsung</p>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <button onclick="switchRole('portal')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]">
+                <i data-lucide="home" class="w-3.5 h-3.5 text-red-600"></i>
+                <span>Menu Utama</span>
+              </button>
+              <button onclick="replayCurrentCall()" title="Panggil Ulang Suara Panggilan Terakhir" class="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]">
+                <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                <span>Ulangi Suara</span>
+              </button>
+              <button onclick="openWalkinModalFromSA()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5 text-slate-800"></i>
+                <span>+ Walk-In</span>
+              </button>
+            </div>
           </div>
 
-          <div class="flex items-center gap-2 flex-wrap">
-            <button onclick="switchRole('portal')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow transition rounded-[2px]">
-              <i data-lucide="home" class="w-4 h-4 text-red-600"></i>
-              <span>Menu Utama</span>
-            </button>
-            <button onclick="replayCurrentCall()" title="Panggil Ulang Suara Panggilan Terakhir" class="px-3 py-2 bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center gap-1.5 shadow transition rounded-[2px]">
-              <i data-lucide="volume-2" class="w-4 h-4"></i>
-              <span>Ulangi Suara</span>
-            </button>
-            <button onclick="openWalkinModalFromSA()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow transition rounded-[2px]">
-              <i data-lucide="user-plus" class="w-4 h-4"></i>
-              <span>+ Input Booking Walk-In</span>
-            </button>
-            <a href="https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow transition rounded-[2px]">
-              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-              <span>Google Sheet</span>
-              <i data-lucide="external-link" class="w-3 h-3 text-emerald-200"></i>
-            </a>
-          </div>
-        </div>
+          <!-- Baris 2: Filter Cabang, Filter Tanggal & Pencarian -->
+          <div class="bg-slate-50 border border-slate-200 p-2 rounded-[3px] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5">
+            <div class="flex items-center gap-2 flex-wrap">
+              <!-- Dropdown Cabang SA -->
+              <select id="saSiteSelector" onchange="handleSaSiteChange(this.value)" class="bg-white border border-slate-300 px-2.5 py-1 text-xs text-slate-800 font-bold outline-none cursor-pointer rounded-[2px] shadow-xs">
+                <!-- Populated via JS -->
+              </select>
 
-        <!-- Bar Pencarian Cepat SA -->
-        <div class="bg-white border border-slate-200 p-3 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div class="relative w-full sm:w-80">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-            <input type="text" id="saSearchInput" onkeyup="renderSABoard()" placeholder="Cari Plat Nomor, Nama, Kode..." class="w-full bg-slate-800 border border-slate-200 pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-red-500">
-          </div>
+              <!-- Tab Filter Tanggal SA -->
+              <div class="inline-flex items-center bg-white p-0.5 rounded-[3px] border border-slate-300 text-xs font-bold shadow-xs">
+                <button type="button" id="saTab-all" onclick="setSaDateFilter('all')" class="px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 flex items-center gap-1">
+                  <span>Semua Jadwal</span>
+                  <span id="saCountAll" class="px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded">0</span>
+                </button>
+                <button type="button" id="saTab-today" onclick="setSaDateFilter('today')" class="px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 flex items-center gap-1">
+                  <span>Hari Ini</span>
+                  <span id="saCountToday" class="px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded">0</span>
+                </button>
+                <button type="button" id="saTab-tomorrow" onclick="setSaDateFilter('tomorrow')" class="px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 flex items-center gap-1">
+                  <span>Besok</span>
+                  <span id="saCountTomorrow" class="px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded">0</span>
+                </button>
+              </div>
 
-          <div class="flex items-center gap-2 text-xs text-slate-400">
-            <span>Petunjuk: Klik <strong>"Check-In Hadir"</strong> saat konsumen tiba. Antrian lewat <strong>15 menit</strong> tanpa check-in akan <strong>OTOMATIS BATAL</strong> (slot kembali kosong).</span>
+              <!-- Input Tanggal Spesifik -->
+              <div class="flex items-center gap-1 bg-white border border-slate-300 px-2 py-1 rounded-[2px] shadow-xs">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-red-600"></i>
+                <input type="date" id="saDateInput" onchange="setSaDateFilter(this.value)" class="text-xs font-bold text-slate-800 outline-none bg-transparent cursor-pointer">
+              </div>
+            </div>
+
+            <!-- Input Pencarian -->
+            <div class="relative w-full md:w-64">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2"></i>
+              <input type="text" id="saSearchInput" onkeyup="renderSABoard()" placeholder="Cari Plat, Nama, Kode..." class="w-full bg-white border border-slate-300 pl-8 pr-2.5 py-1 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 rounded-[2px] shadow-xs">
+            </div>
           </div>
         </div>
 
@@ -1347,68 +1447,67 @@
       <!-- ============================================================== -->
       <!-- MODUL 4: TV RUANG TUNGGU (MONITOR BESAR + SUARA REALTIME)      -->
       <!-- ============================================================== -->
-      <section id="role-section-tv" class="space-y-4">
+      <section id="role-section-tv" class="hidden space-y-3 p-3 sm:p-5 lg:p-6 min-h-screen">
 
-        <!-- Banner Info Monitor Ruang Tunggu -->
-        <div class="bg-white border border-slate-200 p-3 sm:p-5 shadow-sm">
+        <!-- Banner Info Monitor Ruang Tunggu (Sticky di Layar TV & HP) -->
+        <div class="sticky-header-panel border-b border-slate-200 p-3 sm:p-4 shadow-sm space-y-2.5 rounded-[3px]">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
               <div class="flex flex-wrap items-center gap-2.5">
-                <span class="w-3.5 h-3.5 bg-red-600"></span>
-                <h1 class="text-xl sm:text-2xl font-black text-white tracking-wider uppercase">POLYTRON EV SERVICE</h1>
-                <button onclick="switchRole('portal')" class="ml-2 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1 shadow transition rounded-[2px]">
+                <span class="w-3.5 h-3.5 bg-red-600 rounded-[2px]"></span>
+                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-wider uppercase">POLYTRON EV SERVICE</h1>
+                <button onclick="switchRole('portal')" class="ml-2 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1 shadow-xs transition rounded-[2px]">
                   <i data-lucide="home" class="w-3.5 h-3.5 text-red-600"></i>
                   <span>Menu Utama</span>
                 </button>
               </div>
-              <div class="flex flex-wrap items-center gap-2 mt-1.5">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-red-600/20 text-red-400 border border-red-500/30 text-xs font-bold">
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-red-50 text-red-600 border border-red-200 text-xs font-bold rounded-[2px]">
                   <i data-lucide="map-pin" class="w-3 h-3"></i>
                   <span id="bannerSiteName">Polytron SC Tasikmalaya</span>
                 </span>
-                <span id="bannerSiteAddress" class="text-xs text-slate-400 truncate max-w-md">Jl. KHZ. Mustofa No. 280, Tasikmalaya</span>
+                <span id="bannerSiteAddress" class="text-xs text-slate-500 truncate max-w-md">Jl. KHZ. Mustofa No. 280, Tasikmalaya</span>
               </div>
             </div>
 
-            <!-- Tanggal Today, Jam Waktu Bengkel & Kapasitas -->
-            <div class="flex items-center gap-3 sm:gap-4 bg-slate-50 border border-slate-200 px-3.5 py-2 self-start md:self-auto flex-wrap sm:flex-nowrap shadow-sm">
-              <!-- Tanggal Today di sebelah jam -->
-              <div class="text-right">
-                <div class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Tanggal Hari Ini</div>
-                <div class="text-xs sm:text-sm font-bold text-slate-900 flex items-center justify-end gap-1.5 mt-0.5 whitespace-nowrap">
-                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-red-600"></i>
-                  <span id="liveDateTodayText">Memuat tanggal...</span>
-                </div>
+            <!-- Kontrol Tanggal, Jam Waktu Bengkel & Slot Terisi -->
+            <div class="flex items-center gap-2 sm:gap-3 bg-slate-50 border border-slate-200 px-3 py-1.5 self-start md:self-auto flex-wrap sm:flex-nowrap shadow-xs rounded-[3px]">
+              <!-- Kontrol Pindah Tanggal TV -->
+              <div class="flex items-center gap-1 bg-white border border-slate-300 px-1.5 py-1 rounded-[2px]">
+                <button onclick="shiftTvDate(-1)" title="Hari Sebelumnya" class="px-1.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded transition">&lsaquo;</button>
+                <input type="date" id="tvDateInput" onchange="handleTvDateChange(this.value)" class="text-xs font-bold text-slate-800 outline-none bg-transparent cursor-pointer">
+                <button onclick="shiftTvDate(1)" title="Hari Berikutnya" class="px-1.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded transition">&rsaquo;</button>
               </div>
-              <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+
+              <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+
               <!-- Jam Live Waktu Bengkel -->
               <div class="text-right">
-                <div class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Waktu Bengkel</div>
-                <div id="liveClock" class="text-base sm:text-lg font-mono font-bold text-red-600 whitespace-nowrap">08:30:00 WIB</div>
+                <div class="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Waktu Bengkel</div>
+                <div id="liveClock" class="text-sm sm:text-base font-mono font-bold text-red-600 whitespace-nowrap">08:30:00 WIB</div>
               </div>
-              <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+
+              <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+
               <!-- Slot Terisi -->
               <div>
-                <div class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Slot Terisi (Site Ini)</div>
-                <div id="slotUsageDisplay" class="text-base sm:text-lg font-bold text-slate-900 whitespace-nowrap">4 / 34 <span class="text-xs text-slate-500 font-normal">Slot</span></div>
-              </div>
-              <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
-              <!-- Status Sumber Data Google Sheet -->
-              <div class="flex items-center gap-2.5">
-                <div onclick="fetchDataFromGoogleSheet()" title="Klik untuk sinkronkan data sekarang dari Google Sheet" class="cursor-pointer hover:opacity-80 transition select-none">
-                  <div class="text-[10px] text-emerald-600 uppercase tracking-wider font-semibold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 bg-emerald-500 animate-pulse"></span>
-                    <span>Data Sumber (Sync)</span>
-                  </div>
-                  <div id="liveSheetSyncStatus" class="text-xs font-semibold text-slate-700 whitespace-nowrap">Google Sheet <span class="text-[10px] text-emerald-600 font-mono">(Auto 1m)</span></div>
-                </div>
-                <a href="https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762" target="_blank" rel="noopener noreferrer" title="Buka Spreadsheet di Tab Baru" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 rounded-[2px] transition flex items-center gap-1 text-[11px] font-bold shadow-xs">
-                  <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-emerald-600"></i>
-                  <span>Buka Sheet</span>
-                  <i data-lucide="external-link" class="w-3 h-3 text-emerald-500"></i>
-                </a>
+                <div class="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Slot Terisi</div>
+                <div id="slotUsageDisplay" class="text-sm sm:text-base font-bold text-slate-900 whitespace-nowrap">0 / 34</div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- BANNER RUNNING TEXT INFORMASI (MARQUEE KANAN KE KIRI) -->
+        <div class="bg-gradient-to-r from-[#450a0a] via-[#7f1d1d] to-[#dc2626] border border-red-500/30 px-3 py-1.5 shadow-sm flex items-center gap-2.5 overflow-hidden rounded-[3px]">
+          <div class="flex items-center gap-1.5 bg-black/40 text-amber-300 px-2 py-0.5 rounded-[2px] text-[10px] font-black tracking-widest uppercase whitespace-nowrap shrink-0 border border-amber-400/30 shadow-inner">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-amber-400 animate-pulse"></i>
+            <span>INFORMASI</span>
+          </div>
+          <div class="flex-1 overflow-hidden">
+            <marquee behavior="scroll" direction="left" scrollamount="6" class="text-xs sm:text-sm font-bold text-white tracking-wide py-0.5 select-none">
+              Selamat Datang di Polytron Service Center &bull; Konsumen diharapkan melapor ke Service Advisor (SA) saat tiba untuk proses check-in antrian &bull; Pantau status pengerjaan unit Anda secara realtime pada layar ini.
+            </marquee>
           </div>
         </div>
 
@@ -1432,7 +1531,7 @@
           
           <!-- Legend Bar -->
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-slate-200 text-xs">
-            <div class="flex items-center gap-1.5 font-bold text-slate-300 uppercase tracking-wider text-[11px]">
+            <div class="flex items-center gap-1.5 font-bold text-slate-700 uppercase tracking-wider text-[11px]">
               <span>Keterangan Status & Warna:</span>
             </div>
             <div class="flex flex-wrap items-center gap-3 text-[11px] font-medium">
@@ -1450,19 +1549,19 @@
               </div>
               <div class="flex items-center gap-1.5">
                 <div class="w-3.5 h-3.5 bg-indigo-800 border border-indigo-500"></div>
-                <span class="text-slate-600">Booked (Online)</span>
+                <span class="text-slate-700 font-bold">Booked (Online)</span>
               </div>
               <div class="flex items-center gap-1.5">
                 <div class="w-3.5 h-3.5 bg-amber-600 border border-amber-300 animate-pulse"></div>
-                <span class="text-amber-300 font-bold">Checked-In (Tiba)</span>
+                <span class="text-amber-700 font-bold">Checked-In (Tiba)</span>
               </div>
               <div class="flex items-center gap-1.5">
                 <div class="w-3.5 h-3.5 bg-cyan-700 border border-cyan-400"></div>
-                <span class="text-cyan-300 font-bold">Dikerjakan</span>
+                <span class="text-cyan-700 font-bold">Dikerjakan</span>
               </div>
               <div class="flex items-center gap-1.5">
                 <div class="w-3.5 h-3.5 bg-emerald-700 border border-emerald-400"></div>
-                <span class="text-emerald-300 font-bold">Selesai</span>
+                <span class="text-emerald-700 font-bold">Selesai</span>
               </div>
             </div>
           </div>
@@ -1926,127 +2025,7 @@
     </div>
   </div>
 
-  <!-- ============================================================== -->
-  <!-- MODAL GOOGLE SHEET DATABASE & DEMO SYNC                        -->
-  <!-- ============================================================== -->
-  <div id="googleSheetModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-2 hidden">
-    <div class="bg-white border border-slate-200 w-full max-w-xl max-h-[90vh] overflow-y-auto p-4 sm:p-5 shadow-2xl relative text-slate-800">
-      
-      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 bg-emerald-600 flex items-center justify-center shadow">
-            <i data-lucide="database" class="w-4 h-4 text-white"></i>
-          </div>
-          <div>
-            <h3 class="text-base font-black text-slate-900">Database Google Sheet Polytron EV</h3>
-            <p class="text-[11px] text-slate-500">Sinkronisasi Master Kerusakan & Booking Antrian Real-Time</p>
-          </div>
-        </div>
-        <button onclick="closeGoogleSheetModal()" class="text-slate-400 hover:text-slate-700 p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
 
-      <div class="space-y-3.5 my-3.5 text-xs">
-        <!-- Target Sheet Link Banner -->
-        <div class="bg-emerald-50 border border-emerald-200 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <div>
-            <div class="flex items-center gap-1.5 text-emerald-400 font-bold text-xs">
-              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-              <span>Google Sheet Resmi Terhubung:</span>
-            </div>
-            <div class="font-mono text-[11px] text-slate-300 mt-0.5 truncate max-w-sm">ID: 1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww</div>
-          </div>
-          <a href="https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 shadow transition whitespace-nowrap rounded-[2px]">
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            <span>Buka Google Sheet</span>
-          </a>
-        </div>
-
-        <!-- Tombol Aksi Demo Cepat -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <button onclick="copyAppsScriptCode()" class="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 transition">
-            <i data-lucide="copy" class="w-4 h-4 text-amber-400"></i>
-            <span id="btnCopyScriptText">Salin Script Google Sheet</span>
-          </button>
-          
-          <button id="btnSeedSampleData" onclick="seedSampleDataToSheet()" class="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 transition">
-            <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-400"></i>
-            <span>Isi 4 Data Contoh ke Sheet</span>
-          </button>
-        </div>
-
-        <button onclick="fetchDataFromGoogleSheet()" class="w-full p-2.5 bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 transition shadow">
-          <i data-lucide="refresh-cw" class="w-4 h-4 text-emerald-400" id="syncIcon"></i>
-          <span id="btnSyncText">Tarik Data dari Google Sheet (Sinkronkan Cache)</span>
-        </button>
-
-        <div id="syncStatusAlert" class="hidden p-2.5 text-[11px] font-bold border"></div>
-
-        <!-- Petunjuk 3 Langkah Mudah Inisialisasi Database -->
-        <div class="bg-slate-50 border border-slate-200 p-3 space-y-2 text-xs">
-          <div class="font-bold text-white flex items-center gap-1.5">
-            <i data-lucide="info" class="w-4 h-4 text-red-500"></i>
-            <span>Panduan Demo Setup Sheet (Cukup 1 Kali Klik):</span>
-          </div>
-          <ol class="list-decimal list-inside space-y-1 text-slate-300 text-[11px]">
-            <li>Buka Google Sheet Anda via tombol <strong>"Buka Google Sheet"</strong> di atas.</li>
-            <li>Di Google Sheet, klik menu <strong>Ekstensi &gt; Apps Script</strong>.</li>
-            <li>Klik tombol <strong>"Salin Script Google Sheet"</strong> di atas, lalu <em>Paste</em> ke editor Apps Script.</li>
-            <li>Pilih fungsi <strong>initDatabase</strong> di dropdown atas, lalu klik <strong>Jalankan (Run)</strong>.</li>
-            <li class="text-emerald-400 font-semibold">&bull; Seketika Sheet <strong>Master_Kerusakan</strong>, <strong>Bookings</strong>, &amp; <strong>Master_Sites</strong> langsung otomatis terbentuk lengkap dengan data &amp; warnanya!</li>
-          </ol>
-        </div>
-
-        <!-- Konfigurasi Web App URL untuk Live Sync Dua Arah -->
-        <div class="bg-slate-50 border border-slate-200 p-3 space-y-2">
-          <label class="block text-xs font-bold text-white">URL Aplikasi Web Apps Script (Untuk Live Sync Dua Arah):</label>
-          <div class="flex gap-2">
-            <input type="text" id="inputGasUrl" value="https://script.google.com/macros/s/AKfycbwkCZc3iMXLQ1957geQ-Ob4EV-wlbc5NNllPLnOInTh7wWNr8G9U4Kk-IhxSzNem4pr/exec" placeholder="https://script.google.com/macros/s/AKfycbwkCZc3iMXLQ1957geQ-Ob4EV-wlbc5NNllPLnOInTh7wWNr8G9U4Kk-IhxSzNem4pr/exec" class="flex-1 bg-slate-800 border border-slate-200 px-3 py-1.5 text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500 font-mono">
-            <button onclick="saveGasUrl()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
-              Simpan URL
-            </button>
-          </div>
-          <p class="text-[10px] text-slate-400">Didapatkan dari Apps Script: <em>Terapkan (Deploy) &gt; Deployment baru &gt; Aplikasi web (Akses: Siapa saja)</em>. Jika URL ini diisi, setiap booking baru dan perubahan status servis akan otomatis tersimpan langsung ke baris Google Sheet!</p>
-        </div>
-
-        <!-- Panduan Khusus Mengatasi Error 403 Forbidden -->
-        <div class="bg-amber-950/40 border border-amber-700/80 p-3 space-y-1.5 text-xs text-amber-200">
-          <div class="font-bold flex items-center gap-1.5 text-amber-300">
-            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
-            <span>PENTING: Mengatasi Error 403 (Forbidden) saat Simpan Data:</span>
-          </div>
-          <p class="text-[11px] leading-relaxed text-slate-300">
-            Jika muncul error <strong>403 (Forbidden)</strong> di console/browser, artinya izin akses di Google Apps Script masih <em>"Hanya saya"</em>.
-          </p>
-          <ol class="list-decimal list-inside text-[11px] space-y-0.5 text-slate-300">
-            <li>Di Google Apps Script, klik tombol <strong>Terapkan (Deploy)</strong> &gt; <strong>Kelola Deployment</strong>.</li>
-            <li>Klik ikon <strong>Pensil (Edit)</strong>.</li>
-            <li>Pada opsi <strong>"Siapa yang memiliki akses" (Who has access)</strong>: ubah menjadi <strong>"Siapa saja" (Anyone)</strong>.</li>
-            <li>Klik <strong>Terapkan</strong> &bull; Selesai! Web app kini dapat langsung menyimpan data ke Google Sheet.</li>
-          </ol>
-        </div>
-
-        <!-- File CSV Cadangan -->
-        <div class="border-t border-slate-200 pt-2 flex items-center justify-between text-[11px] text-slate-400">
-          <span>Tersedia file CSV lokal:</span>
-          <div class="flex gap-2 font-mono">
-            <a href="Master_Kerusakan.csv" target="_blank" download class="text-red-400 hover:underline">Master_Kerusakan.csv</a>
-            <span>&bull;</span>
-            <a href="Bookings.csv" target="_blank" download class="text-red-400 hover:underline">Bookings.csv</a>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="pt-2 border-t border-slate-200 flex justify-end">
-        <button onclick="closeGoogleSheetModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
-          Tutup
-        </button>
-      </div>
-
-    </div>
-  </div>
 
   <!-- ============================================================== -->
   <!-- JAVASCRIPT APPLICATION CORE & AUDIO CHIME SYSTEM               -->
@@ -2661,7 +2640,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const roleFromUrl = urlParams.get('role');
       const savedRole = localStorage.getItem('LAST_ACTIVE_ROLE');
-      switchRole(roleFromUrl || savedRole || 'portal');
+      switchRole(window.__INITIAL_ACTIVE_ROLE__ || roleFromUrl || savedRole || 'portal', true);
 
       // Tanamkan URL Google Apps Script yang ditentukan pengguna
       localStorage.setItem(GAS_URL_STORAGE_KEY, DEFAULT_GAS_URL);
@@ -2673,7 +2652,17 @@
       // Google Sheet sebagai Data Sumber: Otomatis sinkronisasi data setiap 1 menit (60.000 ms)
       setInterval(fetchDataFromGoogleSheet, 1 * 60 * 1000);
       // Ambil data pertama kali dari Google Sheet saat aplikasi dibuka
-      setTimeout(fetchDataFromGoogleSheet, 800);
+      setTimeout(fetchDataFromGoogleSheet, 500);
+
+      // Otomatis tarik data saat tab browser kembali aktif / difokuskan
+      window.addEventListener('focus', () => {
+        fetchDataFromGoogleSheet();
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          fetchDataFromGoogleSheet();
+        }
+      });
 
       lucide.createIcons();
     });
@@ -2695,12 +2684,17 @@
     // ==============================================================
     // ROLE SWITCHER
     // ==============================================================
-    function switchRole(role) {
+    function switchRole(role, replaceHistory = false) {
       if (!role || !['portal', 'konsumen', 'teknisi', 'sa', 'tv'].includes(role)) {
         role = 'portal';
       }
       currentRole = role;
       try { localStorage.setItem('LAST_ACTIVE_ROLE', role); } catch(e) {}
+
+      // Hapus critical style jika ada agar transisi role berikutnya dinamis via Tailwind classes
+      const crit = document.getElementById('critical-role-style');
+      if (crit) crit.remove();
+
       const roles = ['portal', 'konsumen', 'teknisi', 'sa', 'tv'];
 
       roles.forEach(r => {
@@ -2708,8 +2702,13 @@
         const btn = document.getElementById(`role-btn-${r}`);
 
         if (sec) {
-          if (r === role) sec.classList.remove('hidden');
-          else sec.classList.add('hidden');
+          if (r === role) {
+            sec.classList.remove('hidden');
+            sec.style.removeProperty('display');
+          } else {
+            sec.classList.add('hidden');
+            sec.style.setProperty('display', 'none', 'important');
+          }
         }
 
         if (btn) {
@@ -2729,6 +2728,28 @@
         menuSelect.value = role;
       }
 
+      // Update browser history URL
+      if (window.history && window.history.pushState) {
+        const currentParam = new URLSearchParams(window.location.search).get('role');
+        if (role !== 'portal') {
+          if (currentParam !== role) {
+            if (replaceHistory) {
+              window.history.replaceState({ role: role }, '', '?role=' + role);
+            } else {
+              window.history.pushState({ role: role }, '', '?role=' + role);
+            }
+          }
+        } else {
+          if (currentParam) {
+            if (replaceHistory) {
+              window.history.replaceState({ role: 'portal' }, '', window.location.pathname);
+            } else {
+              window.history.pushState({ role: 'portal' }, '', window.location.pathname);
+            }
+          }
+        }
+      }
+
       // Update portal site name if in portal
       if (role === 'portal') {
         const pSite = document.getElementById('portalActiveSiteName');
@@ -2745,6 +2766,11 @@
       if (role === 'konsumen') {
         goToBookingStep(1);
         renderBookingSlotPicker();
+      }
+
+      // Sinkronkan data terbaru saat berpindah menu
+      if (role !== 'portal') {
+        setTimeout(fetchDataFromGoogleSheet, 100);
       }
 
       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -2783,14 +2809,195 @@
     }
 
     // ==============================================================
+    // MODAL & BROWSER HISTORY MANAGEMENT (TUTUP POPUP VIA TOMBOL BACK)
+    // ==============================================================
+    let isHandlingPopstate = false;
+
+    function pushModalHistoryState(modalId) {
+      try {
+        window.history.pushState({ modalOpen: true, modalId: modalId }, '');
+      } catch(e) {}
+    }
+
+    function popModalHistoryState() {
+      if (!isHandlingPopstate && window.history.state && window.history.state.modalOpen) {
+        window.history.back();
+      }
+    }
+
+    function closeAnyOpenModal() {
+      let closed = false;
+
+      const confirmModal = document.getElementById('bookingConfirmModal');
+      if (confirmModal && (!confirmModal.classList.contains('hidden') || confirmModal.style.display === 'flex')) {
+        confirmModal.classList.add('hidden');
+        confirmModal.style.setProperty('display', 'none', 'important');
+        closed = true;
+      }
+
+      const ticketModal = document.getElementById('ticketSuccessModal');
+      if (ticketModal && (!ticketModal.classList.contains('hidden') || ticketModal.style.display === 'flex')) {
+        ticketModal.classList.add('hidden');
+        ticketModal.style.setProperty('display', 'none', 'important');
+        switchRole('portal');
+        closed = true;
+      }
+
+      const popupModal = document.getElementById('appPopupModal');
+      if (popupModal && !popupModal.classList.contains('hidden')) {
+        popupModal.classList.add('hidden');
+        popupModal.style.setProperty('display', 'none', 'important');
+        closed = true;
+      }
+
+      const slotModal = document.getElementById('slotActionModal');
+      if (slotModal && !slotModal.classList.contains('hidden')) {
+        slotModal.classList.add('hidden');
+        slotModal.style.setProperty('display', 'none', 'important');
+        currentModalTarget = null;
+        closed = true;
+      }
+
+      return closed;
+    }
+
+    window.addEventListener('popstate', function(e) {
+      isHandlingPopstate = true;
+      const modalClosed = closeAnyOpenModal();
+      isHandlingPopstate = false;
+      if (modalClosed) {
+        return;
+      }
+
+      // Jika tidak ada popup terbuka, kembali ke menu sebelumnya atau menu utama
+      if (currentRole === 'konsumen') {
+        if (currentBookingStep > 1) {
+          goToBookingStep(currentBookingStep - 1);
+        } else {
+          switchRole('portal');
+        }
+      } else if (currentRole !== 'portal') {
+        switchRole('portal');
+      }
+    });
+
+    // ==============================================================
+    // FILTER STATE & HANDLERS UNTUK MEJA SA, TEKNISI & TV MONITOR
+    // Memastikan data Google Sheet tampil presisi dan fleksibel (Default: 'all' tampil semua)
+    // ==============================================================
+    let saDateFilter = 'all'; // 'all' (default agar SEMUA data Google Sheet langsung tampil) | 'today' | 'tomorrow' | 'YYYY-MM-DD'
+    let saSiteFilter = 'all'; // 'all' (default agar SEMUA cabang langsung tampil) | specific siteId
+    let teknisiDateFilter = 'all'; // 'all' (default agar SEMUA unit di dashboard teknisi langsung tampil) | 'today' | 'tomorrow' | 'YYYY-MM-DD'
+    let teknisiSiteFilter = 'all'; // 'all' (default agar SEMUA cabang langsung tampil)
+
+    function getLocalDateIso(dateObj = new Date()) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getTomorrowDateIso() {
+      const tom = new Date();
+      tom.setDate(tom.getDate() + 1);
+      return getLocalDateIso(tom);
+    }
+
+    function formatDateIndo(dateStr, isShort = false) {
+      if (!dateStr) return '';
+      try {
+        const parts = String(dateStr).trim().split('-');
+        if (parts.length === 3) {
+          const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+          if (isShort) {
+            return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+          }
+          return d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        }
+        return dateStr;
+      } catch(e) {
+        return dateStr;
+      }
+    }
+
+    function setSaDateFilter(filter) {
+      saDateFilter = filter;
+      const dateInput = document.getElementById('saDateInput');
+      if (filter && String(filter).match(/^\d{4}-\d{2}-\d{2}$/)) {
+        if (dateInput) dateInput.value = filter;
+      }
+      renderSABoard();
+    }
+
+    function handleSaSiteChange(val) {
+      saSiteFilter = val;
+      renderSABoard();
+    }
+
+    function setTeknisiDateFilter(filter) {
+      teknisiDateFilter = filter;
+      const dateInput = document.getElementById('teknisiDateInput');
+      if (filter && String(filter).match(/^\d{4}-\d{2}-\d{2}$/)) {
+        if (dateInput) dateInput.value = filter;
+      }
+      renderTechnicianBoard();
+    }
+
+    function handleTeknisiSiteChange(val) {
+      teknisiSiteFilter = val;
+      renderTechnicianBoard();
+    }
+
+    function handleTvDateChange(val) {
+      if (val === 'today') {
+        currentDate = new Date().toISOString().split('T')[0];
+      } else if (val === 'tomorrow') {
+        const tom = new Date();
+        tom.setDate(tom.getDate() + 1);
+        const y = tom.getFullYear();
+        const m = String(tom.getMonth() + 1).padStart(2, '0');
+        const day = String(tom.getDate()).padStart(2, '0');
+        currentDate = `${y}-${m}-${day}`;
+      } else if (val) {
+        currentDate = normalizeDateString(val);
+      }
+      const tvDateInput = document.getElementById('tvDateInput');
+      if (tvDateInput) tvDateInput.value = currentDate;
+      refreshAllBoards();
+    }
+
+    function shiftTvDate(days) {
+      try {
+        const parts = currentDate.split('-');
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        d.setDate(d.getDate() + days);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        currentDate = `${y}-${m}-${day}`;
+        const tvDateInput = document.getElementById('tvDateInput');
+        if (tvDateInput) tvDateInput.value = currentDate;
+        refreshAllBoards();
+      } catch(e) {}
+    }
+
+    // ==============================================================
     // SITE & MASTER KERUSAKAN DROPDOWN MANAGEMENT
     // ==============================================================
     function initSiteDropdowns() {
       const headerSelect = document.getElementById('activeSiteSelector');
       const bookingSelect = document.getElementById('bookingSiteInput');
+      const saSelect = document.getElementById('saSiteSelector');
+      const teknisiSelect = document.getElementById('teknisiSiteSelector');
 
       if (headerSelect) headerSelect.innerHTML = '';
       if (bookingSelect) bookingSelect.innerHTML = '';
+      if (saSelect) {
+        saSelect.innerHTML = '<option value="all" selected>Semua Cabang</option>';
+      }
+      if (teknisiSelect) {
+        teknisiSelect.innerHTML = '<option value="all" selected>Semua Cabang</option>';
+      }
 
       SITES.forEach(site => {
         if (headerSelect) {
@@ -2808,7 +3015,24 @@
           opt.selected = site.id === currentSiteId;
           bookingSelect.appendChild(opt);
         }
+
+        if (saSelect) {
+          const opt = document.createElement('option');
+          opt.value = site.id;
+          opt.innerText = `Cabang: ${site.name.replace('Polytron SC ', '')}`;
+          saSelect.appendChild(opt);
+        }
+
+        if (teknisiSelect) {
+          const opt = document.createElement('option');
+          opt.value = site.id;
+          opt.innerText = `Cabang: ${site.name.replace('Polytron SC ', '')}`;
+          teknisiSelect.appendChild(opt);
+        }
       });
+
+      if (saSelect) saSelect.value = saSiteFilter;
+      if (teknisiSelect) teknisiSelect.value = teknisiSiteFilter;
     }
 
     function populateDamageDropdowns() {
@@ -3009,7 +3233,7 @@
       try {
         const bookings = loadBookings();
         const now = new Date();
-        const todayIso = now.toISOString().split('T')[0];
+        const todayIso = getLocalDateIso();
 
         bookings.forEach(b => {
           // Hanya evaluasi booking yang masih berstatus 'Booked' (belum di-check-in oleh SA)
@@ -3049,11 +3273,8 @@
                 const expirationTime = new Date(scheduledTime.getTime() + 15 * 60 * 1000);
 
                 if (now >= expirationTime) {
-                  console.log(`⏱️ [AUTO-BATAL] Booking ${b.id} (${b.queueNumber} - Slot ${timeStr}) lewat >15 menit tanpa Check-In SA. Status diubah ke BATAL.`);
-                  b.status = 'Batal';
-                  b.cancelReason = 'Batal Otomatis: Tidak hadir >15 menit tanpa Check-In SA';
-                  changed = true;
-                  syncStatusToGoogleSheet(b.id, 'Batal');
+                  // Tandai catatan telat tanpa menghapus antrian dari dashboard teknisi / SA
+                  b.isLate = true;
                 }
               }
             }
@@ -3107,19 +3328,91 @@
       if (!container) return;
       const stallFilter = document.getElementById('technicianStallFilter')?.value || 'all';
 
-      let bookings = loadBookings().filter(b => isSameDate(b.date, currentDate) && isSameSite(b.siteId, currentSiteId) && b.status !== 'Batal');
+      const allBookings = loadBookings();
+      const todayIso = getLocalDateIso();
+      const tomorrowIso = getTomorrowDateIso();
 
+      // Filter Cabang Teknisi
+      const siteSelect = document.getElementById('teknisiSiteSelector');
+      if (siteSelect) {
+        siteSelect.value = teknisiSiteFilter;
+      }
+      let baseBookings = allBookings.filter(b => b.status !== 'Batal');
+      if (teknisiSiteFilter !== 'all') {
+        baseBookings = baseBookings.filter(b => isSameSite(b.siteId, teknisiSiteFilter));
+      }
+
+      // Hitung Total Antrian untuk Tab
+      const countToday = baseBookings.filter(b => isSameDate(b.date, todayIso)).length;
+      const countTomorrow = baseBookings.filter(b => isSameDate(b.date, tomorrowIso)).length;
+      const countAll = baseBookings.length;
+
+      const cTodayEl = document.getElementById('teknisiCountToday');
+      const cTomorrowEl = document.getElementById('teknisiCountTomorrow');
+      const cAllEl = document.getElementById('teknisiCountAll');
+      if (cTodayEl) cTodayEl.innerText = countToday;
+      if (cTomorrowEl) cTomorrowEl.innerText = countTomorrow;
+      if (cAllEl) cAllEl.innerText = countAll;
+
+      let activeFilter = teknisiDateFilter;
+
+      // Sinkronisasi Gaya Tombol Tab
+      ['all', 'today', 'tomorrow'].forEach(t => {
+        const btn = document.getElementById(`teknisiTab-${t}`);
+        if (btn) {
+          if (activeFilter === t) {
+            btn.className = 'px-2.5 py-1 rounded-[2px] transition bg-blue-600 text-white font-black shadow-xs flex items-center gap-1';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) badge.className = 'px-1.5 py-0.2 bg-white/20 text-white text-[10px] font-mono rounded';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-blue-600 font-bold flex items-center gap-1';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) badge.className = 'px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded';
+          }
+        }
+      });
+
+      // Filter data sesuai activeFilter
+      let bookings = baseBookings;
+      if (activeFilter === 'today') {
+        bookings = bookings.filter(b => isSameDate(b.date, todayIso));
+      } else if (activeFilter === 'tomorrow') {
+        bookings = bookings.filter(b => isSameDate(b.date, tomorrowIso));
+      } else if (activeFilter !== 'all') {
+        bookings = bookings.filter(b => isSameDate(b.date, activeFilter));
+      }
+
+      // Filter Stall
       if (stallFilter !== 'all') {
         bookings = bookings.filter(b => b.stall === stallFilter);
       }
 
+      // Sortir berdasarkan tanggal lalu jam
+      bookings.sort((a, b) => {
+        if (a.date !== b.date) return (a.date || '').localeCompare(b.date || '');
+        return (a.slot || '').localeCompare(b.slot || '');
+      });
+
       container.innerHTML = '';
 
       if (bookings.length === 0) {
+        let emptyMsg = 'Tidak ada unit antrian untuk filter stall / tanggal ini.';
+        let hintBtn = '';
+        if (activeFilter === 'today' && (countTomorrow > 0 || countAll > 0)) {
+          emptyMsg = `Tidak ada unit antrian untuk Hari Ini (${formatDateIndo(todayIso)}).`;
+          hintBtn = `
+            <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
+              ${countTomorrow > 0 ? `<button onclick="setTeknisiDateFilter('tomorrow')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-[3px] shadow transition">Lihat Unit Besok (${countTomorrow} unit) &rarr;</button>` : ''}
+              <button onclick="setTeknisiDateFilter('all')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-[3px] shadow transition">Lihat Semua Jadwal (${countAll} unit) &rarr;</button>
+            </div>
+          `;
+        }
+
         container.innerHTML = `
-          <div class="col-span-full py-12 text-center text-slate-500 bg-white border border-slate-200 shadow-sm">
-            <i data-lucide="wrench" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
-            <p>Tidak ada unit antrian untuk stall teknisi ini hari ini.</p>
+          <div class="col-span-full py-10 text-center text-slate-500 bg-white border border-slate-200 shadow-sm rounded-[3px] p-4">
+            <i data-lucide="wrench" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
+            <p class="font-bold text-slate-700 text-xs sm:text-sm">${emptyMsg}</p>
+            ${hintBtn}
           </div>
         `;
         lucide.createIcons();
@@ -3128,7 +3421,7 @@
 
       bookings.forEach(b => {
         const card = document.createElement('div');
-        card.className = 'bg-white border border-slate-200 p-4 space-y-3 shadow-sm';
+        card.className = 'bg-white border border-slate-200 p-4 space-y-3 shadow-sm rounded-[3px]';
 
         let stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
         let statusBadge = 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold';
@@ -3136,88 +3429,89 @@
         if (b.status === 'In Progress') statusBadge = 'bg-sky-50 text-sky-700 border border-sky-300 font-bold';
         if (b.status === 'Done') statusBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold';
 
+        let dateBadge = '';
+        if (isSameDate(b.date, todayIso)) {
+          dateBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Hari Ini</span>`;
+        } else if (isSameDate(b.date, tomorrowIso)) {
+          dateBadge = `<span class="bg-blue-50 text-blue-700 border border-blue-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Besok (${formatDateIndo(b.date, true)})</span>`;
+        } else {
+          dateBadge = `<span class="bg-purple-50 text-purple-700 border border-purple-200 font-bold px-1.5 py-0.5 rounded text-[10px]">${formatDateIndo(b.date, true)}</span>`;
+        }
+
         let actionButtonsHtml = '';
         let statusNoticeHtml = '';
 
         if (b.status === 'Booked') {
-          // 1. BELUM CHECK-IN OLEH SA:
-          // Tombol Mulai Servis & Selesai KEDUANYA TERKUNCI / DISABLED
           statusNoticeHtml = `
-            <div class="text-[11px] text-amber-400 bg-amber-950/60 border border-amber-800/80 p-2 font-medium flex items-center gap-1.5">
-              <i data-lucide="clock" class="w-3.5 h-3.5 flex-shrink-0"></i>
+            <div class="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 p-2 font-medium flex items-center gap-1.5 rounded-[2px]">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i>
               <span>Menunggu konsumen check-in di Meja SA</span>
             </div>
           `;
           actionButtonsHtml = `
-            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-40">
-              <button disabled class="py-2 px-2 bg-slate-800 text-slate-500 cursor-not-allowed flex items-center justify-center gap-1 shadow border border-slate-200" title="Terkunci: Menunggu Check-In oleh Service Advisor (SA)">
+            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-50">
+              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Menunggu Check-In oleh SA">
                 <i data-lucide="lock" class="w-3.5 h-3.5"></i>
                 <span>Mulai Servis</span>
               </button>
-              <button disabled class="py-2 px-2 bg-slate-800 text-slate-500 cursor-not-allowed flex items-center justify-center gap-1 shadow border border-slate-200" title="Terkunci: Menunggu Check-In oleh Service Advisor (SA)">
+              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Menunggu Check-In oleh SA">
                 <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Selesai Servis</span>
+                <span>Selesai</span>
               </button>
             </div>
           `;
         } else if (b.status === 'Checked In') {
-          // 2. SUDAH CHECK-IN SA:
-          // Tombol Mulai Servis AKTIF & BISA DIKLIK, Selesai Servis DISABLED
           statusNoticeHtml = `
-            <div class="text-[11px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 p-2 font-semibold flex items-center gap-1.5">
-              <i data-lucide="user-check" class="w-3.5 h-3.5 flex-shrink-0"></i>
-              <span>Konsumen telah hadir &bull; Siap dikerjakan</span>
+            <div class="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 p-2 font-semibold flex items-center gap-1.5 rounded-[2px]">
+              <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+              <span>Konsumen telah tiba di bengkel &bull; Siap dikerjakan</span>
             </div>
           `;
           actionButtonsHtml = `
             <div class="grid grid-cols-2 gap-1.5 text-xs font-bold">
-              <button onclick="technicianUpdateStatus('${b.id}', 'In Progress')" class="py-2 px-2 bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center gap-1 shadow cursor-pointer transition">
+              <button onclick="technicianUpdateStatus('${b.id}', 'In Progress')" class="py-1.5 px-2 bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center gap-1 shadow-xs cursor-pointer transition rounded-[2px]">
                 <i data-lucide="play" class="w-3.5 h-3.5"></i>
                 <span>Mulai Servis</span>
               </button>
-              <button disabled class="py-2 px-2 bg-slate-800 text-slate-500 opacity-40 cursor-not-allowed flex items-center justify-center gap-1 shadow border border-slate-200" title="Mulai pengerjaan servis terlebih dahulu">
+              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 opacity-50 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Mulai pengerjaan servis terlebih dahulu">
                 <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-                <span>Selesai Servis</span>
+                <span>Selesai</span>
               </button>
             </div>
           `;
         } else if (b.status === 'In Progress') {
-          // 3. SEDANG DIKERJAKAN:
-          // Tombol Mulai Servis menunjukkan aktif (disabled), Selesai Servis AKTIF & BISA DIKLIK
           statusNoticeHtml = `
-            <div class="text-[11px] text-cyan-300 bg-cyan-950/70 border border-cyan-800 p-2 font-semibold flex items-center gap-1.5">
-              <i data-lucide="wrench" class="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-cyan-400"></i>
+            <div class="text-[11px] text-cyan-900 bg-cyan-50 border border-cyan-200 p-2 font-semibold flex items-center gap-1.5 rounded-[2px]">
+              <i data-lucide="wrench" class="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-cyan-600"></i>
               <span>Sedang dalam proses pengerjaan di stall</span>
             </div>
           `;
           actionButtonsHtml = `
             <div class="grid grid-cols-2 gap-1.5 text-xs font-bold">
-              <button disabled class="py-2 px-2 bg-cyan-950 text-cyan-300 border border-cyan-700 opacity-90 cursor-default flex items-center justify-center gap-1 shadow">
-                <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i>
-                <span>Sedang Dikerjakan</span>
+              <button disabled class="py-1.5 px-2 bg-cyan-50 text-cyan-800 border border-cyan-300 opacity-90 cursor-default flex items-center justify-center gap-1 rounded-[2px]">
+                <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-cyan-600"></i>
+                <span>Dikerjakan</span>
               </button>
-              <button onclick="technicianUpdateStatus('${b.id}', 'Done')" class="py-2 px-2 bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1 shadow cursor-pointer transition animate-pulse">
+              <button onclick="technicianUpdateStatus('${b.id}', 'Done')" class="py-1.5 px-2 bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1 shadow-xs cursor-pointer transition animate-pulse rounded-[2px]">
                 <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
                 <span>Selesai Servis</span>
               </button>
             </div>
           `;
         } else if (b.status === 'Done') {
-          // 4. SUDAH SELESAI:
-          // Tombol Lagi Dikerjakan (Mulai Servis) TIDAK BISA DIKLIK
           statusNoticeHtml = `
-            <div class="text-[11px] text-emerald-300 bg-emerald-950 border border-emerald-700 p-2 font-bold flex items-center justify-center gap-1.5">
-              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+            <div class="text-[11px] text-emerald-900 bg-emerald-50 border border-emerald-300 p-2 font-bold flex items-center justify-center gap-1.5 rounded-[2px]">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
               <span>Servis Selesai &bull; Siap Diserahkan</span>
             </div>
           `;
           actionButtonsHtml = `
-            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-40">
-              <button disabled class="py-2 px-2 bg-slate-800 text-slate-500 cursor-not-allowed flex items-center justify-center gap-1 shadow border border-slate-200" title="Terkunci: Servis sudah selesai">
+            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-50">
+              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Servis sudah selesai">
                 <i data-lucide="lock" class="w-3.5 h-3.5"></i>
                 <span>Mulai Servis</span>
               </button>
-              <button disabled class="py-2 px-2 bg-emerald-950 text-emerald-400 border border-emerald-800 cursor-default flex items-center justify-center gap-1 shadow">
+              <button disabled class="py-1.5 px-2 bg-emerald-50 text-emerald-700 border border-emerald-300 cursor-default flex items-center justify-center gap-1 rounded-[2px]">
                 <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
                 <span>Selesai</span>
               </button>
@@ -3225,38 +3519,45 @@
           `;
         }
 
+        const siteObj = SITES.find(s => isSameSite(s.id, b.siteId));
+        const siteBadge = siteObj ? `<span class="bg-slate-100 text-slate-700 border border-slate-300 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider">${siteObj.city}</span>` : '';
+
         card.innerHTML = `
           <div class="flex items-center justify-between border-b border-slate-200 pb-2">
             <div>
-              <span class="text-[10px] text-slate-500 uppercase font-bold">No. Antrian</span>
-              <div class="text-base font-mono font-black text-white">${b.queueNumber}</div>
+              <div class="flex items-center gap-1.5 mb-0.5 flex-wrap">
+                ${siteBadge}
+                ${dateBadge}
+                <span class="text-[10px] text-slate-500 uppercase font-bold">No. Antrian</span>
+              </div>
+              <div class="text-base font-mono font-black text-slate-900">${b.queueNumber}</div>
             </div>
             <div class="text-right">
-              <span class="text-[10px] text-slate-400 block">${stallLabel}</span>
+              <span class="text-[11px] font-bold text-slate-800 block">${stallLabel}</span>
               <span class="px-2 py-0.5 text-[10px] font-bold ${statusBadge}">${b.status}</span>
             </div>
           </div>
 
-          <div class="space-y-1 text-xs">
-            <div class="flex justify-between">
-              <span class="text-slate-400">Kendaraan:</span>
-              <span class="font-bold text-white">${b.model} (${b.plate})</span>
+          <div class="space-y-1.5 text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 font-medium">Kendaraan:</span>
+              <span class="font-extrabold text-slate-900">${b.model} (${b.plate})</span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-slate-400">Jam Slot:</span>
-              <span class="font-bold text-red-400">${b.slot} WIB</span>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 font-medium">Jam Slot:</span>
+              <span class="font-bold text-red-600">${b.slot} WIB</span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-slate-400">Pelanggan:</span>
-              <span class="text-slate-200">${b.name}</span>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 font-medium">Pelanggan:</span>
+              <span class="font-semibold text-slate-800">${b.name} ${b.phone ? `(${b.phone})` : ''}</span>
             </div>
-            <div class="pt-1.5 text-slate-400">
+            <div class="pt-1 text-slate-700">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-[11px] font-bold text-slate-300">Pekerjaan & Level:</span>
+                <span class="text-[11px] font-bold text-slate-600">Pekerjaan & Level:</span>
                 ${b.level ? `<span class="px-1.5 py-0.2 text-[10px] font-bold ${b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold')}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + ' Jam' : '< 30m') : '1 Jam'})</span>` : ''}
               </div>
-              <div class="font-semibold text-white text-xs">${b.complaint || b.notes || 'Servis berkala standar'}</div>
-              ${b.notes && b.notes !== b.complaint ? `<p class="italic bg-slate-50 border border-slate-200 p-1.5 text-slate-600 text-[11px] mt-1 border border-slate-200">${b.notes}</p>` : ''}
+              <div class="font-semibold text-slate-900 text-xs bg-slate-50 p-2 border border-slate-200 rounded-[2px]">${b.complaint || b.notes || 'Servis berkala standar'}</div>
+              ${b.notes && b.notes !== b.complaint ? `<p class="italic bg-slate-50 border border-slate-200 p-1.5 text-slate-600 text-[11px] mt-1">${b.notes}</p>` : ''}
             </div>
           </div>
 
@@ -3264,7 +3565,7 @@
 
           <!-- Tombol Aksi Teknisi Sesuai Tahapan & State Lock -->
           <div class="pt-2 border-t border-slate-200 space-y-1.5">
-            <span class="text-[10px] text-slate-400 font-bold uppercase block">Ubah Status Servis:</span>
+            <span class="text-[10px] text-slate-500 font-bold uppercase block">Ubah Status Servis:</span>
             ${actionButtonsHtml}
           </div>
         `;
@@ -3319,37 +3620,111 @@
       if (!tbody && !mobileList) return;
       const search = (document.getElementById('saSearchInput')?.value || '').toLowerCase();
 
-      let bookings = loadBookings().filter(b => isSameDate(b.date, currentDate) && isSameSite(b.siteId, currentSiteId));
+      const allBookings = loadBookings();
+      const todayIso = getLocalDateIso();
+      const tomorrowIso = getTomorrowDateIso();
 
+      // Filter Cabang SA
+      const siteSelect = document.getElementById('saSiteSelector');
+      if (siteSelect) {
+        siteSelect.value = saSiteFilter;
+      }
+      let baseBookings = allBookings;
+      if (saSiteFilter !== 'all') {
+        baseBookings = allBookings.filter(b => isSameSite(b.siteId, saSiteFilter));
+      }
+
+      // Hitung Total Antrian untuk Tab SA
+      const countToday = baseBookings.filter(b => isSameDate(b.date, todayIso)).length;
+      const countTomorrow = baseBookings.filter(b => isSameDate(b.date, tomorrowIso)).length;
+      const countAll = baseBookings.length;
+
+      const cTodayEl = document.getElementById('saCountToday');
+      const cTomorrowEl = document.getElementById('saCountTomorrow');
+      const cAllEl = document.getElementById('saCountAll');
+      if (cTodayEl) cTodayEl.innerText = countToday;
+      if (cTomorrowEl) cTomorrowEl.innerText = countTomorrow;
+      if (cAllEl) cAllEl.innerText = countAll;
+
+      let activeFilter = saDateFilter;
+
+      // Sinkronisasi Gaya Tombol Tab SA
+      ['all', 'today', 'tomorrow'].forEach(t => {
+        const btn = document.getElementById(`saTab-${t}`);
+        if (btn) {
+          if (activeFilter === t) {
+            btn.className = 'px-2.5 py-1 rounded-[2px] transition bg-red-600 text-white font-black shadow-xs flex items-center gap-1';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) badge.className = 'px-1.5 py-0.2 bg-white/20 text-white text-[10px] font-mono rounded';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 font-bold flex items-center gap-1';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) badge.className = 'px-1.5 py-0.2 bg-slate-100 text-slate-700 text-[10px] font-mono rounded';
+          }
+        }
+      });
+
+      // Filter data sesuai activeFilter
+      let bookings = baseBookings;
+      if (activeFilter === 'today') {
+        bookings = bookings.filter(b => isSameDate(b.date, todayIso));
+      } else if (activeFilter === 'tomorrow') {
+        bookings = bookings.filter(b => isSameDate(b.date, tomorrowIso));
+      } else if (activeFilter !== 'all') {
+        bookings = bookings.filter(b => isSameDate(b.date, activeFilter));
+      }
+
+      // Filter Pencarian
       if (search) {
         bookings = bookings.filter(b => 
-          b.plate.toLowerCase().includes(search) || 
-          b.name.toLowerCase().includes(search) || 
-          b.id.toLowerCase().includes(search) ||
-          b.queueNumber.toLowerCase().includes(search)
+          (b.plate || '').toLowerCase().includes(search) || 
+          (b.name || '').toLowerCase().includes(search) || 
+          (b.id || '').toLowerCase().includes(search) ||
+          (b.queueNumber || '').toLowerCase().includes(search)
         );
       }
+
+      // Sortir berdasarkan tanggal lalu jam
+      bookings.sort((a, b) => {
+        if (a.date !== b.date) return (a.date || '').localeCompare(b.date || '');
+        return (a.slot || '').localeCompare(b.slot || '');
+      });
 
       if (tbody) tbody.innerHTML = '';
       if (mobileList) mobileList.innerHTML = '';
 
       if (bookings.length === 0) {
+        let emptyMsg = 'Tidak ada data antrian untuk pilihan filter ini.';
+        let hintBtn = '';
+        if (activeFilter === 'today' && (countTomorrow > 0 || countAll > 0)) {
+          emptyMsg = `Tidak ada antrian booking untuk Hari Ini (${formatDateIndo(todayIso)}).`;
+          hintBtn = `
+            <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
+              ${countTomorrow > 0 ? `<button onclick="setSaDateFilter('tomorrow')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-[3px] shadow transition">Lihat Antrian Besok (${countTomorrow} data) &rarr;</button>` : ''}
+              <button onclick="setSaDateFilter('all')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-[3px] shadow transition">Lihat Semua Jadwal (${countAll} data) &rarr;</button>
+            </div>
+          `;
+        }
+
         if (tbody) {
           tbody.innerHTML = `
             <tr>
-              <td colspan="7" class="text-center py-8 text-slate-500 italic">
-                Tidak ada data antrian pada cabang ini.
+              <td colspan="7" class="text-center py-8 text-slate-500 italic bg-slate-50/50">
+                <div class="font-bold text-slate-700 text-xs sm:text-sm">${emptyMsg}</div>
+                ${hintBtn}
               </td>
             </tr>
           `;
         }
         if (mobileList) {
           mobileList.innerHTML = `
-            <div class="text-center py-8 text-slate-400 italic text-xs bg-slate-50 border border-slate-200 p-4 rounded-[3px]">
-              Tidak ada data antrian pada cabang ini.
+            <div class="text-center py-6 text-slate-500 text-xs bg-slate-50 border border-slate-200 p-4 rounded-[3px]">
+              <div class="font-bold text-slate-700 text-xs sm:text-sm">${emptyMsg}</div>
+              ${hintBtn}
             </div>
           `;
         }
+        lucide.createIcons();
         return;
       }
 
@@ -3357,15 +3732,27 @@
         const tr = document.createElement('tr');
         const isBatal = b.status === 'Batal';
         tr.className = isBatal 
-          ? 'bg-rose-950/20 hover:bg-rose-950/30 border-l-2 border-rose-600 transition' 
-          : 'hover:bg-slate-800/40 transition';
+          ? 'bg-rose-50/40 hover:bg-rose-50/60 border-l-2 border-rose-500 transition' 
+          : 'hover:bg-slate-50 transition';
 
         let stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
         let statusBadge = 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold';
         if (b.status === 'Checked In') statusBadge = 'bg-amber-50 text-amber-800 border border-amber-300 font-bold animate-pulse';
         if (b.status === 'In Progress') statusBadge = 'bg-sky-50 text-sky-700 border border-sky-300 font-bold';
         if (b.status === 'Done') statusBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold';
-        if (b.status === 'Batal') statusBadge = 'bg-rose-950 text-rose-300 border border-rose-600 font-black';
+        if (b.status === 'Batal') statusBadge = 'bg-rose-100 text-rose-800 border border-rose-300 font-black';
+
+        let dateBadge = '';
+        if (isSameDate(b.date, todayIso)) {
+          dateBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Hari Ini</span>`;
+        } else if (isSameDate(b.date, tomorrowIso)) {
+          dateBadge = `<span class="bg-blue-50 text-blue-700 border border-blue-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Besok (${formatDateIndo(b.date, true)})</span>`;
+        } else {
+          dateBadge = `<span class="bg-purple-50 text-purple-700 border border-purple-200 font-bold px-1.5 py-0.5 rounded text-[10px]">${formatDateIndo(b.date, true)}</span>`;
+        }
+
+        const siteObj = SITES.find(s => isSameSite(s.id, b.siteId));
+        const siteBadge = siteObj ? `<span class="bg-slate-100 text-slate-700 border border-slate-300 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider">${siteObj.city}</span>` : '';
 
         let hadirBtn = '';
         let prosesBtn = '';
@@ -3380,105 +3767,106 @@
           `;
           prosesBtn = `
             <button disabled title="Terkunci: Konsumen belum hadir & belum dikerjakan" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Proses</span>
             </button>
           `;
           selesaiBtn = `
             <button disabled title="Terkunci: Servis belum selesai" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Selesai</span>
             </button>
           `;
         } else if (b.status === 'Checked In') {
           hadirBtn = `
-            <button onclick="saCallVoice('${b.id}', 'hadir')" title="Panggil Ulang: Konsumen Hadir / Tiba" class="px-2.5 py-1 bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-600 text-[11px] font-bold flex items-center gap-1 shadow transition animate-pulse rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-amber-400"></i>
+            <button onclick="saCallVoice('${b.id}', 'hadir')" title="Panggil Ulang: Konsumen Hadir / Tiba" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-[11px] font-bold flex items-center gap-1 shadow-xs transition animate-pulse rounded-[2px]">
+              <i data-lucide="volume-2" class="w-3 h-3 text-amber-600"></i>
               <span>Panggil Hadir</span>
             </button>
           `;
           prosesBtn = `
             <button disabled title="Terkunci: Teknisi belum memulai pengerjaan" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Proses</span>
             </button>
           `;
           selesaiBtn = `
             <button disabled title="Terkunci: Servis belum selesai" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Selesai</span>
             </button>
           `;
         } else if (b.status === 'In Progress') {
           hadirBtn = `
             <button disabled title="Terkunci: Konsumen sudah hadir dan sedang dikerjakan" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Hadir</span>
             </button>
           `;
           prosesBtn = `
-            <button onclick="saCallVoice('${b.id}', 'proses')" title="Panggil Suara: Sedang Dikerjakan di Stall" class="px-2.5 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-500 text-[11px] font-bold flex items-center gap-1 shadow transition animate-pulse rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-cyan-400"></i>
+            <button onclick="saCallVoice('${b.id}', 'proses')" title="Panggil Suara: Sedang Dikerjakan di Stall" class="px-2.5 py-1 bg-cyan-100 hover:bg-cyan-200 text-cyan-900 border border-cyan-400 text-[11px] font-bold flex items-center gap-1 shadow-xs transition animate-pulse rounded-[2px]">
+              <i data-lucide="volume-2" class="w-3 h-3 text-cyan-600"></i>
               <span>Panggil Proses</span>
             </button>
           `;
           selesaiBtn = `
             <button disabled title="Terkunci: Pengerjaan sedang berlangsung, belum selesai" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Selesai</span>
             </button>
           `;
         } else if (b.status === 'Done') {
           hadirBtn = `
             <button disabled title="Terkunci: Servis sudah selesai" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Hadir</span>
             </button>
           `;
           prosesBtn = `
             <button disabled title="Terkunci: Servis sudah selesai" class="px-2 py-1 bg-slate-100 text-slate-400 border border-slate-200 opacity-60 cursor-not-allowed text-[11px] font-bold flex items-center gap-1 rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-slate-600"></i>
+              <i data-lucide="volume-2" class="w-3 h-3 text-slate-400"></i>
               <span>Proses</span>
             </button>
           `;
           selesaiBtn = `
-            <button onclick="saCallVoice('${b.id}', 'selesai')" title="Panggil Suara: Servis Selesai, Silakan ke Kasir" class="px-2.5 py-1 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-500 text-[11px] font-bold flex items-center gap-1 shadow transition animate-pulse rounded-[2px]">
-              <i data-lucide="volume-2" class="w-3 h-3 text-emerald-400"></i>
+            <button onclick="saCallVoice('${b.id}', 'selesai')" title="Panggil Suara: Servis Selesai, Silakan ke Kasir" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1 shadow-xs transition animate-pulse rounded-[2px]">
+              <i data-lucide="volume-2" class="w-3 h-3 text-white"></i>
               <span>Panggil Selesai</span>
             </button>
           `;
         }
 
         const actionButtonsHtml = isBatal 
-          ? `<span class="px-2.5 py-1 text-[11px] font-bold text-rose-400 bg-rose-950/80 border border-rose-800 rounded-[2px]">BATAL (Hangus)</span>`
+          ? `<span class="px-2.5 py-1 text-[11px] font-bold text-rose-700 bg-rose-100 border border-rose-300 rounded-[2px]">BATAL</span>`
           : `<div class="flex items-center justify-end gap-1 flex-wrap">${hadirBtn}${prosesBtn}${selesaiBtn}</div>`;
 
-        // 1. Tampilan Laptop (Row Tabel)
+        // 1. Tampilan Laptop (Row Tabel dengan Teks Gelap Kontras Tinggi)
         if (tbody) {
           tr.innerHTML = `
-            <td class="py-2.5 px-3 font-mono font-bold ${isBatal ? 'text-slate-500 line-through' : 'text-white'}">${b.queueNumber}</td>
+            <td class="py-2.5 px-3 font-mono font-black text-sm ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</td>
             <td class="py-2.5 px-3">
               <span class="px-2 py-0.5 text-[10px] font-bold ${statusBadge}">
                 ${b.status}
               </span>
-              ${isBatal ? `<div class="text-[9px] text-rose-400 font-semibold mt-0.5">&gt;15 Mnt Tidak Hadir</div>` : ''}
+              ${isBatal ? `<div class="text-[9px] text-rose-600 font-semibold mt-0.5">&gt;15 Mnt Tidak Hadir</div>` : ''}
             </td>
             <td class="py-2.5 px-3">
-              <div class="font-bold ${isBatal ? 'text-slate-400' : 'text-slate-200'}">${stallLabel}</div>
-              <div class="text-[10px] ${isBatal ? 'text-slate-500' : 'text-red-400'}">${b.slot} WIB</div>
+              <div class="flex items-center gap-1 mb-0.5 flex-wrap">${siteBadge}${dateBadge}</div>
+              <div class="font-bold text-xs ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${stallLabel}</div>
+              <div class="text-[11px] ${isBatal ? 'text-slate-400' : 'text-red-600 font-extrabold'}">${b.slot} WIB</div>
             </td>
             <td class="py-2.5 px-3">
-              <div class="font-bold ${isBatal ? 'text-slate-400 line-through' : 'text-white'}">${b.plate}</div>
-              <div class="text-[11px] text-slate-400">${b.model}</div>
+              <div class="font-black text-xs ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.plate}</div>
+              <div class="text-[11px] text-slate-500 font-medium">${b.model}</div>
             </td>
             <td class="py-2.5 px-3">
-              <div class="font-medium ${isBatal ? 'text-slate-400' : 'text-slate-200'}">${b.name}</div>
-              <div class="text-[10px] text-slate-400">${b.phone}</div>
+              <div class="font-bold text-xs ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${b.name}</div>
+              <div class="text-[10px] text-slate-500 font-mono">${b.phone || '-'}</div>
             </td>
             <td class="py-2.5 px-3 max-w-[220px]">
               <div class="flex items-center gap-1 flex-wrap">
-                ${b.level ? `<span class="px-1.5 py-0.2 text-[9px] font-bold ${isBatal ? 'bg-slate-800 text-slate-500 border border-slate-200' : (b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold'))}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + 'J' : '<30m') : '1J'})</span>` : ''}
-                <span class="font-semibold ${isBatal ? 'text-slate-500' : 'text-slate-200'} text-xs truncate max-w-[150px]">${b.complaint || b.notes || '-'}</span>
+                ${b.level ? `<span class="px-1.5 py-0.2 text-[9px] font-bold ${isBatal ? 'bg-slate-100 text-slate-500 border border-slate-200' : (b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold'))}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + 'J' : '<30m') : '1J'})</span>` : ''}
+                <span class="font-semibold ${isBatal ? 'text-slate-400' : 'text-slate-800'} text-xs truncate max-w-[150px]">${b.complaint || b.notes || '-'}</span>
               </div>
               ${b.notes && b.notes !== b.complaint ? `<div class="text-[10px] text-slate-500 italic truncate max-w-[200px] mt-0.5">${b.notes}</div>` : ''}
             </td>
@@ -3492,14 +3880,16 @@
         // 2. Tampilan HP (Daftar Kartu Antrian Rapi Vertikal)
         if (mobileList) {
           const card = document.createElement('div');
-          card.className = `p-3 bg-white border border-slate-200 rounded-[3px] shadow-sm space-y-2.5 transition ${isBatal ? 'opacity-60 bg-rose-50/40 border-rose-300' : ''}`;
+          card.className = `p-3 bg-white border border-slate-200 rounded-[3px] shadow-xs space-y-2.5 transition ${isBatal ? 'opacity-60 bg-rose-50/40 border-rose-200' : ''}`;
           card.innerHTML = `
             <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
                 <span class="font-mono font-black text-sm ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</span>
                 <span class="px-2 py-0.5 text-[10px] font-bold ${statusBadge}">${b.status}</span>
+                ${siteBadge}
+                ${dateBadge}
               </div>
-              <div class="text-[11px] font-bold ${isBatal ? 'text-slate-400' : 'text-red-600'}">${stallLabel} &bull; ${b.slot} WIB</div>
+              <div class="text-[11px] font-extrabold ${isBatal ? 'text-slate-400' : 'text-red-600'}">${stallLabel} &bull; ${b.slot} WIB</div>
             </div>
             
             <div class="flex items-start justify-between gap-2 text-xs">
@@ -3508,8 +3898,8 @@
                 <div class="text-slate-500 text-[11px] font-medium">${b.model}</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-slate-800">${b.name}</div>
-                <div class="text-slate-500 text-[11px]">${b.phone}</div>
+                <div class="font-bold text-slate-900">${b.name}</div>
+                <div class="text-slate-500 text-[11px] font-mono">${b.phone || '-'}</div>
               </div>
             </div>
 
@@ -3605,6 +3995,7 @@
       document.getElementById('modalInputNotes').value = '';
 
       modal.classList.remove('hidden');
+      pushModalHistoryState('slotActionModal');
       lucide.createIcons();
     }
 
@@ -3612,6 +4003,12 @@
     // ROLE 4 & SIMULASI STALL GRID DISPLAY (TV MONITOR)
     // ==============================================================
     function renderSimulasiGrid() {
+      // Sinkronisasi input tanggal TV
+      const tvDateInput = document.getElementById('tvDateInput');
+      if (tvDateInput && tvDateInput.value !== currentDate) {
+        tvDateInput.value = currentDate;
+      }
+
       const bookings = loadBookings().filter(b => isSameDate(b.date, currentDate) && isSameSite(b.siteId, currentSiteId));
       let filledSlotsCount = 0;
 
@@ -4080,6 +4477,7 @@
       if (confirmModal) {
         confirmModal.classList.remove('hidden');
         confirmModal.style.setProperty('display', 'flex', 'important');
+        pushModalHistoryState('bookingConfirmModal');
       }
       if (window.lucide && lucide.createIcons) lucide.createIcons();
     }
@@ -4089,6 +4487,7 @@
       if (modal) {
         modal.classList.add('hidden');
         modal.style.setProperty('display', 'none', 'important');
+        popModalHistoryState();
       }
     }
 
@@ -4178,6 +4577,7 @@
       if (ticketModal) {
         ticketModal.classList.remove('hidden');
         ticketModal.style.setProperty('display', 'flex', 'important');
+        pushModalHistoryState('ticketSuccessModal');
       }
 
       // Bersihkan formulir input
@@ -4196,6 +4596,7 @@
       if (modal) {
         modal.classList.add('hidden');
         modal.style.setProperty('display', 'none', 'important');
+        popModalHistoryState();
       }
     }
 
@@ -4231,12 +4632,16 @@
       }
 
       modal.classList.remove('hidden');
+      pushModalHistoryState('appPopupModal');
       if (window.lucide) lucide.createIcons();
     }
 
     function closePopup() {
       const modal = document.getElementById('appPopupModal');
-      if (modal) modal.classList.add('hidden');
+      if (modal) {
+        modal.classList.add('hidden');
+        popModalHistoryState();
+      }
     }
 
     // Override browser native alert agar seluruh notifikasi web tampil sebagai popup in-app
@@ -4302,6 +4707,7 @@
       }
 
       modal.classList.remove('hidden');
+      pushModalHistoryState('slotActionModal');
       lucide.createIcons();
     }
 
@@ -4341,6 +4747,7 @@
       }
 
       modal.classList.remove('hidden');
+      pushModalHistoryState('slotActionModal');
       lucide.createIcons();
     }
 
@@ -4351,6 +4758,7 @@
     function closeSlotModal() {
       document.getElementById('slotActionModal').classList.add('hidden');
       currentModalTarget = null;
+      popModalHistoryState();
     }
 
     function getNextHour(timeStr) {
@@ -4651,7 +5059,13 @@
 
       // 1. Booking ID
       let id = String(raw.id || '').trim();
-      if (!id || id.toLowerCase() === 'bookingid') return null;
+      if (!id || id.toLowerCase() === 'bookingid' || id.toLowerCase() === 'kode booking') {
+        if (raw.plate || raw.name || raw.queueNumber || raw.date) {
+          id = `PLY-AUTO-${Date.now().toString().slice(-4)}-${Math.floor(Math.random() * 1000)}`;
+        } else {
+          return null;
+        }
+      }
 
       // 2. Tanggal (YYYY-MM-DD)
       let date = normalizeDateString(raw.date);
@@ -4867,24 +5281,44 @@
         const table = await fetchGvizJsonp('Bookings');
         if (table) {
           const rows = extractRowsFromGvizTable(table);
-          rows.forEach(row => {
-            const bId = row[1];
-            if (bId && String(bId).trim().toLowerCase() !== 'bookingid') {
+          rows.forEach((row, rIdx) => {
+            let bId = String(row[1] || '').trim();
+            const qNum = String(row[2] || '').trim();
+            const sId = String(row[3] || '').trim();
+            const dStr = String(row[4] || '').trim();
+            const slotStr = String(row[5] || '').trim();
+            const stallStr = String(row[6] || '').trim();
+            const lvlStr = String(row[7] || '').trim();
+            const compStr = String(row[8] || '').trim();
+            const mdlStr = String(row[9] || '').trim();
+            const pltStr = String(row[10] || '').trim();
+            const nmStr = String(row[11] || '').trim();
+            const phStr = String(row[12] || '').trim();
+            const stStr = String(row[13] || '').trim();
+
+            if (bId.toLowerCase() === 'bookingid' || bId.toLowerCase() === 'kode booking') return;
+
+            // Jika row memiliki isi data tetapi ID kosong, buatkan ID unik
+            if (!bId && (pltStr || nmStr || dStr || qNum)) {
+              bId = `PLY-IMP-${rIdx + 1}`;
+            }
+
+            if (bId) {
               const norm = normalizeBookingData({
-                id: String(bId),
-                queueNumber: row[2],
-                siteId: row[3],
-                date: row[4],
-                slot: row[5],
-                stall: row[6],
-                level: row[7],
-                complaint: row[8],
-                notes: row[8],
-                model: row[9],
-                plate: row[10],
-                name: row[11],
-                phone: row[12],
-                status: row[13]
+                id: bId,
+                queueNumber: qNum || `REG-${String(rIdx + 1).padStart(2, '0')}`,
+                siteId: sId,
+                date: dStr,
+                slot: slotStr,
+                stall: stallStr,
+                level: lvlStr,
+                complaint: compStr,
+                notes: compStr,
+                model: mdlStr,
+                plate: pltStr,
+                name: nmStr,
+                phone: phStr,
+                status: stStr
               });
               if (norm) {
                 remoteBookings.push(norm);
