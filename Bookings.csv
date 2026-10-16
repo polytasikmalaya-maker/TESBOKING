@@ -1,0 +1,5 @@
+Timestamp,BookingID,NoAntrian,SiteID,Tanggal,JamSlot,Stall,Level,Keluhan,ModelMotor,PlatNomor,NamaPelanggan,NoWhatsApp,StatusServis
+2026-10-16 08:00:00,PLY-TSM-001,REG-01,tasikmalaya,2026-10-16,08.30,stall1,Level 1,Servis Berkala 1.000 KM (Pengecekan Standar),Polytron Fox-R,Z 1482 ABZ,Ahmad Faisal,081234567890,In Progress
+2026-10-16 08:15:00,PLY-TSM-002,REG-02,tasikmalaya,2026-10-16,10.30,stall1,Level 2,Update Firmware ECU & Kalibrasi Speedometer,Polytron Fox-S,Z 3019 POL,Siti Rahmawati,082198765432,Checked In
+2026-10-16 08:20:00,PLY-TSM-003,REG-03,tasikmalaya,2026-10-16,09.30,stall2,Level 1,Penggantian Kampas Rem Depan / Belakang,Polytron Fox-R,Z 8812 EV,Bambang Kusuma,085711223344,In Progress
+2026-10-16 08:30:00,PLY-TSM-004,EXP-01,tasikmalaya,2026-10-16,0,express,Express,Fast Check: Cek Tekanan Angin & Tambal Tubeless,Polytron Fox-S,Z 4321 PLY,Rian Pratama,089677889900,Done

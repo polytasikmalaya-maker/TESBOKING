@@ -1,0 +1,24 @@
+ID,Kategori,Level,Estimasi_Jam,Keluhan_Kerusakan,Rekomendasi_Stall,Detail_Pekerjaan
+KEL-001,Reguler,Level 1,1,Servis Berkala 1.000 KM (Pengecekan Standar),Stall EV 1 / 2,"Cek tekanan ban, baut bodi, sistem rem, & pelumasan"
+KEL-002,Reguler,Level 1,1,Servis Berkala 5.000 KM (Pengecekan Rutin),Stall EV 1 / 2,Pemeriksaan voltase baterai, throttle switch & kelistrikan
+KEL-003,Reguler,Level 1,1,Penggantian Kampas Rem Depan / Belakang,Stall EV 1 / 2,Bongkar pasang pad rem & cek piringan cakram disc
+KEL-004,Reguler,Level 1,1,Pengurasan & Bleeding Minyak Rem,Stall EV 1 / 2,Ganti minyak rem DOT4 baru & pembersihan kaliper
+KEL-005,Reguler,Level 1,1,Kalibrasi Throttle Gas & Switch Cut-off Rem,Stall EV 1 / 2,Setting respon putaran gas & kalibrasi sensor rem
+KEL-006,Reguler,Level 1,1,Pengecekan Kelistrikan Lampu, Klakson & Sein,Stall EV 1 / 2,Pemeriksaan jalur kabel ringan & ganti soket
+KEL-007,Reguler,Level 1,1,Pengecekan & Setting Balancing Roda / Velg,Stall EV 1 / 2,Cek laher roda (bearing) & balancing putaran
+KEL-008,Reguler,Level 2,2,Update Firmware ECU & Kalibrasi Speedometer,Stall EV 1 / 2,Flashing software ECU terbaru & kalibrasi display digital
+KEL-009,Reguler,Level 2,2,Diagnostik Gangguan Controller / Inverter Motor,Stall EV 1 / 2,Pembacaan trouble code, cek MOSFET & arus daya
+KEL-010,Reguler,Level 2,2,Penggantian Ban Tubeless Depan / Belakang,Stall EV 1 / 2,Pelepasan velg dinamo hub motor & pasang ban baru
+KEL-011,Reguler,Level 2,2,Servis Suspensi Depan / Ganti Seal & Oli Shock,Stall EV 1 / 2,Overhaul peredam kejut depan & ganti pelumas shock
+KEL-012,Reguler,Level 2,2,Penggantian Belt Drive / Rantai Transfer Tenaga,Stall EV 1 / 2,Penyetelan tegangan sabuk belt motor & pulley
+KEL-013,Reguler,Level 2,2,Perbaikan Wiring Harness / Kabel Bodi Utama,Stall EV 1 / 2,Pengurutan kabel bodi utama & proteksi anti air
+KEL-014,Reguler,Level 3,3,Diagnostik Mendalam BMS (Battery Management System),Stall EV 1 / 2,Cek cell imbalance, internal resistance & modul proteksi
+KEL-015,Reguler,Level 3,3,Penurunan & Penggantian Paket Baterai Utama (Battery Pack),Stall EV 1 / 2,Pembongkaran bodi total, angkat baterai pack & kalibrasi
+KEL-016,Reguler,Level 3,3,Overhaul Hub Motor / Dinamo Penggerak Roda Belakang,Stall EV 1 / 2,Bongkar dinamo BLDC, ganti seal & bearing dinamo
+KEL-017,Reguler,Level 3,3,Penggantian Total Motor Control Unit (MCU),Stall EV 1 / 2,Instalasi MCU unit baru & adaptasi parameter motor
+KEL-018,Reguler,Level 3,3,Perbaikan Total Short Circuit & Sistem Proteksi,Stall EV 1 / 2,Penelusuran korsleting kelistrikan tegangan tinggi
+KEL-019,Reguler,Level 3,3,Penggantian Komstir & Press Segitiga Rangka Depan,Stall EV 1 / 2,Pembongkaran sistem stang kemudi & setting preload komstir
+KEL-020,Express,Express,0.5,Fast Check: Cek Tekanan Angin & Tambal Tubeless,Express Bay,Pengisian angin nitrogen & perbaikan paku tubeless
+KEL-021,Express,Express,0.5,Kencangkan Baut Bodi Kendur & Setel Spion,Express Bay,Pengecekan torsi baut bodi & penyetelan posisi spion
+KEL-022,Express,Express,0.5,Penggantian Sekring Fuse / Bohlam Cepat,Express Bay,Penggantian part kelistrikan ringan plug & play
+KEL-023,Express,Express,0.5,Pelumasan Standar Samping & Engsel Bodi,Express Bay,Penyemprotan pelumas silikon/grease pada engsel
