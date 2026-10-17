@@ -12,6 +12,31 @@
       document.head.appendChild(mLink);
     }
   </script>
+  <!-- HTTP NO-CACHE HEADERS UNTUK GITHUB PAGES -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- AUTO-UNREGISTER SERVICE WORKER & PURGE STALE CACHES -->
+  <script>
+    (function() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var i = 0; i < registrations.length; i++) {
+            registrations[i].unregister();
+          }
+        }).catch(function() {});
+      }
+      if ('caches' in window) {
+        caches.keys().then(function(names) {
+          for (var i = 0; i < names.length; i++) {
+            caches.delete(names[i]);
+          }
+        }).catch(function() {});
+      }
+    })();
+  </script>
+
   <meta name="theme-color" content="#dc2626">
   <link rel="icon" type="image/svg+xml" href="icon-192.svg">
   
@@ -2115,9 +2140,9 @@
   <!-- ============================================================== -->
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      });
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r) { r.unregister(); });
+      }).catch(function() {});
     }
 
     // STORAGE KEY
