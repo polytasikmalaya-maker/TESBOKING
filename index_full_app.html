@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Polytron Service Center - Sistem Booking dan Monitoring EV</title>
   <script>
     if (window.location.protocol.startsWith('http')) {
@@ -171,37 +171,75 @@
     /* ============================================================== */
     
     /* ============================================================== */
-    /* 2. ATURAN TAMPILAN FULL LAYAR (HP & LAPTOP DENGAN DATA RAPI)   */
+    /* 2. ATURAN ANTI-SCROLL TAB CHROME: TAB CHROME DIAM TIDAK TERSKROL*/
+    /* Root html & body dikunci ke 100dvh fixed dengan overflow hidden */
+    /* Setiap menu melakukan scrolling internal secara mandiri          */
     /* ============================================================== */
     html, body {
       padding: 0 !important;
       margin: 0 !important;
       width: 100% !important;
       max-width: 100vw !important;
-      min-height: 100vh !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
       box-sizing: border-box !important;
-      overflow-x: clip !important;
-      overscroll-behavior-y: none;
-      overscroll-behavior-x: none;
+      overflow: hidden !important;
+      overscroll-behavior: none !important;
       touch-action: pan-y;
     }
     
-    .app-container {
+    .app-container,
+    #contentWrapper {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
       width: 100% !important;
-      max-width: 100% !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
       padding: 0 !important;
       margin: 0 !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+
+    /* Container tiap Menu: Scroll internal sendiri, tab Chrome tetap diam tidak bergerak */
+    #role-section-portal,
+    #role-section-konsumen,
+    #role-section-teknisi,
+    #role-section-sa {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      overscroll-behavior-y: contain !important;
       box-sizing: border-box !important;
     }
 
     @media (max-width: 768px) {
       .mobile-pb-safe {
-        padding-bottom: 16px !important;
+        padding-bottom: 24px !important;
       }
     }
     @media (min-width: 769px) {
       .mobile-pb-safe {
-        padding-bottom: 24px !important;
+        padding-bottom: 32px !important;
       }
     }
 
@@ -301,7 +339,8 @@
     #role-section-sa,
     #role-section-teknisi,
     #role-section-tv,
-    #role-section-konsumen {
+    #role-section-konsumen,
+    #role-section-part {
       background-color: #380202 !important;
       background: linear-gradient(to right, #380202 0%, #5a0606 20%, #7e0a0a 40%, #a81212 60%, #cf1b1b 80%, #ef4444 95%, #f43f5e 100%) !important;
       background-attachment: fixed !important;
@@ -889,7 +928,7 @@
               <h2 class="text-xl sm:text-2xl font-black text-white mt-0.5 drop-shadow">Silakan Pilih Menu</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
               
               <!-- MENU 1: KONSUMEN -->
               <div onclick="switchRole('konsumen')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-4 sm:p-5 flex flex-col justify-between border-2 border-transparent hover:border-red-500 transition-all duration-200 shadow-md group">
@@ -1051,6 +1090,46 @@
                 </div>
               </div>
 
+              <!-- MENU 5: CEK KETERSEDIAAN PART -->
+              <div onclick="openPartStockView('portal')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-4 sm:p-5 flex flex-col justify-between border-2 border-transparent hover:border-purple-500 transition-all duration-200 shadow-md group">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="p-2.5 bg-purple-50 text-purple-600 rounded-[3px] group-hover:bg-purple-600 group-hover:text-white transition">
+                      <i data-lucide="package-search" class="w-6 h-6"></i>
+                    </span>
+                    <span class="text-[10px] font-extrabold px-2 py-0.5 bg-purple-100 text-purple-800 rounded-[2px] uppercase">
+                      Sparepart
+                    </span>
+                  </div>
+                  <h3 class="text-base sm:text-lg font-black text-slate-900 group-hover:text-purple-600 transition">
+                    5. Ketersediaan Part
+                  </h3>
+                  <p class="text-xs text-slate-500 font-semibold mt-0.5">
+                    Cek Stok Suku Cadang Realtime
+                  </p>
+                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 border-t border-slate-100 pt-3 text-left">
+                    <li class="flex items-center gap-1.5">
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <span>Stok Live per Cabang / Site</span>
+                    </li>
+                    <li class="flex items-center gap-1.5">
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <span>Kolom A (KODE), B (Part), C (Qty)</span>
+                    </li>
+                    <li class="flex items-center gap-1.5">
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <span>Pencarian Cepat Sparepart</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="mt-5 pt-3 border-t border-slate-100">
+                  <button type="button" class="w-full py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs rounded-[3px] flex items-center justify-center gap-2 shadow-sm transition">
+                    <span>Cek Ketersediaan Part</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -1078,24 +1157,24 @@
                 <div class="flex-shrink-0 mb-1.5">
                   <label class="block text-[11px] font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Pilihan Cabang Service Center</label>
                   <select id="bookingSiteInput" onchange="handleBookingSiteChange(this.value)" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-1.5 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 cursor-pointer shadow-xs">
-                    <!-- Populated via JS -->
+                    <option value="">Memuat data cabang dari Google Sheet...</option>
                   </select>
                 </div>
 
                 <div id="bookingSiteInfoCard" class="flex-shrink-0 bg-white border border-slate-200 rounded-[3px] p-2.5 sm:p-3 space-y-1 shadow-xs text-left mb-1.5">
                   <div class="flex items-start justify-between gap-2">
-                    <div id="siteCardName" class="font-extrabold text-slate-900 text-xs sm:text-sm truncate">Polytron SC Tasikmalaya</div>
-                    <span id="siteCardBadge" class="text-[9px] sm:text-[10px] bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 font-bold rounded-[2px] flex-shrink-0">Jawa Barat</span>
+                    <div id="siteCardName" class="font-extrabold text-slate-900 text-xs sm:text-sm truncate">Memuat data cabang...</div>
+                    <span id="siteCardBadge" class="text-[9px] sm:text-[10px] bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 font-bold rounded-[2px] flex-shrink-0">-</span>
                   </div>
                   <div class="flex items-start gap-1.5 text-[11px] text-slate-700">
                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-red-600 mt-0.5 flex-shrink-0"></i>
-                    <span id="siteCardAddress" class="font-semibold text-slate-800 line-clamp-1">Jl. KHZ. Mustofa No. 280, Nagarawangi, Cihideung</span>
+                    <span id="siteCardAddress" class="font-semibold text-slate-800 line-clamp-1">Menghubungkan ke Google Sheet...</span>
                   </div>
                   <div class="flex items-center gap-2 text-[11px] text-slate-700">
                     <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-500 flex-shrink-0"></i>
-                    <span id="siteCardPhone" class="font-semibold text-slate-800">0265-334567</span>
+                    <span id="siteCardPhone" class="font-semibold text-slate-800">-</span>
                     <span class="text-slate-300">&bull;</span>
-                    <span class="text-slate-700 font-bold">Buka 08.30-17.30 (Sabtu sd 14.30)</span>
+                    <span class="text-slate-700 font-bold">Buka 08.30-14.30 (Sabtu sd 11.30)</span>
                   </div>
                 </div>
 
@@ -1147,16 +1226,16 @@
 
           <!-- TAHAP 2: PILIH KATEGORI SERVICE -->
           <div id="booking-stage-2" class="flex flex-col flex-1 h-full overflow-hidden hidden">
-            <div class="flex-1 min-h-0 flex flex-col justify-start px-4 sm:px-8 py-3.5 sm:py-5 overflow-hidden">
-              <div class="w-full max-w-2xl mx-auto flex flex-col space-y-4">
-                <div class="text-center mb-1 sm:mb-2 flex-shrink-0">
+            <div class="flex-1 min-h-0 flex flex-col justify-start px-3 sm:px-8 py-3 sm:py-4 overflow-y-auto">
+              <div class="w-full max-w-2xl mx-auto flex flex-col space-y-3 sm:space-y-4">
+                <div class="text-center mb-0.5 flex-shrink-0">
                   <h2 class="text-lg sm:text-2xl font-black text-slate-900 leading-tight uppercase tracking-wider mb-0.5">
                     PILIH KATEGORI SERVICE
                   </h2>
                   <p class="text-[11px] sm:text-xs text-slate-600 font-medium">Tentukan jenis penanganan yang sesuai untuk motor listrik Anda</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                   <!-- SERVIS REGULER -->
                   <div id="opt-service-reguler" onclick="selectServiceType('reguler')" class="cursor-pointer border-2 border-red-500 bg-red-50/80 rounded-[3px] p-4 sm:p-5 transition flex flex-col justify-between shadow-sm hover:border-red-600">
                     <div>
@@ -1165,10 +1244,10 @@
                           <div class="font-black text-slate-900 text-sm sm:text-base uppercase">Servis Reguler</div>
                           <span class="text-[10px] sm:text-xs text-red-600 font-bold block mt-0.5">Perawatan Menyeluruh & ECU</span>
                         </div>
-                        <span class="text-[10px] sm:text-xs bg-red-600 text-white font-extrabold px-2.5 py-1 rounded-[2px] flex-shrink-0 shadow-xs">~1 Jam</span>
+                        <span class="text-[10px] sm:text-xs bg-red-600 text-white font-extrabold px-2.5 py-1 rounded-[2px] flex-shrink-0 shadow-xs">~1-2 Jam</span>
                       </div>
                       <p class="text-xs text-slate-600 mt-2.5 leading-relaxed font-medium">
-                        Servis berkala, pengecekan baterai & controller, rem hidrolik, kelistrikan, update ECU / software unit.
+                        Servis berkala, pengecekan baterai & controller, rem hidrolik, kelistrikan, overhaul, update ECU / software unit.
                       </p>
                     </div>
                     <div class="text-xs font-bold text-red-600 mt-4 pt-2.5 border-t border-red-200/70 flex items-center justify-between">
@@ -1203,6 +1282,39 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- PILIH KELUHAN & KENDALA SERVIS (BERSIH TANPA ESTIMASI) -->
+                <div class="bg-white border border-slate-200 rounded-[3px] p-3 shadow-xs text-left">
+                  <label class="block text-xs font-black uppercase text-slate-900 tracking-wider mb-1.5">
+                    Pilih Keluhan / Kendala Servis
+                  </label>
+                  <select id="stage2DamageMaster" onchange="handleStage2DamageChange(this.value)" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 cursor-pointer shadow-2xs">
+                    <!-- Populated dynamically via JS from MASTER_KERUSAKAN -->
+                  </select>
+                  <p id="stage2DamageDesc" class="text-[11px] text-slate-500 italic mt-1 font-medium"></p>
+                  
+                  <!-- Hidden elements for script compatibility -->
+                  <span id="stage2LevelBadge" class="hidden"></span>
+                  <div id="stage2Level2Notice" class="hidden"></div>
+                </div>
+
+                <!-- TOMBOL CEK KETERSEDIAAN PART -->
+                <div class="bg-white border border-slate-200 rounded-[3px] p-3 shadow-xs text-left space-y-2.5">
+                  <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 rounded-[2px] bg-red-50 text-red-600 border border-red-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <i data-lucide="package-search" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs font-black uppercase text-slate-900 tracking-wider">Ketersediaan Suku Cadang</div>
+                      <div class="text-[11px] text-slate-500 font-medium">Cek kesiapan stok sparepart di lokasi cabang terpilih</div>
+                    </div>
+                  </div>
+                  <button type="button" onclick="openPartStockView('konsumen-step2')" class="w-full h-9 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-xs transition cursor-pointer">
+                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                    <span>Cek Ketersediaan Part</span>
+                  </button>
+                </div>
+
               </div>
             </div>
 
@@ -1375,6 +1487,77 @@
 
         </div>
 
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- MODUL KHUSUS: CEK KETERSEDIAAN STOK SPAREPART PER CABANG       -->
+      <!-- ============================================================== -->
+      <section id="role-section-part" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col h-screen max-h-screen overflow-hidden">
+        <!-- Sticky Header Cek Stok (Diam Tidak Terskrol) -->
+        <div class="bg-gradient-to-r from-[#380202] via-[#8c0c0c] to-[#ef4444] text-white p-3 sm:p-4 shadow-md border-b border-white/10 flex-shrink-0">
+          <div class="w-full flex items-center justify-between gap-2.5">
+            <div class="flex items-center gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                  <h2 class="text-sm sm:text-lg font-black text-white uppercase tracking-wider">Ketersediaan Stok Sparepart</h2>
+                </div>
+                <p class="text-[11px] text-red-100 font-medium">Stok ketersediaan part lokasi service terpilih</p>
+              </div>
+            </div>
+
+            <!-- Hidden Site Selector for JS compatibility (No visible dropdown per user request) -->
+            <select id="partSectionSiteSelector" onchange="handlePartSectionSiteChange(this.value)" class="hidden">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Konten Card Tabel Sparepart (Full Height ke Bawah Layar, Header Diam, Tab Chrome Bebas Scroll) -->
+        <div class="p-2 sm:p-4 max-w-5xl mx-auto w-full flex-1 min-h-0 flex flex-col overflow-hidden">
+          <div class="bg-white border border-slate-200 rounded-[4px] shadow-lg p-3 sm:p-4 flex-1 min-h-0 flex flex-col space-y-2.5 overflow-hidden">
+            
+            <!-- Filter & Search Bar (Diam Tidak Terskrol) -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-100 flex-shrink-0">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 bg-red-100 text-red-700 text-xs font-mono font-black rounded-[2px]" id="partSectionSiteCodeBadge">---</span>
+                <div>
+                  <div class="text-xs sm:text-sm font-black text-slate-900" id="partSectionSiteNameTitle">Cabang Terpilih</div>
+                  <div class="text-[10px] text-slate-500 font-medium">Daftar suku cadang resmi siap pakai di lokasi service terpilih</div>
+                </div>
+              </div>
+              <div class="relative w-full sm:w-72">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5"></i>
+                <input type="text" id="partSectionSearchInput" oninput="renderDedicatedPartsTable(this.value)" placeholder="Cari nama suku cadang..." class="w-full h-9 pl-9 pr-3 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
+              </div>
+            </div>
+
+            <!-- Table Container (HANYA BAGIAN INI YANG BISA DISCROLL) -->
+            <div class="overflow-y-auto overflow-x-auto border border-slate-200 rounded-[3px] flex-1 min-h-0">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead class="sticky top-0 z-10 bg-slate-100">
+                  <tr class="bg-slate-100 text-slate-700 font-black border-b border-slate-200 uppercase tracking-wider text-[11px]">
+                    <th class="p-2.5 w-24 text-center">KODE</th>
+                    <th class="p-2.5">NAMA PART (SUKU CADANG)</th>
+                    <th class="p-2.5 w-28 text-center">QTY STOK</th>
+                  </tr>
+                </thead>
+                <tbody id="dedicatedPartsTableBody" class="divide-y divide-slate-100">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Bottom summary (Ukuran Tombol Seragam dengan Tombol Kembali Lainnya) -->
+            <div class="pt-2 flex items-center justify-end flex-shrink-0">
+              <button type="button" onclick="handlePartBack()" class="h-9 px-4 sm:px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-[3px] font-bold text-xs sm:text-sm flex items-center gap-2 cursor-pointer shadow-xs transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Kembali</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
       </section>
 
       <!-- ============================================================== -->
@@ -1564,9 +1747,9 @@
               <div class="flex flex-wrap items-center gap-2 mt-0.5">
                 <span class="inline-flex items-center gap-1 px-1.5 py-0.2 bg-red-50 text-red-600 border border-red-200 text-[11px] font-bold rounded-[2px]">
                   <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>
-                  <span id="bannerSiteName">Polytron SC Tasikmalaya</span>
+                  <span id="bannerSiteName">Service Center</span>
                 </span>
-                <span id="bannerSiteAddress" class="text-[11px] text-slate-500 truncate max-w-md">Jl. KHZ. Mustofa No. 280, Tasikmalaya</span>
+                <span id="bannerSiteAddress" class="text-[11px] text-slate-500 truncate max-w-md"></span>
               </div>
             </div>
 
@@ -1836,7 +2019,7 @@
   <!-- ============================================================== -->
   <!-- MODAL DETAIL / INPUT BOOKING MANUAL (UNTUK ADMIN)              -->
   <!-- ============================================================== -->
-  <div id="slotActionModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-2 hidden">
+  <div id="slotActionModal" onclick="if(event.target === this) closeSlotModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-2 hidden">
     <div class="bg-white border border-slate-200 w-full max-w-md p-5 shadow-2xl relative">
       <button onclick="closeSlotModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 p-1">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -1974,11 +2157,6 @@
       <!-- Top Red Strip -->
       <div class="w-10 h-1 bg-red-600 mx-auto mb-3 rounded-full"></div>
 
-      <!-- Icon Container -->
-      <div id="popupIconContainer" class="w-11 h-11 bg-red-50 text-red-600 border border-red-200 rounded-[3px] flex items-center justify-center mx-auto mb-2.5 shadow-sm">
-        <i id="popupIcon" data-lucide="alert-triangle" class="w-6 h-6"></i>
-      </div>
-
       <!-- Title -->
       <h3 id="popupTitle" class="text-sm font-black text-slate-900 mb-1.5">Perhatian</h3>
 
@@ -1988,8 +2166,7 @@
       </div>
 
       <!-- Action Button -->
-      <button type="button" onclick="closePopup()" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer rounded-[3px]">
-        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+      <button type="button" onclick="closePopup()" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs shadow-sm transition flex items-center justify-center cursor-pointer rounded-[3px]">
         <span>Oke, Mengerti</span>
       </button>
 
@@ -1997,14 +2174,40 @@
   </div>
 
   <!-- ============================================================== -->
+  <!-- MODAL POPUP KHUSUS LEVEL 2 (WAKTU BUTUH 2 JAM BERURUTAN)       -->
+  <!-- ============================================================== -->
+  <div id="level2AlertModal" onclick="if(event.target === this) closeLevel2AlertModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-3 hidden" style="z-index: 99999 !important;">
+    <div class="bg-white border border-slate-200 w-full max-w-md p-5 shadow-2xl relative text-center rounded-[3px]">
+      
+      <!-- Top Red Strip -->
+      <div class="w-10 h-1 bg-red-600 mx-auto mb-3 rounded-full"></div>
+
+      <!-- Title -->
+      <h3 class="text-sm sm:text-base font-black text-slate-900 mb-1.5 uppercase tracking-wide">Kategori Perbaikan Level 2 (2 Jam)</h3>
+
+      <!-- Message Content -->
+      <div id="level2AlertMessage" class="text-xs text-slate-600 leading-relaxed mb-4 text-left bg-slate-50 border border-slate-200 rounded-[3px] p-3 space-y-1.5 font-medium">
+        Kerusakan yang Anda pilih membutuhkan waktu pengerjaan 2 jam. Waktu yang Anda pilih tidak dapat ditambah karena slot berikutnya sudah terisi atau di luar jam operasional. Silakan pilih waktu yang memiliki durasi 2 jam berurutan.
+      </div>
+
+      <!-- Action Buttons -->
+      <div>
+        <button type="button" onclick="closeLevel2AlertModal()" class="w-full py-2.5 px-4 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow-sm transition flex items-center justify-center cursor-pointer">
+          <span>Pilih Jam Lain</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL KONFIRMASI SIMPAN BOOKING (YA / TIDAK)                    -->
   <!-- ============================================================== -->
-  <div id="bookingConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-3 hidden" style="z-index: 99999 !important;">
+  <div id="bookingConfirmModal" onclick="if(event.target === this) closeBookingConfirmModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-3 hidden" style="z-index: 99999 !important;">
     <div class="bg-white border border-slate-200 w-full max-w-md p-4 sm:p-5 shadow-2xl rounded-[3px] text-center relative text-slate-800">
       
-      <div class="w-12 h-12 bg-red-50 text-red-600 border border-red-200 rounded-[3px] flex items-center justify-center mx-auto mb-2.5 shadow-sm">
-        <i data-lucide="help-circle" class="w-7 h-7"></i>
-      </div>
+      <!-- Top Red Strip -->
+      <div class="w-10 h-1 bg-red-600 mx-auto mb-3 rounded-full"></div>
 
       <h3 class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wide">
         KONFIRMASI SIMPAN BOOKING
@@ -2042,12 +2245,10 @@
 
       <!-- Tombol Konfirmasi Ya / Tidak Jelas Sesuai Permintaan -->
       <div class="grid grid-cols-2 gap-3">
-        <button type="button" onclick="closeBookingConfirmModal()" class="py-2.5 px-3 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-[3px] border border-slate-300 shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5">
-          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+        <button type="button" onclick="closeBookingConfirmModal()" class="py-2.5 px-3 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-[3px] border border-slate-300 shadow-xs transition cursor-pointer flex items-center justify-center">
           <span>Tidak (Batal)</span>
         </button>
-        <button type="button" onclick="executeSubmitBooking()" class="py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer">
-          <i data-lucide="check-circle" class="w-4 h-4"></i>
+        <button type="button" onclick="executeSubmitBooking()" class="py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow-sm flex items-center justify-center transition cursor-pointer">
           <span>Ya, Simpan</span>
         </button>
       </div>
@@ -2058,14 +2259,10 @@
   <!-- ============================================================== -->
   <!-- MODAL TIKET DIGITAL (POPUP E-TICKET SETELAH BOOKING)            -->
   <!-- ============================================================== -->
-  <div id="ticketSuccessModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-2 hidden" style="z-index: 99999 !important;">
-    <div class="bg-white border border-slate-200 w-full max-w-sm p-5 shadow-2xl text-center relative">
+  <div id="ticketSuccessModal" onclick="if(event.target === this) closeTicketModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-2 hidden" style="z-index: 99999 !important;">
+    <div class="bg-white border border-slate-200 w-full max-w-sm p-5 shadow-2xl text-center relative rounded-[3px]">
       
-      <div class="w-12 h-1 bg-red-600 mx-auto mb-3"></div>
-
-      <div class="w-12 h-12 bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center mx-auto mb-2 shadow">
-        <i data-lucide="check-check" class="w-7 h-7"></i>
-      </div>
+      <div class="w-12 h-1 bg-red-600 mx-auto mb-3 rounded-full"></div>
 
       <h3 class="text-lg font-black text-slate-900 uppercase tracking-wide">BOOKING BERHASIL!</h3>
       <p class="text-xs text-slate-600 font-medium mt-0.5">Tunjukkan e-tiket ini kepada Service Advisor saat tiba.</p>
@@ -2085,7 +2282,7 @@
         <div class="space-y-1.5 text-xs">
           <div class="flex justify-between items-center">
             <span class="text-slate-700">Lokasi Cabang:</span>
-            <span id="ticketSite" class="font-bold text-red-600 truncate max-w-[190px]">Polytron SC Tasikmalaya</span>
+            <span id="ticketSite" class="font-bold text-red-600 truncate max-w-[190px]">-</span>
           </div>
           <div class="flex justify-between items-center">
             <span class="text-slate-700">Petunjuk Arah:</span>
@@ -2124,8 +2321,7 @@
       </div>
 
       <div class="mt-4">
-        <button type="button" onclick="closeTicketModal(); switchRole('portal');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center gap-1.5">
-          <i data-lucide="check" class="w-4 h-4"></i>
+        <button type="button" onclick="closeTicketModal();" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
           <span>Tutup</span>
         </button>
       </div>
@@ -2149,79 +2345,52 @@
     const STORAGE_KEY = 'POLYTRON_EV_BOOKINGS_V6';
     const SOUND_KEY = 'POLYTRON_EV_SOUND_ENABLED';
 
-    // Master Cabang
-    const SITES = [
-      {
-        id: 'tasikmalaya',
-        name: 'Polytron SC Tasikmalaya',
-        city: 'Tasikmalaya',
-        address: 'Jl. KHZ. Mustofa No. 280, Nagarawangi, Cihideung, Tasikmalaya',
-        phone: '0265-334567',
-        badge: 'Jawa Barat',
-        coords: '-7.339218, 108.219543',
-        mapsUrl: 'https://maps.google.com/?q=-7.339218,108.219543'
-      },
-      {
-        id: 'bandung',
-        name: 'Polytron SC Bandung (Soekarno Hatta)',
-        city: 'Bandung',
-        address: 'Jl. Soekarno Hatta No. 338, Batununggal, Bandung',
-        phone: '022-5401234',
-        badge: 'Jawa Barat',
-        coords: '-6.945821, 107.625612',
-        mapsUrl: 'https://maps.google.com/?q=-6.945821,107.625612'
-      },
-      {
-        id: 'cirebon',
-        name: 'Polytron SC Cirebon',
-        city: 'Cirebon',
-        address: 'Jl. Tuparev No. 88, Kedawung, Cirebon',
-        phone: '0231-209876',
-        badge: 'Jawa Barat',
-        coords: '-6.711845, 108.536920',
-        mapsUrl: 'https://maps.google.com/?q=-6.711845,108.536920'
-      },
-      {
-        id: 'jakarta',
-        name: 'Polytron SC Jakarta Barat (Daan Mogot)',
-        city: 'Jakarta Barat',
-        address: 'Jl. Daan Mogot KM 11 No. 9, Kedaung Kali Angke, Cengkareng',
-        phone: '021-5432100',
-        badge: 'DKI Jakarta',
-        coords: '-6.151740, 106.745510',
-        mapsUrl: 'https://maps.google.com/?q=-6.151740,106.745510'
-      },
-      {
-        id: 'semarang',
-        name: 'Polytron SC Semarang (Raden Patah)',
-        city: 'Semarang',
-        address: 'Jl. Raden Patah No. 38, Rejomulyo, Semarang Timur',
-        phone: '024-3512345',
-        badge: 'Jawa Tengah',
-        coords: '-6.969532, 110.435721',
-        mapsUrl: 'https://maps.google.com/?q=-6.969532,110.435721'
-      },
-      {
-        id: 'kudus',
-        name: 'Polytron SC Kudus (Pusat)',
-        city: 'Kudus',
-        address: 'Jl. Raya Kudus - Pati KM 4, Krajan, Tenggeles, Mejobo, Kudus',
-        phone: '0291-433000',
-        badge: 'Jawa Tengah',
-        coords: '-6.822214, 110.887235',
-        mapsUrl: 'https://maps.google.com/?q=-6.822214,110.887235'
-      },
-      {
-        id: 'surabaya',
-        name: 'Polytron SC Surabaya (Rungkut)',
-        city: 'Surabaya',
-        address: 'Jl. Rungkut Industri IV No. 12, Kutisari, Surabaya',
-        phone: '031-8431234',
-        badge: 'Jawa Timur',
-        coords: '-7.332511, 112.756240',
-        mapsUrl: 'https://maps.google.com/?q=-7.332511,112.756240'
+    // ==============================================================
+    // MASTER CABANG & STOK PART DINAMIS DARI GOOGLE SPREADSHEET
+    // 100% Mengikuti Master Google Sheet (Master_Sites & PART)
+    // ==============================================================
+    const MASTER_SITES_STORAGE_KEY = 'POLYTRON_MASTER_SITES_CACHE_V2';
+    const MASTER_PARTS_STORAGE_KEY = 'POLYTRON_MASTER_PARTS_CACHE_V2';
+
+    let SITES = [];
+    try {
+      const cachedSites = localStorage.getItem(MASTER_SITES_STORAGE_KEY);
+      if (cachedSites) {
+        const parsed = JSON.parse(cachedSites);
+        if (Array.isArray(parsed) && parsed.length > 0) SITES = parsed;
       }
-    ];
+    } catch(e) {}
+
+    let MASTER_PARTS = [];
+    try {
+      const cachedParts = localStorage.getItem(MASTER_PARTS_STORAGE_KEY);
+      if (cachedParts) {
+        const parsed = JSON.parse(cachedParts);
+        if (Array.isArray(parsed) && parsed.length > 0) MASTER_PARTS = parsed;
+      }
+    } catch(e) {}
+
+    function getSiteCode(siteId) {
+      if (!siteId) return '';
+      const target = String(siteId).toLowerCase().trim();
+      const s = SITES.find(item => {
+        if (!item) return false;
+        if (item.id && String(item.id).toLowerCase().trim() === target) return true;
+        if (item.code && String(item.code).toLowerCase().trim() === target) return true;
+        if (item.name && String(item.name).toLowerCase().trim() === target) return true;
+        return false;
+      });
+      if (s && s.code && /^[A-Z0-9]{2,4}$/i.test(s.code)) {
+        return s.code.toUpperCase();
+      }
+      return target.replace(/[^a-z0-9]/gi, '').substring(0, 3).toUpperCase() || '---';
+    }
+
+    function getSiteByCode(code) {
+      if (!code) return SITES[0] || { id: '', code: '', name: 'Cabang Service', city: '', address: '' };
+      const c = String(code).toUpperCase().trim();
+      return SITES.find(s => s && ((s.code && s.code.toUpperCase() === c) || (s.id && s.id.toUpperCase() === c))) || SITES[0] || { id: '', code: code, name: 'Cabang Service', city: '', address: '' };
+    }
 
     const REGULAR_HOURS = ['08.30', '09.30', '10.30', '11.30', '12.30', '13.30', '14.30', '15.30', '16.30'];
 
@@ -2274,12 +2443,21 @@
     const GOOGLE_SPREADSHEET_ID = '1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww';
     const GOOGLE_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762';
     const GAS_URL_STORAGE_KEY = 'POLYTRON_GAS_WEBAPP_URL';
-    const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwkCZc3iMXLQ1957geQ-Ob4EV-wlbc5NNllPLnOInTh7wWNr8G9U4Kk-IhxSzNem4pr/exec';
+    const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbzPNDszqAYl0u5YQJH6AdYWRBxjG79i6NVR03ex01WXyJrQl13mDOcflM1B2Jin_hs1jA/exec';
+    
+    // Auto-update cached URL jika masih tersimpan script lama
+    try {
+      const savedGas = localStorage.getItem(GAS_URL_STORAGE_KEY);
+      if (!savedGas || savedGas !== DEFAULT_GAS_URL) {
+        localStorage.setItem(GAS_URL_STORAGE_KEY, DEFAULT_GAS_URL);
+      }
+    } catch(e) {}
 
     // State Variables
-    let currentRole = 'portal'; // 'portal' | 'konsumen' | 'teknisi' | 'sa' | 'tv'
+    let currentRole = 'portal'; // 'portal' | 'konsumen' | 'teknisi' | 'sa' | 'tv' | 'part'
+    let partReturnSource = 'portal'; // 'portal' | 'konsumen-step2' | 'sa' | 'teknisi'
     let currentBookingStep = 1;
-    let currentSiteId = 'tasikmalaya';
+    let currentSiteId = localStorage.getItem('POLYTRON_ACTIVE_SITE_ID') || (SITES[0] ? SITES[0].id : 'tasik');
     let currentDate = getLocalDateIso();
     let selectedBookingService = 'reguler';
     let selectedBookingSlot = null;
@@ -2287,109 +2465,8 @@
     let isSoundEnabled = localStorage.getItem(SOUND_KEY) !== 'false';
     let lastSpokenText = '';
 
-    // Sample Initial Bookings
-    const INITIAL_SAMPLE_DATA = [
-      {
-        id: 'PLY-TSM-20261016-01',
-        siteId: 'tasikmalaya',
-        siteName: 'Polytron SC Tasikmalaya',
-        siteAddress: 'Jl. KHZ. Mustofa No. 280, Tasikmalaya',
-        date: currentDate,
-        stall: 'stall1',
-        slot: '08.30',
-        serviceType: 'reguler',
-        queueNumber: 'REG-01',
-        model: 'Polytron Fox-R',
-        plate: 'Z 1482 ABZ',
-        name: 'Ahmad Faisal',
-        phone: '081234567890',
-        level: 'Level 1',
-        estimatedHours: 1,
-        complaint: 'Servis Berkala 1.000 KM (Pengecekan Standar)',
-        notes: 'Pemeriksaan rutin 2.000 KM & rem belakang',
-        status: 'In Progress' // Biru Cyan
-      },
-      {
-        id: 'PLY-TSM-20261016-02',
-        siteId: 'tasikmalaya',
-        siteName: 'Polytron SC Tasikmalaya',
-        siteAddress: 'Jl. KHZ. Mustofa No. 280, Tasikmalaya',
-        date: currentDate,
-        stall: 'stall1',
-        slot: '10.30',
-        serviceType: 'reguler',
-        queueNumber: 'REG-02',
-        model: 'Polytron Fox-S',
-        plate: 'Z 3019 POL',
-        name: 'Siti Rahmawati',
-        phone: '082198765432',
-        level: 'Level 2',
-        estimatedHours: 2,
-        complaint: 'Update Firmware ECU & Kalibrasi Speedometer',
-        notes: 'Update firmware speedometer & voltase baterai',
-        status: 'Checked In' // Kuning Emas Berkedip (Hadir di bengkel)
-      },
-      {
-        id: 'PLY-TSM-20261016-03',
-        siteId: 'tasikmalaya',
-        siteName: 'Polytron SC Tasikmalaya',
-        siteAddress: 'Jl. KHZ. Mustofa No. 280, Tasikmalaya',
-        date: currentDate,
-        stall: 'stall2',
-        slot: '09.30',
-        serviceType: 'reguler',
-        queueNumber: 'REG-03',
-        model: 'Polytron Fox-R',
-        plate: 'Z 8812 EV',
-        name: 'Bambang Kusuma',
-        phone: '085711223344',
-        level: 'Level 1',
-        estimatedHours: 1,
-        complaint: 'Penggantian Kampas Rem Depan / Belakang',
-        notes: 'Ganti ban depan & cek bearing roda',
-        status: 'Booked' // Indigo / Biru Tua (Booking online)
-      },
-      {
-        id: 'PLY-TSM-20261016-04',
-        siteId: 'tasikmalaya',
-        siteName: 'Polytron SC Tasikmalaya',
-        siteAddress: 'Jl. KHZ. Mustofa No. 280, Tasikmalaya',
-        date: currentDate,
-        stall: 'express',
-        slot: '0',
-        serviceType: 'express',
-        queueNumber: 'EXP-01',
-        model: 'Polytron Fox-S',
-        plate: 'Z 4321 PLY',
-        name: 'Rian Pratama',
-        phone: '089677889900',
-        level: 'Express',
-        estimatedHours: 0.5,
-        complaint: 'Fast Check: Cek Tekanan Angin & Tambal Tubeless',
-        notes: 'Fast check: Kencangkan spion dan cek tekanan angin',
-        status: 'Done' // Hijau Emerald
-      },
-      {
-        id: 'PLY-TSM-20261016-05',
-        siteId: 'tasikmalaya',
-        siteName: 'Polytron SC Tasikmalaya',
-        siteAddress: 'Jl. KHZ. Mustofa No. 280, Tasikmalaya',
-        date: currentDate,
-        stall: 'stall2',
-        slot: '16.30',
-        serviceType: 'reguler',
-        queueNumber: 'REG-04',
-        model: 'Polytron Fox-R',
-        plate: 'D 1234 EV',
-        name: 'Hendra Gunawan',
-        phone: '081399887766',
-        level: 'Level 1',
-        estimatedHours: 1,
-        complaint: 'Servis Berkala 1.000 KM (Pengecekan Standar)',
-        notes: 'Booking sore (belum hadir, masih dalam toleransi)',
-        status: 'Booked' // Biru Indigo (Belum lewat waktu slot, tetap Booked)
-      }
-    ];
+    // Data booking murni diambil secara realtime dari Google Sheet & user input
+    const INITIAL_SAMPLE_DATA = [];
 
     // ==============================================================
     // HELPER NORMALISASI & KOMPARASI DATA BOOKING (ANTI-BENTROK / DOUBLE-BOOKING)
@@ -2579,16 +2656,21 @@
     }
 
     function isSameSite(siteA, siteB) {
-      const sA = String(siteA || 'tasikmalaya').toLowerCase().trim();
-      const sB = String(siteB || 'tasikmalaya').toLowerCase().trim();
+      if (!siteA || !siteB) return false;
+      const sA = String(siteA).toLowerCase().trim();
+      const sB = String(siteB).toLowerCase().trim();
       if (sA === sB) return true;
-      if ((sA.includes('tasik') || sA === 'tasikmalaya') && (sB.includes('tasik') || sB === 'tasikmalaya')) return true;
-      if (sA.includes('bandung') && sB.includes('bandung')) return true;
-      if (sA.includes('cirebon') && sB.includes('cirebon')) return true;
-      if (sA.includes('jakarta') && sB.includes('jakarta')) return true;
-      if (sA.includes('semarang') && sB.includes('semarang')) return true;
-      if (sA.includes('kudus') && sB.includes('kudus')) return true;
-      if (sA.includes('surabaya') && sB.includes('surabaya')) return true;
+
+      // Pencocokan via 3-4 huruf KODE jika valid
+      const codeA = getSiteCode(sA);
+      const codeB = getSiteCode(sB);
+      if (codeA && codeB && codeA !== '---' && codeA === codeB) return true;
+
+      // Normalisasi teks (menghapus polytron, sc, spasi, tanda strip)
+      const cleanA = sA.replace(/polytron/g, '').replace(/sc/g, '').replace(/[^a-z0-9]/g, '');
+      const cleanB = sB.replace(/polytron/g, '').replace(/sc/g, '').replace(/[^a-z0-9]/g, '');
+      if (cleanA && cleanB && (cleanA === cleanB || cleanA.includes(cleanB) || cleanB.includes(cleanA))) return true;
+
       return false;
     }
 
@@ -2602,18 +2684,84 @@
       return false;
     }
 
+    function getNextRegularSlot(slotTime) {
+      if (!slotTime) return null;
+      const clean = normalizeSlotString(slotTime, 'stall1');
+      const idx = REGULAR_HOURS.indexOf(clean);
+      if (idx !== -1 && idx + 1 < REGULAR_HOURS.length) {
+        return REGULAR_HOURS[idx + 1];
+      }
+      return null;
+    }
+
+    function isBookingInSlot(b, slotTime) {
+      if (!b || !slotTime) return false;
+      if (isSameSlot(b.slot, slotTime)) return true;
+      if (b.secondarySlot && isSameSlot(b.secondarySlot, slotTime)) return true;
+      if (b.estimatedHours && b.estimatedHours >= 2) {
+        const nextSlot = getNextRegularSlot(b.slot);
+        if (nextSlot && isSameSlot(nextSlot, slotTime)) return true;
+      }
+      return false;
+    }
+
+    function changeGlobalActiveSite(newSiteId, isRemote = false) {
+      if (!newSiteId) return;
+      const siteObj = SITES.find(s => s.id === newSiteId || isSameSite(s.id, newSiteId)) || SITES[0];
+      if (!siteObj) return;
+      currentSiteId = siteObj.id;
+      saSiteFilter = siteObj.id;
+      teknisiSiteFilter = siteObj.id;
+      localStorage.setItem('POLYTRON_ACTIVE_SITE_ID', siteObj.id);
+
+      const bSelect = document.getElementById('bookingSiteInput');
+      if (bSelect) bSelect.value = siteObj.id;
+      const saSelect = document.getElementById('saSiteSelector');
+      if (saSelect) saSelect.value = siteObj.id;
+      const tekSelect = document.getElementById('teknisiSiteSelector');
+      if (tekSelect) tekSelect.value = siteObj.id;
+      const actSelect = document.getElementById('activeSiteSelector');
+      if (actSelect) actSelect.value = siteObj.id;
+
+      updateSiteDisplay();
+      renderBookingPartsList();
+      selectedBookingSlot = null;
+      selectedBookingSecondarySlot = null;
+      const slotBadge = document.getElementById('selectedSlotBadge');
+      if (slotBadge) slotBadge.innerText = 'Belum dipilih';
+      renderBookingSlotPicker();
+      refreshAllBoards();
+
+      if (!isRemote) {
+        const payload = {
+          type: 'SITE_CHANGED',
+          siteId: siteObj.id,
+          siteCode: getSiteCode(siteObj.id),
+          siteName: siteObj.name,
+          deviceId: LOCAL_DEVICE_ID,
+          timestamp: Date.now()
+        };
+        if (localBroadcastChannel) {
+          try { localBroadcastChannel.postMessage(payload); } catch (e) {}
+        }
+        if (mqttClient && mqttClient.connected) {
+          try {
+            mqttClient.publish('polytron/ev_service/data_sync', JSON.stringify(payload), { qos: 0 });
+            mqttClient.publish('polytron/ev/global/site_sync', JSON.stringify(payload), { qos: 0 });
+          } catch (e) {}
+        }
+      }
+    }
+
     function loadBookings() {
       const saved = localStorage.getItem(STORAGE_KEY);
-      const isSynced = localStorage.getItem('POLYTRON_SYNCED_FROM_SHEET') === 'true';
       let list = [];
-      if (saved === null) {
-        list = isSynced ? [] : [...INITIAL_SAMPLE_DATA];
-      } else {
+      if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          list = Array.isArray(parsed) ? parsed : (isSynced ? [] : [...INITIAL_SAMPLE_DATA]);
+          if (Array.isArray(parsed)) list = parsed;
         } catch (e) {
-          list = isSynced ? [] : [...INITIAL_SAMPLE_DATA];
+          list = [];
         }
       }
 
@@ -2690,12 +2838,13 @@
 
         const topicCall = 'polytron/ev_service/voice_call';
         const topicData = 'polytron/ev_service/data_sync';
+        const topicSite = 'polytron/ev/global/site_sync';
 
         mqttClient.on('connect', () => {
           console.log('✅ MQTT Realtime Sync Connected to EMQX Broker');
-          mqttClient.subscribe([topicCall, topicData], (err) => {
+          mqttClient.subscribe([topicCall, topicData, topicSite], (err) => {
             if (!err) {
-              console.log('✅ Subscribed to Realtime Call & Data Topics');
+              console.log('✅ Subscribed to Realtime Call, Data & Site Topics');
             }
           });
         });
@@ -2721,6 +2870,20 @@
       if (!payload || typeof payload !== 'object') return;
       // Jangan proses pesan yang berasal dari tab / perangkat ini sendiri
       if (payload.deviceId === LOCAL_DEVICE_ID) return;
+
+      // 1. SINKRONISASI PEMILIHAN SITE/CABANG ANTAR PERANGKAT (TEKNISI <-> SA <-> MONITOR TV)
+      if (payload.type === 'SITE_CHANGED') {
+        if (payload.siteId && !isSameSite(payload.siteId, currentSiteId)) {
+          console.log(`[SYNC SITE] Sinkronisasi cabang dari perangkat lain ke: ${payload.siteId} (${payload.siteCode || ''})`);
+          changeGlobalActiveSite(payload.siteId, true /* isRemote */);
+        }
+        return;
+      }
+
+      // 2. FILTER KETAT CABANG: JIKA BUKAN CABANG YANG AKTIF DI PERANGKAT INI, JANGAN TERIMA/PROSES
+      if (payload.siteId && !isSameSite(payload.siteId, currentSiteId)) {
+        return;
+      }
 
       if (payload.type === 'voice_call') {
         const { text, booking } = payload;
@@ -3068,8 +3231,8 @@
 
       // Google Sheet sebagai Data Sumber: Otomatis sinkronisasi data setiap 1 menit (60.000 ms)
       setInterval(fetchDataFromGoogleSheet, 1 * 60 * 1000);
-      // Ambil data pertama kali dari Google Sheet saat aplikasi dibuka
-      setTimeout(fetchDataFromGoogleSheet, 500);
+      // Ambil data pertama kali dari Google Sheet saat aplikasi dibuka secara instan
+      fetchDataFromGoogleSheet();
 
       // Otomatis tarik data saat tab browser kembali aktif / difokuskan
       window.addEventListener('focus', () => {
@@ -3102,7 +3265,7 @@
     // ROLE SWITCHER
     // ==============================================================
     function switchRole(role, replaceHistory = false) {
-      if (!role || !['portal', 'konsumen', 'teknisi', 'sa', 'tv'].includes(role)) {
+      if (!role || !['portal', 'konsumen', 'teknisi', 'sa', 'tv', 'part'].includes(role)) {
         role = 'portal';
       }
       currentRole = role;
@@ -3112,7 +3275,7 @@
       const crit = document.getElementById('critical-role-style');
       if (crit) crit.remove();
 
-      const roles = ['portal', 'konsumen', 'teknisi', 'sa', 'tv'];
+      const roles = ['portal', 'konsumen', 'teknisi', 'sa', 'tv', 'part'];
 
       roles.forEach(r => {
         const sec = document.getElementById(`role-section-${r}`);
@@ -3186,19 +3349,21 @@
         }
       }
 
-      if (role === 'tv') {
+      if (role === 'tv' || role === 'part') {
         document.body.classList.add('role-tv-active');
         document.documentElement.classList.add('role-tv-active');
         document.body.style.setProperty('overflow', 'hidden', 'important');
         document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-        currentDate = getLocalDateIso();
-        renderSimulasiGrid();
-        updateTvAudioIndicator();
-        const tickerTrack = document.getElementById('tvTickerTrack');
-        if (tickerTrack) {
-          tickerTrack.style.animation = 'none';
-          void tickerTrack.offsetWidth;
-          tickerTrack.style.animation = '';
+        if (role === 'tv') {
+          currentDate = getLocalDateIso();
+          renderSimulasiGrid();
+          updateTvAudioIndicator();
+          const tickerTrack = document.getElementById('tvTickerTrack');
+          if (tickerTrack) {
+            tickerTrack.style.animation = 'none';
+            void tickerTrack.offsetWidth;
+            tickerTrack.style.animation = '';
+          }
         }
       } else {
         document.body.classList.remove('role-tv-active');
@@ -3211,6 +3376,10 @@
       if (role === 'konsumen') {
         goToBookingStep(1);
         renderBookingSlotPicker();
+      }
+      if (role === 'part') {
+        populatePartSectionSiteDropdown();
+        renderDedicatedPartsTable(document.getElementById('partSectionSearchInput')?.value || '');
       }
 
       // Sinkronkan data terbaru saat berpindah menu
@@ -3235,6 +3404,8 @@
         btn.classList.add('flex');
         if (currentRole === 'konsumen') {
           if (label) label.innerText = 'Kembali';
+        } else if (currentRole === 'part') {
+          if (label) label.innerText = (partReturnSource === 'konsumen-step2') ? 'Kembali ke Form' : 'Menu Utama';
         } else {
           if (label) label.innerText = 'Menu Utama';
         }
@@ -3242,6 +3413,10 @@
     }
 
     function handleHeaderBack() {
+      if (currentRole === 'part') {
+        handlePartBack();
+        return;
+      }
       if (currentRole === 'konsumen') {
         if (currentBookingStep > 1) {
           goToBookingStep(currentBookingStep - 1);
@@ -3254,24 +3429,48 @@
     }
 
     // ==============================================================
-    // MODAL & BROWSER HISTORY MANAGEMENT (TUTUP POPUP VIA TOMBOL BACK)
+    // MODAL & BROWSER HISTORY MANAGEMENT (TUTUP POPUP VIA TOMBOL BACK HP / OK)
+    // Menjamin bahwa tombol Back HP atau tombol OK/Batal HANYA menutup popup
+    // dan tidak memundurkan halaman / menu lain secara tidak sengaja.
     // ==============================================================
     let isHandlingPopstate = false;
+    let modalJustClosedViaButton = false;
+    let openModalStack = [];
 
     function pushModalHistoryState(modalId) {
+      if (!openModalStack.includes(modalId)) {
+        openModalStack.push(modalId);
+      }
       try {
-        window.history.pushState({ modalOpen: true, modalId: modalId }, '');
+        window.history.pushState({ modalOpen: true, modalId: modalId, stackLen: openModalStack.length }, '');
       } catch(e) {}
     }
 
-    function popModalHistoryState() {
-      if (!isHandlingPopstate && window.history.state && window.history.state.modalOpen) {
-        window.history.back();
+    function popModalHistoryState(modalId) {
+      if (modalId) {
+        const idx = openModalStack.indexOf(modalId);
+        if (idx !== -1) openModalStack.splice(idx, 1);
+      } else {
+        openModalStack.pop();
+      }
+      // Jika penutupan modal dipicu oleh klik tombol OK / Batal (bukan tombol Back HP)
+      if (!isHandlingPopstate) {
+        if (window.history.state && window.history.state.modalOpen) {
+          modalJustClosedViaButton = true;
+          window.history.back();
+        }
       }
     }
 
     function closeAnyOpenModal() {
       let closed = false;
+
+      const lvl2Modal = document.getElementById('level2AlertModal');
+      if (lvl2Modal && (!lvl2Modal.classList.contains('hidden') || lvl2Modal.style.display === 'flex')) {
+        lvl2Modal.classList.add('hidden');
+        lvl2Modal.style.setProperty('display', 'none', 'important');
+        closed = true;
+      }
 
       const confirmModal = document.getElementById('bookingConfirmModal');
       if (confirmModal && (!confirmModal.classList.contains('hidden') || confirmModal.style.display === 'flex')) {
@@ -3284,37 +3483,59 @@
       if (ticketModal && (!ticketModal.classList.contains('hidden') || ticketModal.style.display === 'flex')) {
         ticketModal.classList.add('hidden');
         ticketModal.style.setProperty('display', 'none', 'important');
-        switchRole('portal');
         closed = true;
       }
 
       const popupModal = document.getElementById('appPopupModal');
-      if (popupModal && !popupModal.classList.contains('hidden')) {
+      if (popupModal && (!popupModal.classList.contains('hidden') || popupModal.style.display === 'flex')) {
         popupModal.classList.add('hidden');
         popupModal.style.setProperty('display', 'none', 'important');
         closed = true;
       }
 
       const slotModal = document.getElementById('slotActionModal');
-      if (slotModal && !slotModal.classList.contains('hidden')) {
+      if (slotModal && (!slotModal.classList.contains('hidden') || slotModal.style.display === 'flex')) {
         slotModal.classList.add('hidden');
         slotModal.style.setProperty('display', 'none', 'important');
         currentModalTarget = null;
         closed = true;
       }
 
+      const gsModal = document.getElementById('googleSheetModal');
+      if (gsModal && !gsModal.classList.contains('hidden')) {
+        gsModal.classList.add('hidden');
+        closed = true;
+      }
+
+      openModalStack = [];
       return closed;
     }
 
     window.addEventListener('popstate', function(e) {
-      isHandlingPopstate = true;
-      const modalClosed = closeAnyOpenModal();
-      isHandlingPopstate = false;
-      if (modalClosed) {
+      // 1. Jika popstate dipicu oleh klik tombol OK / Tutup / Batal pada modal
+      if (modalJustClosedViaButton) {
+        modalJustClosedViaButton = false;
+        closeAnyOpenModal();
         return;
       }
 
-      // Jika tidak ada popup terbuka, kembali ke menu sebelumnya atau menu utama
+      // 2. Jika popstate dipicu oleh tombol Back HP fisik / gesture swipe back
+      isHandlingPopstate = true;
+      const modalClosed = closeAnyOpenModal();
+      isHandlingPopstate = false;
+
+      // Jika ada modal yang aktif saat tombol back HP ditekan, CUKUP TUTUP MODAL ITU SAJA!
+      if (modalClosed || openModalStack.length > 0) {
+        openModalStack = [];
+        return;
+      }
+
+      // 3. Hanya jika TIDAK ADA popup apapun yang terbuka, baru jalankan navigasi back aplikasi:
+      if (currentRole === 'part') {
+        handlePartBack();
+        return;
+      }
+
       if (currentRole === 'konsumen') {
         if (currentBookingStep > 1) {
           goToBookingStep(currentBookingStep - 1);
@@ -3387,8 +3608,7 @@
     }
 
     function handleSaSiteChange(val) {
-      saSiteFilter = val;
-      renderSABoard();
+      changeGlobalActiveSite(val);
     }
 
     function setTeknisiDateFilter(filter) {
@@ -3401,8 +3621,7 @@
     }
 
     function handleTeknisiSiteChange(val) {
-      teknisiSiteFilter = val;
-      renderTechnicianBoard();
+      changeGlobalActiveSite(val);
     }
 
     function handleTvDateChange(val) {
@@ -3457,10 +3676,11 @@
       }
 
       SITES.forEach(site => {
+        const sCode = site.code || getSiteCode(site.id);
         if (headerSelect) {
           const opt = document.createElement('option');
           opt.value = site.id;
-          opt.innerText = `${site.city} - ${site.name.replace('Polytron SC ', '')}`;
+          opt.innerText = `[${sCode}] ${site.city} - ${site.name.replace('Polytron SC ', '')}`;
           opt.selected = site.id === currentSiteId;
           headerSelect.appendChild(opt);
         }
@@ -3468,7 +3688,7 @@
         if (bookingSelect) {
           const opt = document.createElement('option');
           opt.value = site.id;
-          opt.innerText = `${site.name} (${site.city})`;
+          opt.innerText = `${site.name} [${sCode}]`;
           opt.selected = site.id === currentSiteId;
           bookingSelect.appendChild(opt);
         }
@@ -3476,14 +3696,14 @@
         if (saSelect) {
           const opt = document.createElement('option');
           opt.value = site.id;
-          opt.innerText = `Cabang: ${site.name.replace('Polytron SC ', '')}`;
+          opt.innerText = `[${sCode}] ${site.name.replace('Polytron SC ', '')}`;
           saSelect.appendChild(opt);
         }
 
         if (teknisiSelect) {
           const opt = document.createElement('option');
           opt.value = site.id;
-          opt.innerText = `Cabang: ${site.name.replace('Polytron SC ', '')}`;
+          opt.innerText = `[${sCode}] ${site.name.replace('Polytron SC ', '')}`;
           teknisiSelect.appendChild(opt);
         }
       });
@@ -3492,16 +3712,144 @@
       if (teknisiSelect) teknisiSelect.value = teknisiSiteFilter;
     }
 
+    // ==============================================================
+    // MODUL KHUSUS: CEK KETERSEDIAAN PART PER CABANG (MENU & FORM)
+    // ==============================================================
+    let currentPartSectionSiteId = 'tasikmalaya';
+
+    function openPartStockView(source = 'portal') {
+      partReturnSource = source || 'portal';
+
+      // Sinkronkan site dengan asal pembuka
+      if (source === 'konsumen-step2') {
+        const bookSite = document.getElementById('bookingSiteInput')?.value;
+        if (bookSite) currentPartSectionSiteId = bookSite;
+      } else {
+        currentPartSectionSiteId = currentSiteId;
+      }
+
+      // Populate dropdown pilihan site di halaman Part jika belum lengkap
+      populatePartSectionSiteDropdown();
+
+      const siteSelect = document.getElementById('partSectionSiteSelector');
+      if (siteSelect) siteSelect.value = currentPartSectionSiteId;
+
+      handlePartSectionSiteChange(currentPartSectionSiteId);
+
+      // Beralih ke role 'part'
+      switchRole('part');
+    }
+
+    function handlePartBack() {
+      if (partReturnSource === 'konsumen-step2') {
+        switchRole('konsumen');
+        goToBookingStep(2);
+      } else if (partReturnSource === 'sa') {
+        switchRole('sa');
+      } else if (partReturnSource === 'teknisi') {
+        switchRole('teknisi');
+      } else {
+        switchRole('portal');
+      }
+    }
+
+    function populatePartSectionSiteDropdown() {
+      const select = document.getElementById('partSectionSiteSelector');
+      if (!select) return;
+      let html = '';
+      SITES.forEach(s => {
+        html += `<option value="${s.id}">[${s.code}] ${s.name.replace('Polytron SC ', '')}</option>`;
+      });
+      select.innerHTML = html;
+      select.value = currentPartSectionSiteId;
+    }
+
+    function handlePartSectionSiteChange(siteId) {
+      currentPartSectionSiteId = siteId;
+      const site = SITES.find(s => s.id === siteId || isSameSite(s.id, siteId)) || SITES[0];
+      const code = getSiteCode(site.id);
+
+      const codeBadge = document.getElementById('partSectionSiteCodeBadge');
+      const titleName = document.getElementById('partSectionSiteNameTitle');
+      if (codeBadge) codeBadge.innerText = code;
+      if (titleName) titleName.innerText = site.name;
+
+      const searchInput = document.getElementById('partSectionSearchInput');
+      const query = searchInput ? searchInput.value : '';
+      renderDedicatedPartsTable(query);
+    }
+
+    function renderDedicatedPartsTable(searchQuery = '') {
+      const tbody = document.getElementById('dedicatedPartsTableBody');
+      if (!tbody) return;
+
+      const site = SITES.find(s => s.id === currentPartSectionSiteId || isSameSite(s.id, currentPartSectionSiteId)) || SITES[0];
+      const siteCode = getSiteCode(site.id);
+
+      const query = String(searchQuery || '').toLowerCase().trim();
+      const partsForSite = MASTER_PARTS.filter(p => {
+        const itemCode = String(p.kode || p.code || '').toUpperCase();
+        if (itemCode !== siteCode) return false;
+        if (!query) return true;
+        return (p.name || '').toLowerCase().includes(query) || (p.category || '').toLowerCase().includes(query);
+      });
+
+      if (partsForSite.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="3" class="p-6 text-center text-xs text-slate-500 font-medium">
+              ${query ? 'Tidak ditemukan sparepart yang cocok dengan kata kunci pencarian.' : `Belum ada data stok sparepart untuk kode cabang <b>${siteCode}</b> di Sheet PART.`}
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      let html = '';
+      partsForSite.forEach(part => {
+        const qty = parseInt(part.qty, 10) || 0;
+        let rowClass = 'hover:bg-slate-50 transition';
+        if (qty === 0) {
+          rowClass = 'bg-rose-50/40 hover:bg-rose-50 transition';
+        }
+
+        html += `
+          <tr class="${rowClass}">
+            <td class="p-2.5 text-center font-mono font-bold text-red-700 bg-red-50/50">${part.kode || part.code || siteCode}</td>
+            <td class="p-2.5 font-bold text-slate-900 text-xs sm:text-sm">
+              <div>${part.name}</div>
+              ${part.category ? `<span class="text-[10px] text-slate-400 font-normal uppercase tracking-wider">${part.category}</span>` : ''}
+            </td>
+            <td class="p-2.5 text-center font-mono font-black text-sm sm:text-base ${qty > 0 ? 'text-slate-900' : 'text-rose-600'}">
+              ${qty}
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    }
+
+    function renderBookingPartsList(searchQuery = '') {
+      renderDedicatedPartsTable(searchQuery);
+    }
+
+    function filterPartsList(query) {
+      renderDedicatedPartsTable(query);
+    }
+
     function populateDamageDropdowns() {
       const selectConsumer = document.getElementById('inputDamageMaster');
+      const selectStage2 = document.getElementById('stage2DamageMaster');
       const selectModal = document.getElementById('modalInputDamageMaster');
-      if (!selectConsumer && !selectModal) return;
+      if (!selectConsumer && !selectModal && !selectStage2) return;
 
+      // Pilihan bersih tanpa label estimasi jam / level agar tampilan konsumen rapi & tidak membingungkan
       const generateOptionsHtml = () => {
         let html = '';
         html += `<option value="" disabled>-- Pilih Keluhan / Kendala Motor --</option>`;
         MASTER_KERUSAKAN.forEach(item => {
-          // Tampilkan HANYA nama kendala saja (Level, jam, dll tidak dimunculkan di dropdown)
           html += `<option value="${item.id}">${item.name}</option>`;
         });
         html += `<option value="CUSTOM">Kendala / Kerusakan Lainnya</option>`;
@@ -3509,6 +3857,11 @@
       };
 
       const optionsHtml = generateOptionsHtml();
+      if (selectStage2) {
+        selectStage2.innerHTML = optionsHtml;
+        if (!selectStage2.value) selectStage2.value = MASTER_KERUSAKAN[0].id;
+        handleStage2DamageChange(selectStage2.value);
+      }
       if (selectConsumer) {
         selectConsumer.innerHTML = optionsHtml;
         if (!selectConsumer.value) selectConsumer.value = MASTER_KERUSAKAN[0].id;
@@ -3519,6 +3872,34 @@
         if (!selectModal.value) selectModal.value = MASTER_KERUSAKAN[0].id;
         handleModalDamageChange(selectModal.value);
       }
+    }
+
+    function handleStage2DamageChange(damageId) {
+      const selectConsumer = document.getElementById('inputDamageMaster');
+      if (selectConsumer && selectConsumer.value !== damageId) {
+        selectConsumer.value = damageId;
+        handleDamageSelectionChange(damageId);
+      }
+
+      const badge = document.getElementById('stage2LevelBadge');
+      const desc = document.getElementById('stage2DamageDesc');
+      const notice2 = document.getElementById('stage2Level2Notice');
+
+      const item = MASTER_KERUSAKAN.find(d => d.id === damageId);
+      if (!item) return;
+
+      if (desc) desc.innerText = item.desc || item.name;
+
+      // Sembunyikan badge & notice estimasi dari tampilan konsumen sesuai instruksi
+      if (badge) badge.className = 'hidden';
+      if (notice2) notice2.classList.add('hidden');
+
+      // Reset slot pilihan jika level berubah
+      selectedBookingSlot = null;
+      selectedBookingSecondarySlot = null;
+      const slotBadge = document.getElementById('selectedSlotBadge');
+      if (slotBadge) slotBadge.innerText = 'Belum dipilih';
+      renderBookingSlotPicker();
     }
 
     function handleDamageSelectionChange(damageId) {
@@ -3581,30 +3962,18 @@
     }
 
     function handleSiteChange(newSiteId) {
-      currentSiteId = newSiteId;
-      const bookingSelect = document.getElementById('bookingSiteInput');
-      if (bookingSelect) bookingSelect.value = newSiteId;
-
-      updateSiteDisplay();
-      refreshAllBoards();
-      lucide.createIcons();
+      changeGlobalActiveSite(newSiteId);
     }
 
     function handleBookingSiteChange(newSiteId) {
-      currentSiteId = newSiteId;
-      const headerSelect = document.getElementById('activeSiteSelector');
-      if (headerSelect) headerSelect.value = newSiteId;
-
-      updateSiteDisplay();
-      selectedBookingSlot = null;
-      document.getElementById('selectedSlotBadge').innerText = 'Belum dipilih';
-      renderBookingSlotPicker();
+      changeGlobalActiveSite(newSiteId);
       renderSimulasiGrid();
-      lucide.createIcons();
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
     }
 
     function updateSiteDisplay() {
-      const site = SITES.find(s => s.id === currentSiteId) || SITES[0];
+      const site = SITES.find(s => s.id === currentSiteId || isSameSite(s.id, currentSiteId)) || SITES[0];
+      if (!site) return;
 
       const bannerName = document.getElementById('bannerSiteName');
       const bannerAddress = document.getElementById('bannerSiteAddress');
@@ -4622,13 +4991,15 @@
         if (!slotEl) return;
         if (time === '12.30') return;
 
-        // Hilangkan kotak slot jika di luar jam operasional
-        if (isTvDateSat && time >= '14.30') {
+        // Hilangkan kotak slot jika di luar jam operasional:
+        // Sabtu: mulai 11.30 ke atas dihilangkan (slot reguler terakhir 10.30)
+        // Selain Sabtu: mulai 14.30 ke atas dihilangkan (slot reguler terakhir 13.30)
+        if (isTvDateSat && time >= '11.30') {
           slotEl.style.display = 'none';
           return;
         }
 
-        if (!isTvDateSat && time >= '16.30') {
+        if (!isTvDateSat && time >= '14.30') {
           slotEl.style.display = 'none';
           return;
         }
@@ -4652,13 +5023,15 @@
         if (!slotEl) return;
         if (time === '13.30') return;
 
-        // Hilangkan kotak slot jika di luar jam operasional
-        if (isTvDateSat && time >= '14.30') {
+        // Hilangkan kotak slot jika di luar jam operasional:
+        // Sabtu: mulai 11.30 ke atas dihilangkan
+        // Selain Sabtu: mulai 14.30 ke atas dihilangkan
+        if (isTvDateSat && time >= '11.30') {
           slotEl.style.display = 'none';
           return;
         }
 
-        if (!isTvDateSat && time >= '16.30') {
+        if (!isTvDateSat && time >= '14.30') {
           slotEl.style.display = 'none';
           return;
         }
@@ -4682,14 +5055,14 @@
         if (!slotEl) return;
 
         // Hilangkan kotak slot Express jika di luar jam operasional:
-        // Sabtu: index >= 12 (mulai 14.30 ke atas dihilangkan)
-        // Hari Biasa: index >= 16 (mulai 16.30 ke atas dihilangkan)
-        if (isTvDateSat && index >= 12) {
+        // Sabtu: index >= 6 (mulai 11.30 ke atas dihilangkan, total 6 slot: 08.30 - 11.30)
+        // Hari Biasa: index >= 12 (mulai 14.30 ke atas dihilangkan, total 12 slot: 08.30 - 14.30)
+        if (isTvDateSat && index >= 6) {
           slotEl.style.display = 'none';
           return;
         }
 
-        if (!isTvDateSat && index >= 16) {
+        if (!isTvDateSat && index >= 12) {
           slotEl.style.display = 'none';
           return;
         }
@@ -4707,9 +5080,9 @@
       });
 
       // Hitung total kapasitas slot aktif:
-      // Sabtu: 10 slot reguler (2 stall x 5 slot kerja) + 12 slot express = 22 slot
-      // Hari biasa: 14 slot reguler (2 stall x 7 slot kerja) + 16 slot express = 30 slot
-      const maxSlots = isTvDateSat ? 22 : 30;
+      // Sabtu: 6 slot reguler (2 stall x 3 slot kerja) + 6 slot express = 12 slot
+      // Hari biasa: 10 slot reguler (2 stall x 5 slot kerja) + 12 slot express = 22 slot
+      const maxSlots = isTvDateSat ? 12 : 22;
       const usageEl = document.getElementById('slotUsageDisplay');
       if (usageEl) {
         usageEl.innerHTML = `${filledSlotsCount} / ${maxSlots} <span class="text-xs text-slate-400 font-normal">(${Math.round((filledSlotsCount/maxSlots)*100)}%)</span>`;
@@ -4719,12 +5092,12 @@
       const tvHoursEl = document.getElementById('tvOperatingHoursDisplay');
       const tvDurationEl = document.getElementById('tvOperatingDurationDisplay');
       if (tvHoursEl) {
-        tvHoursEl.innerText = isTvDateSat ? '08.30 – 14.30' : '08.30 – 16.30';
+        tvHoursEl.innerText = isTvDateSat ? '08.30 – 11.30' : '08.30 – 14.30';
       }
       if (tvDurationEl) {
         tvDurationEl.innerText = isTvDateSat 
-          ? 'Total durasi 6 jam operasional' 
-          : 'Total durasi 8 jam operasional';
+          ? 'Total durasi 3 jam operasional' 
+          : 'Total durasi 6 jam operasional';
       }
 
       // Update Banner Siaran Panggilan Aktif (Now Calling) secara dinamis sesuai jadwal DATA riil hari ini
@@ -4854,27 +5227,119 @@
       }
       const bookingDateRaw = document.getElementById('bookingDateInput').value;
       const bookingDate = normalizeDateString(bookingDateRaw);
-      if (isSaturday(bookingDate)) {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '14.30') {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot reguler terakhir pukul 13.30 WIB). Silakan pilih slot jam yang tersedia.', 'Jam Operasional Sabtu', 'warning');
+      const isSat = isSaturday(bookingDate);
+
+      // Cek Batas Jam Operasional
+      if (isSat) {
+        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '11.30') {
+          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot reguler terakhir pukul 10.30 WIB). Silakan pilih slot jam yang tersedia.', 'Jam Operasional Sabtu', 'warning');
           return;
         }
-        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 12) {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 14.30 WIB. Silakan pilih slot jam sebelum 14.30 WIB.', 'Jam Operasional Sabtu', 'warning');
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 6) {
+          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot express terakhir pukul 11.00 WIB). Silakan pilih slot jam sebelum 11.30 WIB.', 'Jam Operasional Sabtu', 'warning');
           return;
         }
       } else {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '16.30') {
-          showPopup('Slot jam 16.30 WIB tidak tersedia untuk booking servis reguler. Silakan pilih slot jam sebelum 16.30 WIB.', 'Slot Tidak Tersedia', 'warning');
+        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '14.30') {
+          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot reguler terakhir pukul 13.30 WIB). Silakan pilih slot jam yang tersedia.', 'Slot Tidak Tersedia', 'warning');
+          return;
+        }
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 12) {
+          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot express terakhir pukul 14.00 WIB). Silakan pilih slot jam yang tersedia.', 'Slot Tidak Tersedia', 'warning');
           return;
         }
       }
+
+      // Validasi Khusus Level 2 (Butuh 2 Jam Berurutan)
+      const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
+      const currentDamageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
+      const isLevel2 = (selectedBookingService === 'reguler' && currentDamageItem && (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2));
+
+      if (isLevel2) {
+        const stall = document.getElementById('bookingStallInput')?.value || 'stall1';
+        const siteId = document.getElementById('bookingSiteInput')?.value || currentSiteId;
+        const allBookings = loadBookings();
+        const activeBookings = allBookings.filter(b => 
+          isSameDate(b.date, bookingDate) && 
+          isSameSite(b.siteId, siteId) && 
+          b.status !== 'Batal'
+        );
+
+        const activeRegularHours = REGULAR_HOURS.filter(time => {
+          if (isSat) return time < '11.30';
+          return time < '14.30';
+        });
+
+        const tIdx = activeRegularHours.indexOf(selectedBookingSlot);
+        const nextTime = (tIdx !== -1 && tIdx + 1 < activeRegularHours.length) ? activeRegularHours[tIdx + 1] : null;
+
+        // Cek apakah slot kedua valid dan tersedia
+        if (!nextTime) {
+          const closingHour = isSat ? '11.30' : '14.30';
+          openLevel2AlertModal(selectedBookingSlot, `sudah mencapai batas jam operasional servis (${closingHour} WIB)`);
+          return;
+        }
+
+        const isBreakNext = (stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30');
+        const bookedNext = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
+        const isPassedNext = isSlotTimePassed(nextTime, bookingDate);
+
+        if (isBreakNext || bookedNext || isPassedNext) {
+          let reasonText = '';
+          if (isBreakNext) {
+            reasonText = `slot jam berikutnya (${nextTime} WIB) adalah jam istirahat teknisi`;
+          } else if (bookedNext) {
+            reasonText = `slot jam berikutnya (${nextTime} WIB) sudah dipesan oleh pelanggan lain`;
+          } else {
+            reasonText = `slot jam berikutnya (${nextTime} WIB) sudah terlewati untuk hari ini`;
+          }
+          openLevel2AlertModal(selectedBookingSlot, reasonText);
+          return;
+        }
+
+        // Slot kedua aman dan tersedia
+        selectedBookingSecondarySlot = nextTime;
+      }
+
       goToBookingStep(4);
+    }
+
+    function openLevel2AlertModal(chosenTime, reason) {
+      const modal = document.getElementById('level2AlertModal');
+      const msg = document.getElementById('level2AlertMessage');
+      if (!modal) return;
+
+      if (msg) {
+        msg.innerHTML = `Kerusakan yang Anda pilih membutuhkan waktu pengerjaan <b>2 jam</b>. Karena waktu yang Anda pilih (<b>${chosenTime} WIB</b>) tidak dapat ditambah durasinya (${reason}), silakan pilih waktu yang memiliki durasi 2 jam berurutan atau gunakan pilihan otomatis di bawah.`;
+      }
+
+      modal.classList.remove('hidden');
+      modal.style.setProperty('display', 'flex', 'important');
+      pushModalHistoryState('level2AlertModal');
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    }
+
+    function closeLevel2AlertModal() {
+      const modal = document.getElementById('level2AlertModal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.style.setProperty('display', 'none', 'important');
+      popModalHistoryState();
+    }
+
+    function executeLevel2AutoSelectFromModal() {
+      closeLevel2AlertModal();
+      const success = autoSelectLevel2ConsecutiveSlots();
+      if (success) {
+        goToBookingStep(4);
+      }
     }
 
     function validateStep4AndNext() {
       validateStep3AndNext();
     }
+
+    let selectedBookingSecondarySlot = null;
 
     function updateBookingSummary() {
       const site = SITES.find(s => s.id === currentSiteId) || SITES[0];
@@ -4883,7 +5348,7 @@
       const summaryDate = document.getElementById('summaryDateTime');
 
       if (summarySite) summarySite.innerText = site.name;
-      if (summaryService) summaryService.innerText = selectedBookingService === 'express' ? 'Express Bay (< 30 Mnt)' : 'Reguler (1 Jam)';
+      if (summaryService) summaryService.innerText = selectedBookingService === 'express' ? 'Express Bay (< 30 Mnt)' : (selectedBookingSecondarySlot ? 'Reguler (2 Jam)' : 'Reguler (1 Jam)');
       
       const bDate = normalizeDateString(document.getElementById('bookingDateInput')?.value || currentDate);
       const holiday = checkHolidayOrSunday(bDate);
@@ -4894,6 +5359,8 @@
       } else if (selectedBookingSlot) {
         if (selectedBookingService === 'express') {
           slotText = `${bDate} &bull; ${EXPRESS_SLOTS[parseInt(selectedBookingSlot)]} WIB`;
+        } else if (selectedBookingSecondarySlot) {
+          slotText = `${bDate} &bull; ${selectedBookingSlot} - ${getNextHour(selectedBookingSecondarySlot)} WIB (2 Jam)`;
         } else {
           slotText = `${bDate} &bull; ${selectedBookingSlot} - ${getNextHour(selectedBookingSlot)} WIB`;
         }
@@ -4904,6 +5371,7 @@
     function selectServiceType(type) {
       selectedBookingService = type;
       selectedBookingSlot = null;
+      selectedBookingSecondarySlot = null;
       document.getElementById('selectedSlotBadge').innerText = 'Belum dipilih';
 
       const optReg = document.getElementById('opt-service-reguler');
@@ -4924,6 +5392,83 @@
       updateBookingSummary();
     }
 
+    function autoSelectLevel2ConsecutiveSlots() {
+      const bookingDateRaw = document.getElementById('bookingDateInput')?.value || currentDate;
+      const bookingDate = normalizeDateString(bookingDateRaw);
+      const stall = document.getElementById('bookingStallInput')?.value || 'stall1';
+      const siteId = document.getElementById('bookingSiteInput')?.value || currentSiteId;
+      const allBookings = loadBookings();
+      const activeBookings = allBookings.filter(b => isSameDate(b.date, bookingDate) && isSameSite(b.siteId, siteId) && b.status !== 'Batal');
+      const isBookingSat = isSaturday(bookingDate);
+      const activeRegularHours = REGULAR_HOURS.filter(time => isBookingSat ? time < '11.30' : time < '14.30');
+
+      for (let i = 0; i < activeRegularHours.length - 1; i++) {
+        const t1 = activeRegularHours[i];
+        const t2 = activeRegularHours[i + 1];
+
+        const isBreak1 = (stall === 'stall1' && t1 === '12.30') || (stall === 'stall2' && t1 === '13.30');
+        const isBreak2 = (stall === 'stall1' && t2 === '12.30') || (stall === 'stall2' && t2 === '13.30');
+        if (isBreak1 || isBreak2) continue;
+
+        const isPassed1 = isSlotTimePassed(t1, bookingDate);
+        const isPassed2 = isSlotTimePassed(t2, bookingDate);
+        if (isPassed1 || isPassed2) continue;
+
+        const b1 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t1));
+        const b2 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t2));
+        if (b1 || b2) continue;
+
+        // Ketemu pasangan 2 slot berurutan yang kosong!
+        selectedBookingSlot = t1;
+        selectedBookingSecondarySlot = t2;
+        const badge = document.getElementById('selectedSlotBadge');
+        if (badge) badge.innerText = `${t1} - ${getNextHour(t2)} WIB`;
+        renderBookingSlotPicker();
+        updateBookingSummary();
+        showPopup(`Sistem berhasil memilihkan 2 jam berurutan: ${t1} s/d ${getNextHour(t2)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '2 Jam Berurutan Terpilih', 'success');
+        return true;
+      }
+
+      showPopup('Tidak ditemukan 2 jam berurutan yang kosong pada stall ini. Silakan coba ganti ke stall lain atau pilih tanggal besok.', 'Tidak Ada Slot Berurutan', 'warning');
+      return false;
+    }
+
+    function handleRegularSlotClick(time, tIdx, activeRegularHours, stall, activeBookings, bookingDate, isLevel2) {
+      if (!isLevel2) {
+        selectedBookingSlot = time;
+        selectedBookingSecondarySlot = null;
+        const badge = document.getElementById('selectedSlotBadge');
+        if (badge) badge.innerText = `${time} - ${getNextHour(time)} WIB`;
+        renderBookingSlotPicker();
+        updateBookingSummary();
+        return;
+      }
+
+      // KETENTUAN LEVEL 2:
+      // Jika slot berikutnya tersedia (tidak break, tidak penuh, tidak lewat, dalam jam operasional) -> otomatis pilih 2 kotak!
+      const nextTime = (tIdx + 1 < activeRegularHours.length) ? activeRegularHours[tIdx + 1] : null;
+      const isBreakNext = nextTime && ((stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30'));
+      const bookedNext = nextTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
+      const isPassedNext = nextTime && isSlotTimePassed(nextTime, bookingDate);
+
+      if (nextTime && !isBreakNext && !bookedNext && !isPassedNext) {
+        selectedBookingSlot = time;
+        selectedBookingSecondarySlot = nextTime;
+        const badge = document.getElementById('selectedSlotBadge');
+        if (badge) badge.innerText = `${time} - ${getNextHour(nextTime)} WIB`;
+      } else {
+        // Jika depannya terisi / break / tutup, tetap tandai slot ini tapi secondary null.
+        // Notifikasi popup akan muncul saat konsumen klik tombol "Lanjut"!
+        selectedBookingSlot = time;
+        selectedBookingSecondarySlot = null;
+        const badge = document.getElementById('selectedSlotBadge');
+        if (badge) badge.innerText = `${time} WIB`;
+      }
+
+      renderBookingSlotPicker();
+      updateBookingSummary();
+    }
+
     function renderBookingSlotPicker() {
       const container = document.getElementById('bookingSlotContainer');
       if (!container) return;
@@ -4936,17 +5481,17 @@
 
       // ==============================================================
       // CEK HARI MINGGU ATAU TANGGAL MERAH (BENGKEL TUTUP)
-      // Jika Hari Minggu atau Tanggal Merah, jam otomatis tidak bisa diklik / dipilih
       // ==============================================================
       const holidayInfo = checkHolidayOrSunday(bookingDate);
       if (holidayInfo) {
         selectedBookingSlot = null;
+        selectedBookingSecondarySlot = null;
         const badge = document.getElementById('selectedSlotBadge');
         if (badge) badge.innerText = 'Belum dipilih';
 
         const isHolidaySat = isSaturday(bookingDate);
         if (selectedBookingService === 'reguler') {
-          const holidayRegHours = isHolidaySat ? REGULAR_HOURS.filter(t => t < '14.30') : REGULAR_HOURS.filter(t => t < '16.30');
+          const holidayRegHours = isHolidaySat ? REGULAR_HOURS.filter(t => t < '11.30') : REGULAR_HOURS.filter(t => t < '14.30');
           holidayRegHours.forEach(time => {
             const slotBtn = document.createElement('button');
             slotBtn.type = 'button';
@@ -4957,7 +5502,7 @@
             container.appendChild(slotBtn);
           });
         } else {
-          const holidayExpSlots = isHolidaySat ? EXPRESS_SLOTS.slice(0, 12) : EXPRESS_SLOTS.slice(0, 16);
+          const holidayExpSlots = isHolidaySat ? EXPRESS_SLOTS.slice(0, 6) : EXPRESS_SLOTS.slice(0, 12);
           holidayExpSlots.forEach(timeRange => {
             const slotBtn = document.createElement('button');
             slotBtn.type = 'button';
@@ -4983,24 +5528,31 @@
 
       const isBookingSat = isSaturday(bookingDate);
 
+      // Cek apakah keluhan yang dipilih masuk Level 2 (2 Jam)
+      const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
+      const currentDamageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
+      const isLevel2 = (selectedBookingService === 'reguler' && currentDamageItem && (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2));
+
       // Saring daftar jam yang beroperasi:
-      // - Pada hari Sabtu: hilangkan pilihan jam 14.30 ke atas (slot reguler hanya s/d 13.30)
-      // - Pada hari selain Sabtu: hilangkan pilihan jam 16.30 (slot reguler hanya s/d 15.30)
+      // - Pada hari Sabtu: hanya sampai 11.30 (slot reguler terakhir s/d 10.30)
+      // - Pada hari selain Sabtu: hanya sampai 14.30 (slot reguler terakhir s/d 13.30)
       const activeRegularHours = REGULAR_HOURS.filter(time => {
-        if (isBookingSat) return time < '14.30';
-        return time < '16.30';
+        if (isBookingSat) return time < '11.30';
+        return time < '14.30';
       });
 
       // Reset slot jika sebelumnya terpilih slot di luar jam operasional
       if (selectedBookingService === 'reguler' && selectedBookingSlot && !activeRegularHours.includes(selectedBookingSlot)) {
         selectedBookingSlot = null;
+        selectedBookingSecondarySlot = null;
         const badge = document.getElementById('selectedSlotBadge');
         if (badge) badge.innerText = 'Belum dipilih';
       } else if (selectedBookingService === 'express') {
         const idx = parseInt(selectedBookingSlot, 10);
-        const maxLimit = isBookingSat ? 12 : 16;
+        const maxLimit = isBookingSat ? 6 : 12;
         if (!isNaN(idx) && idx >= maxLimit) {
           selectedBookingSlot = null;
+          selectedBookingSecondarySlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
         }
@@ -5009,19 +5561,21 @@
       if (isBookingSat) {
         const satNotice = document.createElement('div');
         satNotice.className = 'col-span-full py-1.5 px-3 bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold rounded-[2px] flex items-center gap-1.5 shadow-2xs mb-1';
-        satNotice.innerHTML = '<i data-lucide="info" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i><span>Jadwal Khusus Hari Sabtu: Jam operasional 08.30 &ndash; 14.30 WIB (Pilihan slot Express s/d 14.00, Reguler s/d 13.30 WIB).</span>';
+        satNotice.innerHTML = '<i data-lucide="info" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i><span>Jadwal Khusus Hari Sabtu: Jam operasional 08.30 &ndash; 11.30 WIB (Pilihan slot Express s/d 11.00, Reguler s/d 10.30 WIB).</span>';
         container.appendChild(satNotice);
       }
 
       if (selectedBookingService === 'reguler') {
-        activeRegularHours.forEach(time => {
+        activeRegularHours.forEach((time, tIdx) => {
           const isBreak = (stall === 'stall1' && time === '12.30') || (stall === 'stall2' && time === '13.30');
           
-          // Cari booking aktif yang menempati stall, cabang, tanggal, dan jam ini
-          const booked = activeBookings.find(b => isSameStall(b.stall, stall) && isSameSlot(b.slot, time));
+          // Cari booking aktif yang menempati stall, cabang, tanggal, dan jam ini (termasuk pengerjaan Level 2)
+          const booked = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, time));
           const isBooked = !!booked;
           const isPassed = isSlotTimePassed(time, bookingDate);
-          const isSelected = selectedBookingSlot && isSameSlot(selectedBookingSlot, time);
+          const isPrimarySelected = selectedBookingSlot && isSameSlot(selectedBookingSlot, time);
+          const isSecondarySelected = selectedBookingSecondarySlot && isSameSlot(selectedBookingSecondarySlot, time);
+          const isSelected = isPrimarySelected || isSecondarySelected;
 
           const slotBtn = document.createElement('button');
           slotBtn.type = 'button';
@@ -5037,17 +5591,18 @@
             slotBtn.title = `Slot ${time} WIB sudah terisi oleh antrian ${booked.queueNumber} (${booked.plate || booked.model})`;
             if (isSelected) {
               selectedBookingSlot = null;
+              selectedBookingSecondarySlot = null;
               const badge = document.getElementById('selectedSlotBadge');
               if (badge) badge.innerText = 'Belum dipilih';
             }
           } else if (isPassed) {
-            // KETENTUAN: WAKTU SUDAH MELEBIHI WAKTU SEKARANG (BERJALAN) PADA HARI INI -> TIDAK BISA DIPILIH
             slotBtn.className = 'py-2 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-medium cursor-not-allowed opacity-60';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] font-medium text-slate-400 bg-slate-200 px-1 py-0.2 rounded-[2px]">Lewat</span>`;
             slotBtn.disabled = true;
             slotBtn.title = `Slot jam ${time} WIB sudah terlewati untuk hari ini`;
             if (isSelected) {
               selectedBookingSlot = null;
+              selectedBookingSecondarySlot = null;
               const badge = document.getElementById('selectedSlotBadge');
               if (badge) badge.innerText = 'Belum dipilih';
             }
@@ -5058,18 +5613,15 @@
             slotBtn.className = 'py-2 px-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 rounded-[3px] text-xs font-bold shadow-sm transition hover:border-slate-400';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] text-emerald-600 font-semibold">Tersedia</span>`;
             slotBtn.onclick = () => {
-              selectedBookingSlot = time;
-              document.getElementById('selectedSlotBadge').innerText = `${time} - ${getNextHour(time)} WIB`;
-              renderBookingSlotPicker();
-              updateBookingSummary();
+              handleRegularSlotClick(time, tIdx, activeRegularHours, stall, activeBookings, bookingDate, isLevel2);
             };
           }
 
           container.appendChild(slotBtn);
         });
       } else {
-        // Express Bay: Sabtu s/d 14.00 (12 slot), Hari Biasa s/d 16.00 (16 slot)
-        const activeExpressSlots = isBookingSat ? EXPRESS_SLOTS.slice(0, 12) : EXPRESS_SLOTS.slice(0, 16);
+        // Express Bay: Sabtu s/d 11.30 (6 slot: 08.30 - 11.30), Hari Biasa s/d 14.30 (12 slot: 08.30 - 14.30)
+        const activeExpressSlots = isBookingSat ? EXPRESS_SLOTS.slice(0, 6) : EXPRESS_SLOTS.slice(0, 12);
         activeExpressSlots.forEach((timeRange, idx) => {
 
           const booked = activeBookings.find(b => 
@@ -5094,7 +5646,6 @@
               if (badge) badge.innerText = 'Belum dipilih';
             }
           } else if (isPassed) {
-            // KETENTUAN: WAKTU SUDAH MELEBIHI WAKTU SEKARANG (BERJALAN) PADA HARI INI -> TIDAK BISA DIPILIH
             slotBtn.className = 'py-2 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-medium cursor-not-allowed opacity-60 flex flex-col items-center justify-center';
             slotBtn.innerHTML = `<div>${timeRange.split(' - ')[0]}</div><span class="text-[9px] font-medium text-slate-400 bg-slate-200 px-1 py-0.2 rounded-[2px]">Lewat</span>`;
             slotBtn.disabled = true;
@@ -5168,8 +5719,8 @@
 
       // VALIDASI: OPERASIONAL KHUSUS HARI SABTU & HARI BIASA
       if (isSaturday(bookingDate)) {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '14.30') {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot reguler terakhir pukul 13.30 WIB).\n\nSilakan pilih slot yang tersedia.', 'Jam Operasional Sabtu', 'warning');
+        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '11.30') {
+          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot reguler terakhir pukul 10.30 WIB).\n\nSilakan pilih slot yang tersedia.', 'Jam Operasional Sabtu', 'warning');
           selectedBookingSlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
@@ -5177,8 +5728,8 @@
           goToBookingStep(3);
           return;
         }
-        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 12) {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 14.30 WIB.\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Jam Operasional Sabtu', 'warning');
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 6) {
+          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot express terakhir pukul 11.00 WIB).\n\nSilakan pilih slot sebelum pukul 11.30 WIB.', 'Jam Operasional Sabtu', 'warning');
           selectedBookingSlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
@@ -5187,8 +5738,17 @@
           return;
         }
       } else {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '16.30') {
-          showPopup('Slot jam 16.30 WIB tidak tersedia untuk booking servis reguler.\n\nSilakan pilih slot sebelum pukul 16.30 WIB.', 'Slot Tidak Tersedia', 'warning');
+        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '14.30') {
+          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot reguler terakhir pukul 13.30 WIB).\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
+          selectedBookingSlot = null;
+          const badge = document.getElementById('selectedSlotBadge');
+          if (badge) badge.innerText = 'Belum dipilih';
+          renderBookingSlotPicker();
+          goToBookingStep(3);
+          return;
+        }
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 12) {
+          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot express terakhir pukul 14.00 WIB).\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
           selectedBookingSlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
@@ -5206,7 +5766,7 @@
         isSameDate(b.date, bookingDate) &&
         isSameSite(b.siteId, siteId) &&
         isSameStall(b.stall, stall) &&
-        isSameSlot(b.slot, selectedBookingSlot) &&
+        (isBookingInSlot(b, selectedBookingSlot) || (selectedBookingSecondarySlot && isBookingInSlot(b, selectedBookingSecondarySlot))) &&
         b.status !== 'Batal'
       );
 
@@ -5215,6 +5775,7 @@
         const timeDisplay = selectedBookingService === 'express' ? `${EXPRESS_SLOTS[parseInt(selectedBookingSlot)] || selectedBookingSlot} WIB` : `${selectedBookingSlot} WIB`;
         showPopup(`Slot waktu jam ${timeDisplay} pada tanggal ${bookingDate} di ${siteObj.name} (${stallLabel}) sudah terisi oleh antrian ${conflict.queueNumber} (${conflict.plate}).\n\nSilakan pilih jam kedatangan atau stall lain yang masih kosong.`, 'Slot Sudah Terisi', 'warning');
         selectedBookingSlot = null;
+        selectedBookingSecondarySlot = null;
         const badge = document.getElementById('selectedSlotBadge');
         if (badge) badge.innerText = 'Belum dipilih';
         renderBookingSlotPicker();
@@ -5227,11 +5788,15 @@
       // ==============================================================
       const chosenSlot = selectedBookingSlot;
       const chosenService = selectedBookingService;
-      const timeDisplay = chosenService === 'express' 
+      let timeDisplay = chosenService === 'express' 
         ? `${EXPRESS_SLOTS[parseInt(chosenSlot)] || chosenSlot} WIB` 
         : `${chosenSlot} - ${getNextHour(chosenSlot)} WIB`;
 
-      const damageId = document.getElementById('inputDamageMaster')?.value || 'KEL-001';
+      if (chosenService === 'reguler' && selectedBookingSecondarySlot) {
+        timeDisplay = `${chosenSlot} - ${getNextHour(selectedBookingSecondarySlot)} WIB (2 Jam Penuh)`;
+      }
+
+      const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
       let damageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
       let complaint = damageItem ? damageItem.name : (notes || 'Servis EV');
       if (damageId === 'CUSTOM') {
@@ -5247,7 +5812,7 @@
       const confOwner = document.getElementById('confirmOwner');
       const confComp = document.getElementById('confirmComplaint');
 
-      if (confSite) confSite.innerText = siteObj.name;
+      if (confSite) confSite.innerText = `${siteObj.name} [${getSiteCode(siteObj.id)}]`;
       if (confService) confService.innerText = `${chosenService === 'express' ? 'Express Bay' : 'Servis Reguler'} (${stallText})`;
       if (confDate) confDate.innerText = `${bookingDate} • ${timeDisplay}`;
       if (confVeh) confVeh.innerText = `${model} (${plate.toUpperCase()})`;
@@ -5283,6 +5848,7 @@
 
       const siteId = document.getElementById('bookingSiteInput').value;
       const siteObj = SITES.find(s => s.id === siteId) || SITES[0];
+      const siteCode = getSiteCode(siteObj.id);
       const plate = document.getElementById('inputPlateNumber').value.trim();
       const name = document.getElementById('inputOwnerName').value.trim();
       const phone = document.getElementById('inputPhone').value.trim();
@@ -5294,17 +5860,25 @@
 
       // Kunci data slot dan tampilan waktu SEBELUM saveBookings
       const chosenSlot = selectedBookingSlot;
+      const secondarySlot = selectedBookingSecondarySlot;
       const chosenService = selectedBookingService;
-      const timeDisplay = chosenService === 'express' 
+      let timeDisplay = chosenService === 'express' 
         ? `${EXPRESS_SLOTS[parseInt(chosenSlot)] || chosenSlot} WIB` 
         : `${chosenSlot} - ${getNextHour(chosenSlot)} WIB`;
 
+      if (chosenService === 'reguler' && secondarySlot) {
+        timeDisplay = `${chosenSlot} - ${getNextHour(secondarySlot)} WIB (2 Jam Penuh)`;
+      }
+
       const bookings = loadBookings();
       const prefix = chosenService === 'express' ? 'EXP' : 'REG';
-      const queueNumber = `${prefix}-${(bookings.length + 1).toString().padStart(2, '0')}`;
-      const bookingCode = `PLY-${siteObj.id.substring(0,3).toUpperCase()}-${bookingDate.replace(/-/g, '')}-${Math.floor(100 + Math.random() * 900)}`;
+      const siteBookings = bookings.filter(b => isSameSite(b.siteId, siteObj.id) && isSameDate(b.date, bookingDate));
+      const seqStr = String(siteBookings.length + 1).padStart(3, '0');
+      // FORMAT BARU: 3 KODE SITE (misal REGTSM001 / EXPTSM001)
+      const queueNumber = `${prefix}${siteCode}${seqStr}`;
+      const bookingCode = `PLY-${siteCode}-${bookingDate.replace(/-/g, '')}-${seqStr}`;
 
-      const damageId = document.getElementById('inputDamageMaster')?.value || 'KEL-001';
+      const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
       let damageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
       let level = damageItem ? damageItem.level : 'Level 1';
       let estimatedHours = damageItem ? damageItem.hours : 1;
@@ -5319,11 +5893,13 @@
       const newBooking = {
         id: bookingCode,
         siteId: siteObj.id,
+        siteCode: siteCode,
         siteName: siteObj.name,
         siteAddress: siteObj.address,
         date: bookingDate,
         stall: stall,
         slot: chosenSlot,
+        secondarySlot: secondarySlot || null,
         serviceType: chosenService,
         queueNumber: queueNumber,
         model: model,
@@ -5453,12 +6029,12 @@
     // ==============================================================
     function handleSlotClick(stall, time) {
       if (currentRole === 'tv') return; // Slot TV Monitor tidak dapat diklik
-      if (isSaturday(currentDate) && time >= '14.30') {
-        showPopup(`Slot jam ${time} WIB tidak beroperasi pada hari Sabtu karena jam operasional servis hanya sampai 14.30 WIB.`, 'Jam Operasional Sabtu', 'warning');
+      if (isSaturday(currentDate) && time >= '11.30') {
+        showPopup(`Slot jam ${time} WIB tidak beroperasi pada hari Sabtu karena jam operasional servis hanya sampai 11.30 WIB.`, 'Jam Operasional Sabtu', 'warning');
         return;
       }
-      if (!isSaturday(currentDate) && time >= '16.30') {
-        showPopup(`Slot jam ${time} WIB tidak beroperasi untuk servis reguler.`, 'Slot Tidak Tersedia', 'warning');
+      if (!isSaturday(currentDate) && time >= '14.30') {
+        showPopup(`Slot jam ${time} WIB tidak beroperasi karena jam operasional servis hanya sampai 14.30 WIB.`, 'Slot Tidak Tersedia', 'warning');
         return;
       }
       currentModalTarget = { stall, slot: time };
@@ -5503,12 +6079,12 @@
 
     function handleExpressSlotClick(index, timeRange) {
       if (currentRole === 'tv') return; // Slot TV Monitor tidak dapat diklik
-      if (isSaturday(currentDate) && index >= 12) {
-        showPopup(`Slot Express ${timeRange} WIB tidak beroperasi pada hari Sabtu karena jam operasional servis hanya sampai 14.30 WIB.`, 'Jam Operasional Sabtu', 'warning');
+      if (isSaturday(currentDate) && index >= 6) {
+        showPopup(`Slot Express ${timeRange} WIB tidak beroperasi pada hari Sabtu karena jam operasional servis hanya sampai 11.30 WIB.`, 'Jam Operasional Sabtu', 'warning');
         return;
       }
-      if (!isSaturday(currentDate) && index >= 16) {
-        showPopup(`Slot Express ${timeRange} WIB tidak beroperasi pada hari biasa karena jam operasional servis selesai pukul 16.30 WIB.`, 'Jam Operasional', 'warning');
+      if (!isSaturday(currentDate) && index >= 12) {
+        showPopup(`Slot Express ${timeRange} WIB tidak beroperasi karena jam operasional servis selesai pukul 14.30 WIB.`, 'Jam Operasional', 'warning');
         return;
       }
       currentModalTarget = { stall: 'express', slot: String(index) };
@@ -5644,15 +6220,19 @@
       const notes = document.getElementById('modalInputNotes').value.trim();
 
       if (!plate || !name) {
-        alert('Harap isi nomor plat dan nama pelanggan.');
+        showPopup('Harap isi nomor plat dan nama pelanggan.', 'Data Belum Lengkap', 'warning');
         return;
       }
 
       const currentSite = SITES.find(s => s.id === currentSiteId) || SITES[0];
+      const siteCode = getSiteCode(currentSite.id);
       const bookings = loadBookings();
       const prefix = currentModalTarget.stall === 'express' ? 'EXP' : 'REG';
-      const queueNumber = `${prefix}-${(bookings.length + 1).toString().padStart(2, '0')}`;
-      const id = `PLY-${currentSite.id.substring(0,3).toUpperCase()}-${currentDate.replace(/-/g, '')}-${Math.floor(100 + Math.random() * 900)}`;
+      const siteBookings = bookings.filter(b => isSameSite(b.siteId, currentSite.id) && isSameDate(b.date, currentDate));
+      const seqStr = String(siteBookings.length + 1).padStart(3, '0');
+      // Format baru: 3 Kode Site (e.g. REGTSM001 / EXPTSM001)
+      const queueNumber = `${prefix}${siteCode}${seqStr}`;
+      const id = `PLY-${siteCode}-${currentDate.replace(/-/g, '')}-${seqStr}`;
 
       const damageId = document.getElementById('modalInputDamageMaster')?.value || 'KEL-001';
       let damageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
@@ -5666,14 +6246,58 @@
         complaint = notes || 'Permintaan Khusus Walk-In';
       }
 
+      let secondarySlot = null;
+      if (currentModalTarget.stall !== 'express' && estimatedHours >= 2) {
+        secondarySlot = getNextRegularSlot(currentModalTarget.slot);
+        const isSat = isSaturday(currentDate);
+        if (!secondarySlot || (isSat && secondarySlot > '11.30') || (!isSat && secondarySlot > '14.30')) {
+          showPopup(
+            `Kerusakan ini masuk kategori Level 2 (estimasi 2 jam pengerjaan), namun slot berikutnya tidak tersedia atau di luar jam operasional (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki 2 jam berurutan!`,
+            'Waktu 2 Jam Tidak Cukup',
+            'warning'
+          );
+          return;
+        }
+
+        const secConflict = bookings.find(b => 
+          isSameDate(b.date, currentDate) &&
+          isSameSite(b.siteId, currentSite.id) &&
+          isSameStall(b.stall, currentModalTarget.stall) &&
+          isBookingInSlot(b, secondarySlot) &&
+          b.status !== 'Batal'
+        );
+        if (secConflict) {
+          showPopup(
+            `Kerusakan ini masuk kategori Level 2 (estimasi 2 jam pengerjaan). Namun slot jam berikutnya (${secondarySlot}) sudah terisi oleh antrian ${secConflict.queueNumber} (${secConflict.plate}).\n\nSilakan pilih jam kedatangan yang memiliki 2 jam berurutan!`,
+            'Slot Berikutnya Sudah Terisi',
+            'warning'
+          );
+          return;
+        }
+      }
+
+      const conflict = bookings.find(b => 
+        isSameDate(b.date, currentDate) &&
+        isSameSite(b.siteId, currentSite.id) &&
+        isSameStall(b.stall, currentModalTarget.stall) &&
+        isBookingInSlot(b, currentModalTarget.slot) &&
+        b.status !== 'Batal'
+      );
+      if (conflict) {
+        showPopup(`Slot ini sudah terisi oleh antrian ${conflict.queueNumber} (${conflict.plate})!`, 'Slot Terisi', 'warning');
+        return;
+      }
+
       const newBooking = {
         id,
         siteId: currentSite.id,
+        siteCode: siteCode,
         siteName: currentSite.name,
         siteAddress: currentSite.address,
         date: currentDate,
         stall: currentModalTarget.stall,
         slot: currentModalTarget.slot,
+        secondarySlot: secondarySlot,
         serviceType: currentModalTarget.stall === 'express' ? 'express' : 'reguler',
         queueNumber,
         model,
@@ -5686,18 +6310,6 @@
         notes: notes || complaint,
         status: 'Checked In' // Langsung checked-in karena hadir di tempat
       };
-
-      const conflict = bookings.find(b => 
-        isSameDate(b.date, currentDate) &&
-        isSameSite(b.siteId, currentSite.id) &&
-        isSameStall(b.stall, currentModalTarget.stall) &&
-        isSameSlot(b.slot, currentModalTarget.slot) &&
-        b.status !== 'Batal'
-      );
-      if (conflict) {
-        alert(`⚠️ Slot ini sudah terisi oleh antrian ${conflict.queueNumber} (${conflict.plate})!`);
-        return;
-      }
 
       bookings.push(newBooking);
       saveBookings(bookings);
@@ -5788,12 +6400,16 @@
         inputUrl.value = DEFAULT_GAS_URL;
       }
       modal.classList.remove('hidden');
+      pushModalHistoryState('googleSheetModal');
       lucide.createIcons();
     }
 
     function closeGoogleSheetModal() {
       const modal = document.getElementById('googleSheetModal');
-      if (modal) modal.classList.add('hidden');
+      if (modal) {
+        modal.classList.add('hidden');
+        popModalHistoryState('googleSheetModal');
+      }
     }
 
     function saveGasUrl() {
@@ -6161,7 +6777,100 @@
         console.warn('GViz JSONP Master_Kerusakan terkendala:', errM);
       }
 
-      // 3. Fallback via Apps Script jika diakses via http:// dan GViz belum dapat
+      // 3. Ambil & Perbarui Master_Sites (KODE & Nama) dari Google Sheet via JSONP
+      try {
+        const sTable = await fetchGvizJsonp('Master_Sites');
+        if (sTable) {
+          const sRows = extractRowsFromGvizTable(sTable);
+          const parsedSites = [];
+          sRows.forEach(r => {
+            const nonEmpty = r.map(c => String(c !== undefined && c !== null ? c : '').trim()).filter(s => s !== '');
+            if (nonEmpty.length < 2) return;
+            const first = nonEmpty[0].toLowerCase();
+            if (first === 'siteid' || first === 'kode' || first === 'site' || first === 'namacabang') return;
+
+            const rawName = nonEmpty[0];
+            const code = String(nonEmpty[1] || '').trim().toUpperCase();
+            const branchName = nonEmpty[2] || rawName;
+            const city = nonEmpty[3] || rawName;
+            const addr = nonEmpty[4] || '';
+            const phone = nonEmpty[5] || '';
+
+            const displayName = branchName.toLowerCase().startsWith('polytron') ? branchName : `Polytron SC ${branchName}`;
+            const sId = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+            parsedSites.push({
+              id: sId,
+              code: code || sId.substring(0, 3).toUpperCase(),
+              name: displayName,
+              city: city,
+              address: addr || displayName,
+              phone: phone || '-',
+              badge: city || 'Cabang Resmi'
+            });
+          });
+
+          if (parsedSites.length > 0) {
+            SITES.length = 0;
+            SITES.push(...parsedSites);
+            try {
+              localStorage.setItem(MASTER_SITES_STORAGE_KEY, JSON.stringify(SITES));
+            } catch(e) {}
+
+            // Pastikan currentSiteId sinkron dan valid di daftar cabang aktif
+            if (!currentSiteId || !SITES.find(s => s.id === currentSiteId || isSameSite(s.id, currentSiteId))) {
+              const def = SITES.find(s => s.id.includes('tasik')) || SITES[0];
+              currentSiteId = def ? def.id : '';
+            }
+            initSiteDropdowns();
+            updateSiteDisplay();
+          }
+        }
+      } catch (errSites) {
+        console.warn('GViz JSONP Master_Sites terkendala:', errSites);
+      }
+
+      // 4. Ambil & Perbarui Sheet PART (Kolom A: KODE, Kolom B: Nama Part, Kolom C: QTY)
+      try {
+        const pTable = await fetchGvizJsonp('PART');
+        if (pTable) {
+          const pRows = extractRowsFromGvizTable(pTable);
+          const newParts = [];
+          pRows.forEach(r => {
+            const nonEmpty = r.map(c => String(c !== undefined && c !== null ? c : '').trim()).filter(s => s !== '');
+            if (nonEmpty.length < 3) return;
+            const pKode = String(nonEmpty[0] || '').trim().toUpperCase();
+            if (pKode === 'KODE' || pKode === 'CODE') return;
+            const pName = String(nonEmpty[1] || '').trim();
+            const pQty = parseInt(nonEmpty[2], 10);
+            const pCat = String(nonEmpty[3] || 'Sparepart').trim();
+
+            if (pKode && pName) {
+              newParts.push({
+                kode: pKode,
+                code: pKode,
+                name: pName,
+                qty: isNaN(pQty) ? 0 : pQty,
+                category: pCat
+              });
+            }
+          });
+
+          if (newParts.length > 0) {
+            MASTER_PARTS.length = 0;
+            MASTER_PARTS.push(...newParts);
+            try {
+              localStorage.setItem(MASTER_PARTS_STORAGE_KEY, JSON.stringify(MASTER_PARTS));
+            } catch(e) {}
+            renderDedicatedPartsTable(document.getElementById('partSectionSearchInput')?.value || '');
+            renderBookingPartsList();
+          }
+        }
+      } catch (errParts) {
+        console.warn('GViz JSONP PART terkendala:', errParts);
+      }
+
+      // 5. Fallback via Apps Script jika diakses via http:// dan GViz belum dapat
       if (!success && window.location.protocol !== 'file:') {
         const gasUrl = localStorage.getItem(GAS_URL_STORAGE_KEY) || DEFAULT_GAS_URL;
         if (gasUrl) {
@@ -6175,6 +6884,42 @@
                   if (norm) remoteBookings.push(norm);
                 });
                 success = true;
+              }
+              if (json.parts && Array.isArray(json.parts) && json.parts.length > 0) {
+                MASTER_PARTS.length = 0;
+                MASTER_PARTS.push(...json.parts.map(p => ({
+                  kode: p.kode || p.code || '',
+                  code: p.code || p.kode || '',
+                  name: p.name || '',
+                  qty: parseInt(p.qty, 10) || 0,
+                  category: p.category || 'Sparepart'
+                })));
+                try {
+                  localStorage.setItem(MASTER_PARTS_STORAGE_KEY, JSON.stringify(MASTER_PARTS));
+                } catch(e) {}
+                renderDedicatedPartsTable(document.getElementById('partSectionSearchInput')?.value || '');
+                renderBookingPartsList();
+              }
+              if (json.sites && Array.isArray(json.sites) && json.sites.length > 0) {
+                SITES.length = 0;
+                json.sites.forEach(s => {
+                  const sId = String(s.id || '').trim().toLowerCase();
+                  if (!sId) return;
+                  SITES.push({
+                    id: sId,
+                    code: (s.code || sId.substring(0, 3)).toUpperCase(),
+                    name: s.name || `Polytron SC ${sId}`,
+                    city: s.city || sId,
+                    address: s.address || s.name || '',
+                    phone: s.phone || '-',
+                    badge: s.city || 'Cabang Resmi'
+                  });
+                });
+                try {
+                  localStorage.setItem(MASTER_SITES_STORAGE_KEY, JSON.stringify(SITES));
+                } catch(e) {}
+                initSiteDropdowns();
+                updateSiteDisplay();
               }
             }
           } catch(e) {}

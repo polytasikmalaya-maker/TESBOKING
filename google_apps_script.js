@@ -13,7 +13,7 @@
  *    -> WAJIB PILIH: "Siapa saja" (Anyone) !! Jangan pilih "Hanya saya" atau organisasi.
  * 5. Klik "Terapkan" (Deploy).
  * 6. URL Web App Aktif (Paten):
- *    https://script.google.com/macros/s/AKfycbwkCZc3iMXLQ1957geQ-Ob4EV-wlbc5NNllPLnOInTh7wWNr8G9U4Kk-IhxSzNem4pr/exec
+ *    https://script.google.com/macros/s/AKfycbzPNDszqAYl0u5YQJH6AdYWRBxjG79i6NVR03ex01WXyJrQl13mDOcflM1B2Jin_hs1jA/exec
  * 
  * CARA SETUP PERTAMA KALI:
  * 1. Buka spreadsheet: https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762
@@ -89,22 +89,22 @@ function initDatabase() {
     sheetBookings.autoResizeColumns(1, bookingHeaders.length);
   }
 
-  // C. SETUP SHEET MASTER SITES
+  // C. SETUP SHEET MASTER SITES DENGAN KOLOM KODE (MISAL TSM)
   let sheetSites = ss.getSheetByName('Master_Sites');
   if (!sheetSites) {
     sheetSites = ss.insertSheet('Master_Sites');
   } else {
     sheetSites.clear();
   }
-  const siteHeaders = ['SiteID', 'NamaCabang', 'Kota', 'Alamat', 'Telepon'];
+  const siteHeaders = ['SiteID', 'KODE', 'NamaCabang', 'Kota', 'Alamat', 'Telepon'];
   const siteData = [
-    ['tasikmalaya', 'Polytron SC Tasikmalaya', 'Tasikmalaya', 'Jl. KHZ. Mustofa No. 280', '(0265) 332840'],
-    ['bandung', 'Polytron SC Bandung', 'Bandung', 'Jl. Soekarno Hatta No. 438', '(022) 5201415'],
-    ['cirebon', 'Polytron SC Cirebon', 'Cirebon', 'Jl. Brigjen Dharsono No. 12', '(0231) 246810'],
-    ['jakarta-barat', 'Polytron SC Jakarta Barat', 'Jakarta Barat', 'Jl. Daan Mogot KM 11 No. 8', '(021) 5439876'],
-    ['semarang', 'Polytron SC Semarang', 'Semarang', 'Jl. MT Haryono No. 712', '(024) 8412345'],
-    ['kudus', 'Polytron SC Kudus (Pusat EV)', 'Kudus', 'Jl. AKBP R. Agil Kusumadya', '(0291) 431234'],
-    ['surabaya', 'Polytron SC Surabaya', 'Surabaya', 'Jl. Rungkut Industri IV No. 5', '(031) 8439000']
+    ['tasikmalaya', 'TSM', 'Polytron SC Tasikmalaya', 'Tasikmalaya', 'Jl. KHZ. Mustofa No. 280', '(0265) 332840'],
+    ['bandung', 'BDG', 'Polytron SC Bandung', 'Bandung', 'Jl. Soekarno Hatta No. 438', '(022) 5201415'],
+    ['cirebon', 'CRB', 'Polytron SC Cirebon', 'Cirebon', 'Jl. Brigjen Dharsono No. 12', '(0231) 246810'],
+    ['jakarta-barat', 'JKT', 'Polytron SC Jakarta Barat', 'Jakarta Barat', 'Jl. Daan Mogot KM 11 No. 8', '(021) 5439876'],
+    ['semarang', 'SMG', 'Polytron SC Semarang', 'Semarang', 'Jl. MT Haryono No. 712', '(024) 8412345'],
+    ['kudus', 'KDS', 'Polytron SC Kudus (Pusat EV)', 'Kudus', 'Jl. AKBP R. Agil Kusumadya', '(0291) 431234'],
+    ['surabaya', 'SBY', 'Polytron SC Surabaya', 'Surabaya', 'Jl. Rungkut Industri IV No. 5', '(031) 8439000']
   ];
   sheetSites.getRange(1, 1, 1, siteHeaders.length).setValues([siteHeaders])
     .setBackground('#0f172a').setFontColor('#ffffff').setFontWeight('bold');
@@ -112,7 +112,71 @@ function initDatabase() {
   sheetSites.setFrozenRows(1);
   sheetSites.autoResizeColumns(1, siteHeaders.length);
 
-  Logger.log('✅ DATABASE POLYTRON BERHASIL DIBUAT DENGAN LENGKAP!');
+  // D. SETUP SHEET PART (KOLOM A=KODE, KOLOM B=NAMA PART, KOLOM C=QTY)
+  let sheetParts = ss.getSheetByName('PART');
+  if (!sheetParts) {
+    sheetParts = ss.insertSheet('PART');
+  } else {
+    sheetParts.clear();
+  }
+  const partHeaders = ['KODE', 'NAMA PART', 'QTY', 'KATEGORI'];
+  const partData = [
+    // Cabang Tasikmalaya (TSM)
+    ['TSM', 'Kampas Rem Depan Fox-R / Fox-S', 18, 'Braking'],
+    ['TSM', 'Kampas Rem Belakang Fox-R', 14, 'Braking'],
+    ['TSM', 'Minyak Rem DOT 4 (300ml)', 25, 'Chemical'],
+    ['TSM', 'Belt Transmisi Penggerak Fox-R', 5, 'Drivetrain'],
+    ['TSM', 'Ban Tubeless Depan 110/70-13', 8, 'Tire'],
+    ['TSM', 'Ban Tubeless Belakang 130/70-13', 6, 'Tire'],
+    ['TSM', 'Bearing Roda Depan/Belakang (Laher)', 12, 'Wheel'],
+    ['TSM', 'Controller / Inverter MCU Unit', 2, 'Electrical'],
+    ['TSM', 'BMS Battery Pack Module', 1, 'Battery'],
+    ['TSM', 'Spion Kanan Kiri Fox-R (Set)', 10, 'Body'],
+    ['TSM', 'Sekring Fuse 15A / 30A', 30, 'Electrical'],
+    ['TSM', 'Seal Shockbreaker Depan & Oli', 8, 'Suspension'],
+
+    // Cabang Bandung (BDG)
+    ['BDG', 'Kampas Rem Depan Fox-R / Fox-S', 24, 'Braking'],
+    ['BDG', 'Kampas Rem Belakang Fox-R', 20, 'Braking'],
+    ['BDG', 'Belt Transmisi Penggerak Fox-R', 8, 'Drivetrain'],
+    ['BDG', 'Ban Tubeless Depan 110/70-13', 10, 'Tire'],
+    ['BDG', 'Ban Tubeless Belakang 130/70-13', 9, 'Tire'],
+    ['BDG', 'Controller / Inverter MCU Unit', 3, 'Electrical'],
+
+    // Cabang Cirebon (CRB)
+    ['CRB', 'Kampas Rem Depan Fox-R / Fox-S', 15, 'Braking'],
+    ['CRB', 'Kampas Rem Belakang Fox-R', 10, 'Braking'],
+    ['CRB', 'Belt Transmisi Penggerak Fox-R', 4, 'Drivetrain'],
+
+    // Cabang Jakarta Barat (JKT)
+    ['JKT', 'Kampas Rem Depan Fox-R / Fox-S', 35, 'Braking'],
+    ['JKT', 'Kampas Rem Belakang Fox-R', 28, 'Braking'],
+    ['JKT', 'Belt Transmisi Penggerak Fox-R', 12, 'Drivetrain'],
+    ['JKT', 'Controller / Inverter MCU Unit', 5, 'Electrical'],
+
+    // Cabang Semarang (SMG)
+    ['SMG', 'Kampas Rem Depan Fox-R / Fox-S', 16, 'Braking'],
+    ['SMG', 'Kampas Rem Belakang Fox-R', 12, 'Braking'],
+    ['SMG', 'Belt Transmisi Penggerak Fox-R', 6, 'Drivetrain'],
+
+    // Cabang Kudus (KDS)
+    ['KDS', 'Kampas Rem Depan Fox-R / Fox-S', 40, 'Braking'],
+    ['KDS', 'Kampas Rem Belakang Fox-R', 35, 'Braking'],
+    ['KDS', 'Belt Transmisi Penggerak Fox-R', 15, 'Drivetrain'],
+    ['KDS', 'BMS Battery Pack Module', 5, 'Battery'],
+
+    // Cabang Surabaya (SBY)
+    ['SBY', 'Kampas Rem Depan Fox-R / Fox-S', 22, 'Braking'],
+    ['SBY', 'Kampas Rem Belakang Fox-R', 18, 'Braking'],
+    ['SBY', 'Belt Transmisi Penggerak Fox-R', 7, 'Drivetrain']
+  ];
+  sheetParts.getRange(1, 1, 1, partHeaders.length).setValues([partHeaders])
+    .setBackground('#059669').setFontColor('#ffffff').setFontWeight('bold');
+  sheetParts.getRange(2, 1, partData.length, partHeaders.length).setValues(partData);
+  sheetParts.setFrozenRows(1);
+  sheetParts.autoResizeColumns(1, partHeaders.length);
+
+  Logger.log('✅ DATABASE POLYTRON BERHASIL DIBUAT DENGAN LENGKAP (MASTER SITES + KODE & SHEET PART)!');
 }
 
 // FUNGSI MENGISI 4 DATA SAMPLE ANTRIN (JALANKAN DARI RUN ATAU WEB APP)
@@ -132,10 +196,10 @@ function seedSampleBookings() {
   const now = new Date();
 
   const samples = [
-    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-01', 'REG-01', 'tasikmalaya', todayStr, '08.30', 'stall1', 'Level 1', 'Servis Berkala 1.000 KM (Pengecekan Standar)', 'Polytron Fox-R', 'Z 1482 ABZ', 'Ahmad Faisal', '081234567890', 'Checked In'],
-    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-02', 'REG-02', 'tasikmalaya', todayStr, '09.30', 'stall1', 'Level 2', 'Update Firmware ECU & Kalibrasi Speedometer', 'Polytron Fox-R', 'Z 5678 CD', 'Siti Rahmawati', '082198765432', 'In Progress'],
-    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-03', 'REG-03', 'tasikmalaya', todayStr, '10.30', 'stall2', 'Level 1', 'Penggantian Kampas Rem Depan / Belakang', 'Polytron Fox-S', 'Z 9012 EF', 'Bambang Kusuma', '085712349988', 'Booked'],
-    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-04', 'EXP-01', 'tasikmalaya', todayStr, '0', 'express', 'Express', 'Fast Check: Cek Tekanan Angin & Tambal Tubeless', 'Polytron Fox-S', 'Z 4321 PLY', 'Rian Pratama', '089677889900', 'Done']
+    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-001', 'REGTSM001', 'tasikmalaya', todayStr, '08.30', 'stall1', 'Level 1', 'Servis Berkala 1.000 KM (Pengecekan Standar)', 'Polytron Fox-R', 'Z 1482 ABZ', 'Ahmad Faisal', '081234567890', 'Checked In'],
+    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-002', 'REGTSM002', 'tasikmalaya', todayStr, '09.30', 'stall1', 'Level 2', 'Update Firmware ECU & Kalibrasi Speedometer', 'Polytron Fox-R', 'Z 5678 CD', 'Siti Rahmawati', '082198765432', 'In Progress'],
+    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-003', 'REGTSM003', 'tasikmalaya', todayStr, '10.30', 'stall2', 'Level 1', 'Penggantian Kampas Rem Depan / Belakang', 'Polytron Fox-S', 'Z 9012 EF', 'Bambang Kusuma', '085712349988', 'Booked'],
+    [now, 'PLY-TSM-' + todayStr.replace(/-/g, '') + '-004', 'EXPTSM001', 'tasikmalaya', todayStr, '0', 'express', 'Express', 'Fast Check: Cek Tekanan Angin & Tambal Tubeless', 'Polytron Fox-S', 'Z 4321 PLY', 'Rian Pratama', '089677889900', 'Done']
   ];
 
   samples.forEach(function(row) {
@@ -253,9 +317,68 @@ function doGet(e) {
     });
   }
 
+  // BACA MASTER SITES (DENGAN KOLOM KODE MISAL TSM, MENDUKUNG SELURUH POSISI KOLOM)
+  const sheetSites = ss.getSheetByName('Master_Sites');
+  const siteValues = sheetSites ? sheetSites.getDataRange().getValues() : [];
+  const sitesData = [];
+  for (let i = 1; i < siteValues.length; i++) {
+    const row = siteValues[i];
+    const nonEmpty = row.map(function(c) { return String(c || '').trim(); }).filter(function(str) { return str !== ''; });
+    if (nonEmpty.length < 2) continue;
+    if (nonEmpty[0].toLowerCase() === 'siteid' || nonEmpty[1].toLowerCase() === 'kode') continue;
+
+    const codeCell = nonEmpty.find(function(str) { return str.length >= 2 && str.length <= 4 && /^[A-Z]{2,4}$/i.test(str); });
+    const nameCell = nonEmpty.find(function(str) { return str !== codeCell && str.length >= 3; }) || nonEmpty[0];
+    const cleanName = String(nameCell).trim();
+    const displayName = cleanName.toLowerCase().startsWith('polytron') ? cleanName : ('Polytron SC ' + cleanName);
+    const code = codeCell ? codeCell.toUpperCase() : cleanName.substring(0, 3).toUpperCase();
+    const id = cleanName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const city = nonEmpty.find(function(str) { return str !== codeCell && str !== nameCell; }) || cleanName;
+
+    sitesData.push({
+      id: id,
+      code: code,
+      name: displayName,
+      city: city,
+      address: cleanName,
+      phone: '-'
+    });
+  }
+
+  // BACA SHEET PART (MENDUKUNG SELURUH POSISI KOLOM REALTIME DARI SPREADSHEET)
+  const sheetParts = ss.getSheetByName('PART');
+  const partValues = sheetParts ? sheetParts.getDataRange().getValues() : [];
+  const partsData = [];
+  for (let i = 0; i < partValues.length; i++) {
+    const row = partValues[i];
+    const nonEmpty = row.map(function(c) { return String(c || '').trim(); }).filter(function(str) { return str !== ''; });
+    if (nonEmpty.length < 3) continue;
+    if (nonEmpty[0].toLowerCase() === 'kode' || nonEmpty[1].toLowerCase() === 'nama part') continue;
+
+    const codeCell = nonEmpty.find(function(str) { return str.length >= 2 && str.length <= 4 && /^[A-Z]{2,4}$/i.test(str); }) || nonEmpty[0];
+    const nameCell = nonEmpty.find(function(str) { return str !== codeCell && isNaN(parseFloat(str)); }) || nonEmpty[1];
+    const qtyCell = nonEmpty.find(function(str) { return str !== codeCell && !isNaN(parseFloat(str)); });
+    const catCell = nonEmpty.find(function(str) { return str !== codeCell && str !== nameCell && str !== qtyCell; }) || 'Umum';
+
+    const pKode = String(codeCell).trim().toUpperCase();
+    const pQty = qtyCell ? Math.round(parseFloat(qtyCell)) : 0;
+
+    if (pKode && nameCell) {
+      partsData.push({
+        kode: pKode,
+        code: pKode,
+        name: String(nameCell).trim(),
+        qty: isNaN(pQty) ? 0 : pQty,
+        category: catCell
+      });
+    }
+  }
+
   const response = {
     status: 'success',
     master_kerusakan: masterData,
+    sites: sitesData,
+    parts: partsData,
     bookings: bookingsData
   };
 
