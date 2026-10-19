@@ -212,11 +212,9 @@
       overflow: hidden !important;
     }
 
-    /* Container tiap Menu: Scroll internal sendiri, tab Chrome tetap diam tidak bergerak */
+    /* Container Menu Portal & Konsumen: Scroll internal sendiri, tab Chrome tetap diam tidak bergerak */
     #role-section-portal,
-    #role-section-konsumen,
-    #role-section-teknisi,
-    #role-section-sa {
+    #role-section-konsumen {
       position: absolute !important;
       top: 0 !important;
       left: 0 !important;
@@ -231,6 +229,29 @@
       -webkit-overflow-scrolling: touch !important;
       overscroll-behavior-y: contain !important;
       box-sizing: border-box !important;
+    }
+
+    /* Khusus Menu SA dan Teknisi: 100% Pas Layar Tanpa Melebihi Layar Bagian Bawah */
+    #role-section-teknisi,
+    #role-section-sa {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      overflow: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+      box-sizing: border-box !important;
+      padding-bottom: 0 !important;
+    }
+    #role-section-teknisi.hidden,
+    #role-section-sa.hidden {
+      display: none !important;
     }
 
     @media (max-width: 768px) {
@@ -1590,12 +1611,12 @@
       <!-- ============================================================== -->
       <!-- MODUL 2: DASHBOARD TEKNISI (UBAH STATUS PENGERJAAN STALL)      -->
       <!-- ============================================================== -->
-      <section id="role-section-teknisi" class="hidden space-y-2 py-2 px-[2mm] sm:px-4 lg:px-5 min-h-screen">
+      <section id="role-section-teknisi" class="hidden flex flex-col h-full max-h-full overflow-hidden p-2 sm:p-3 lg:p-4 gap-2">
         
-        <!-- STICKY HEADER & FILTER PANEL TEKNISI (TIDAK TERSKROL / SEMBUNYI DI HP) -->
-        <div class="sticky-header-panel border-b border-slate-200 p-3 sm:p-4 shadow-sm space-y-2.5 rounded-[3px]">
+        <!-- HEADER & FILTER PANEL TEKNISI (DIAM DI ATAS, TIDAK MELUBER) -->
+        <div class="flex-shrink-0 bg-white border border-slate-200 p-2.5 sm:p-3 shadow-xs space-y-2 rounded-[3px]">
           <!-- Baris 1: Judul, Menu Utama, Pilihan Cabang & Filter Stall -->
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
             <div>
               <div class="flex items-center gap-2">
                 <span class="w-3 h-3 bg-blue-500 rounded-[2px]"></span>
@@ -1626,7 +1647,7 @@
           </div>
 
           <!-- Baris 2: Tab Filter Tanggal (Semua Jadwal, Hari Ini, Besok, Pilih Tanggal) -->
-          <div class="bg-slate-50 border border-slate-200 p-2 rounded-[3px] flex items-center justify-between gap-2 flex-wrap">
+          <div class="bg-slate-50 border border-slate-200 p-1.5 sm:p-2 rounded-[3px] flex items-center justify-between gap-2 flex-wrap">
             <div class="inline-flex items-center bg-white p-0.5 rounded-[3px] border border-slate-300 text-xs font-bold shadow-xs">
               <button type="button" id="teknisiTab-all" onclick="setTeknisiDateFilter('all')" class="px-2.5 py-1 rounded-[2px] transition text-slate-700 hover:text-red-600 flex items-center gap-1">
                 <span>Semua Jadwal</span>
@@ -1649,9 +1670,11 @@
           </div>
         </div>
 
-        <!-- Daftar Unit untuk Teknisi (Kartu Pekerjaan) -->
-        <div id="technicianCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
-          <!-- Rendered dynamically via JS -->
+        <!-- Scrollable Area Kartu Pekerjaan Teknisi (SCROLL INTERNAL RAPI DI DALAM LAYAR) -->
+        <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-0.5 pb-8">
+          <div id="technicianCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5 pb-8">
+            <!-- Rendered dynamically via JS -->
+          </div>
         </div>
 
       </section>
@@ -1659,12 +1682,12 @@
       <!-- ============================================================== -->
       <!-- MODUL 3: SERVICE ADVISOR / SA (CHECK-IN KEDATANGAN & WALK-IN)  -->
       <!-- ============================================================== -->
-      <section id="role-section-sa" class="hidden space-y-2 py-2 px-[2mm] sm:px-4 lg:px-5 min-h-screen">
+      <section id="role-section-sa" class="hidden flex flex-col h-full max-h-full overflow-hidden p-2 sm:p-3 lg:p-4 gap-2">
         
-        <!-- STICKY HEADER & FILTER PANEL SERVICE ADVISOR (TIDAK TERSKROL / SEMBUNYI DI HP) -->
-        <div class="sticky-header-panel border-b border-slate-200 p-3 sm:p-4 shadow-sm space-y-2.5 rounded-[3px]">
+        <!-- HEADER & FILTER PANEL SERVICE ADVISOR (FIXED AT TOP, NOT SCROLLED) -->
+        <div class="flex-shrink-0 bg-white border border-slate-200 p-2.5 sm:p-3.5 shadow-xs space-y-2 rounded-[3px]">
           <!-- Baris 1: Judul & Tombol-tombol Aksi Utama -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <div class="flex items-center gap-2">
                 <span class="w-3 h-3 bg-amber-500 rounded-[2px]"></span>
@@ -1686,7 +1709,7 @@
           </div>
 
           <!-- Baris 2: Filter Cabang, Filter Tanggal & Pencarian -->
-          <div class="bg-slate-50 border border-slate-200 p-2 rounded-[3px] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5">
+          <div class="bg-slate-50 border border-slate-200 p-2 rounded-[3px] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2">
             <div class="flex items-center gap-2 flex-wrap">
               <!-- Dropdown Cabang SA -->
               <select id="saSiteSelector" onchange="handleSaSiteChange(this.value)" class="bg-white border border-slate-300 px-2.5 py-1 text-xs text-slate-800 font-bold outline-none cursor-pointer rounded-[2px] shadow-xs">
@@ -1730,20 +1753,20 @@
           </div>
         </div>
 
-        <!-- DAFTAR UNIT ANTRIAN SA: 2 TAMPILAN (HP = KARTU RAPI, LAPTOP = TABEL LEBAR) -->
-        <div class="bg-white border border-slate-200 overflow-hidden shadow-sm">
-          <!-- Tampilan Laptop / Desktop (Tabel Lengkap) -->
-          <div class="hidden md:block overflow-x-auto">
-            <table class="w-full text-left text-xs min-w-[880px]">
-              <thead class="bg-slate-50 text-slate-700 uppercase font-bold border-b border-slate-200 text-[11px]">
+        <!-- DAFTAR UNIT ANTRIAN SA: 2 TAMPILAN (HP = KARTU RAPI, LAPTOP = TABEL LEBAR) DENGAN SCROLL INTERNAL -->
+        <div class="flex-1 min-h-0 bg-white border border-slate-200 rounded-[3px] shadow-xs overflow-hidden flex flex-col">
+          <!-- Tampilan Laptop / Desktop (Tabel Lengkap dengan sticky header & scrollable body) -->
+          <div class="hidden md:block flex-1 min-h-0 overflow-auto">
+            <table class="w-full text-left text-xs min-w-[880px] border-collapse">
+              <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200 text-[11px] sticky top-0 z-10 shadow-xs">
                 <tr>
-                  <th class="py-2.5 px-3">No. Antrian</th>
-                  <th class="py-2.5 px-3">Status Saat Ini</th>
-                  <th class="py-2.5 px-3">Stall & Waktu</th>
-                  <th class="py-2.5 px-3">Kendaraan</th>
-                  <th class="py-2.5 px-3">Pelanggan & WhatsApp</th>
-                  <th class="py-2.5 px-3">Keluhan</th>
-                  <th class="py-2.5 px-3 text-right">Panggilan Suara (Hadir / Proses / Selesai)</th>
+                  <th class="py-2.5 px-3 bg-slate-100">No. Antrian</th>
+                  <th class="py-2.5 px-3 bg-slate-100">Status Saat Ini</th>
+                  <th class="py-2.5 px-3 bg-slate-100">Stall & Waktu</th>
+                  <th class="py-2.5 px-3 bg-slate-100">Kendaraan</th>
+                  <th class="py-2.5 px-3 bg-slate-100">Pelanggan & WhatsApp</th>
+                  <th class="py-2.5 px-3 bg-slate-100">Keluhan</th>
+                  <th class="py-2.5 px-3 bg-slate-100 text-right">Panggilan Suara (Hadir / Proses / Selesai)</th>
                 </tr>
               </thead>
               <tbody id="saTableBody" class="divide-y divide-slate-100 text-slate-800">
@@ -1752,8 +1775,8 @@
             </table>
           </div>
 
-          <!-- Tampilan HP (Daftar Kartu Antrean Vertikal Rapi) -->
-          <div id="saMobileCardList" class="md:hidden divide-y divide-slate-100 p-1.5 space-y-1.5">
+          <!-- Tampilan HP (Daftar Kartu Antrean Vertikal Rapi dengan scroll internal) -->
+          <div id="saMobileCardList" class="md:hidden flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 p-2 space-y-2 pb-8">
             <!-- Rendered dynamically via JS -->
           </div>
         </div>
@@ -3504,14 +3527,14 @@
 
       const mainApp = document.querySelector('main.app-container');
       if (mainApp) {
-        if (role === 'tv') {
+        if (role === 'tv' || role === 'sa' || role === 'teknisi' || role === 'part') {
           mainApp.style.setProperty('padding-bottom', '0px', 'important');
         } else {
           mainApp.style.removeProperty('padding-bottom');
         }
       }
 
-      if (role === 'tv' || role === 'part') {
+      if (role === 'tv' || role === 'part' || role === 'sa' || role === 'teknisi') {
         document.body.classList.add('role-tv-active');
         document.documentElement.classList.add('role-tv-active');
         document.body.style.setProperty('overflow', 'hidden', 'important');
