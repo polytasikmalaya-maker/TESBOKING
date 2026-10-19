@@ -1650,6 +1650,7 @@
                 const branchName = nonEmpty[2] || rawName;
                 const city = nonEmpty[3] || rawName;
                 const addr = nonEmpty[4] || '';
+                const workDays = String(nonEmpty[6] || '1,2,3,4,5,6').trim();
 
                 const displayName = branchName.toLowerCase().startsWith('polytron') ? branchName : ('Polytron SC ' + branchName);
                 const sId = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -1659,7 +1660,8 @@
                   code: code || sId.substring(0, 3).toUpperCase(),
                   name: displayName,
                   city: city,
-                  address: addr || displayName
+                  address: addr || displayName,
+                  workDays: workDays
                 });
               });
 
@@ -1705,7 +1707,8 @@
                 id: sId,
                 code: (s.code || sId.substring(0, 3)).toUpperCase(),
                 name: s.name || sId,
-                address: s.address || ''
+                address: s.address || '',
+                workDays: s.workDays || '1,2,3,4,5,6'
               });
             });
             try {

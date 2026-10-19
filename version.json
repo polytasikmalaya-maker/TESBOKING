@@ -1,5 +1,5 @@
 {
-  "version": "20261017_v32",
-  "updatedAt": "2026-10-17T18:40:00+07:00",
-  "description": "Fixed RangeError recursive call stack in getSiteCode; integrated new Google Apps Script Web App URL (55 sites, 35 parts); locked Chrome mobile viewport with 100dvh to prevent tab bar scrolling/collapsing across all menus; removed icons from confirmation/notification popups; and isolated popup modal dismiss via phone back button or OK/Tutup to close the active popup exclusively."
+  "version": "20261019_v37",
+  "updatedAt": "2026-10-19T11:40:00+07:00",
+  "description": "Full support for damage Level 3 (3 hours / 3 consecutive slots) in index_full_app.html. Auto-selection, manual slot selection, operational cutoff validation (max start 12.30 Mon-Fri, 09.30 Sat/Sun), double-booking collision prevention, and sync support."
 }

@@ -486,7 +486,8 @@
     /* MODEL 3: FULL SCREEN CARD (SUDUT 90 DERAJAT TIDAK LANCIP)      */
     /* LAYAR DIAM TOTAL, RESPONSIF HP & LAPTOP, TOMBOL STABIL         */
     /* ============================================================== */
-    #role-section-konsumen {
+    #role-section-konsumen,
+    #role-section-part {
       display: flex !important;
       flex-direction: column !important;
       align-items: stretch !important;
@@ -521,13 +522,15 @@
       background-attachment: fixed !important;
       box-sizing: border-box !important;
     }
-    #role-section-konsumen.hidden {
+    #role-section-konsumen.hidden,
+    #role-section-part.hidden {
       display: none !important;
     }
 
     /* Penyesuaian Tampilan di Layar Laptop / PC (Kartu Elegan Rapi & Proporsional) */
     @media (min-width: 768px) {
-      #role-section-konsumen {
+      #role-section-konsumen,
+      #role-section-part {
         align-items: center !important;
         justify-content: flex-start !important; /* Rata Atas di Layar Laptop / PC */
         padding: 20px 24px !important;
@@ -1157,18 +1160,18 @@
                 <div class="flex-shrink-0 mb-1.5">
                   <label class="block text-[11px] font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Pilihan Cabang Service Center</label>
                   <select id="bookingSiteInput" onchange="handleBookingSiteChange(this.value)" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-1.5 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 cursor-pointer shadow-xs">
-                    <option value="">Memuat data cabang dari Google Sheet...</option>
+                    <option value="">Memuat data...</option>
                   </select>
                 </div>
 
                 <div id="bookingSiteInfoCard" class="flex-shrink-0 bg-white border border-slate-200 rounded-[3px] p-2.5 sm:p-3 space-y-1 shadow-xs text-left mb-1.5">
                   <div class="flex items-start justify-between gap-2">
-                    <div id="siteCardName" class="font-extrabold text-slate-900 text-xs sm:text-sm truncate">Memuat data cabang...</div>
+                    <div id="siteCardName" class="font-extrabold text-slate-900 text-xs sm:text-sm truncate">Memuat data...</div>
                     <span id="siteCardBadge" class="text-[9px] sm:text-[10px] bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 font-bold rounded-[2px] flex-shrink-0">-</span>
                   </div>
                   <div class="flex items-start gap-1.5 text-[11px] text-slate-700">
                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-red-600 mt-0.5 flex-shrink-0"></i>
-                    <span id="siteCardAddress" class="font-semibold text-slate-800 line-clamp-1">Menghubungkan ke Google Sheet...</span>
+                    <span id="siteCardAddress" class="font-semibold text-slate-800 line-clamp-1">Memuat data...</span>
                   </div>
                   <div class="flex items-center gap-2 text-[11px] text-slate-700">
                     <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-500 flex-shrink-0"></i>
@@ -1283,15 +1286,28 @@
                   </div>
                 </div>
 
-                <!-- PILIH KELUHAN & KENDALA SERVIS (BERSIH TANPA ESTIMASI) -->
-                <div class="bg-white border border-slate-200 rounded-[3px] p-3 shadow-xs text-left">
-                  <label class="block text-xs font-black uppercase text-slate-900 tracking-wider mb-1.5">
-                    Pilih Keluhan / Kendala Servis
-                  </label>
+                <!-- PILIH KELUHAN & KENDALA SERVIS -->
+                <div class="bg-white border border-slate-200 rounded-[3px] p-3 shadow-xs text-left space-y-2">
+                  <div class="flex items-center justify-between">
+                    <label class="block text-xs font-black uppercase text-slate-900 tracking-wider">
+                      Pilih Keluhan / Kendala Servis
+                    </label>
+                    <span id="stage2CategoryBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-red-100 text-red-700 uppercase">Reguler</span>
+                  </div>
+
+                  <!-- Kolom Pencarian Semua Kata Kunci Kerusakan -->
+                  <div class="relative w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="stage2DamageSearchInput" oninput="filterStage2DamageOptions(this.value)" placeholder="Cari kata kunci kerusakan" style="padding-left: 36px !important;" class="w-full h-9 pr-3 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
+                  </div>
+
                   <select id="stage2DamageMaster" onchange="handleStage2DamageChange(this.value)" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 cursor-pointer shadow-2xs">
                     <!-- Populated dynamically via JS from MASTER_KERUSAKAN -->
                   </select>
-                  <p id="stage2DamageDesc" class="text-[11px] text-slate-500 italic mt-1 font-medium"></p>
+                  <p id="stage2DamageDesc" class="text-[11px] text-slate-500 italic mt-0.5 font-medium"></p>
                   
                   <!-- Hidden elements for script compatibility -->
                   <span id="stage2LevelBadge" class="hidden"></span>
@@ -1335,10 +1351,10 @@
 
           <!-- TAHAP 3: JADWAL, STALL & JAM KEDATANGAN (1 TAMPILAN TERPADU) -->
           <div id="booking-stage-3" class="flex flex-col flex-1 h-full overflow-hidden hidden">
-            <div class="flex-1 min-h-0 flex flex-col justify-start px-3 sm:px-6 py-2.5 sm:py-3.5 overflow-hidden">
-              <div class="w-full max-w-xl mx-auto space-y-2 sm:space-y-2.5">
+            <div class="flex-1 min-h-0 flex flex-col justify-start px-3 sm:px-6 py-2 sm:py-2.5 overflow-hidden">
+              <div class="w-full max-w-xl mx-auto flex-1 min-h-0 flex flex-col overflow-hidden" style="gap: 2mm;">
                 
-                <div class="text-center mb-1">
+                <div class="text-center flex-shrink-0">
                   <h2 class="text-lg sm:text-2xl font-black text-slate-900 leading-tight uppercase tracking-wider mb-0.5">
                     PILIH JADWAL & JAM KEDATANGAN
                   </h2>
@@ -1346,16 +1362,16 @@
                 </div>
 
                 <!-- Kontrol Tanggal & Stall (Berdampingan di Laptop, Kompak di HP) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-2.5 bg-slate-50 border border-slate-200 p-2 sm:p-2.5 rounded-[3px]">
+                <div class="grid grid-cols-1 md:grid-cols-2 bg-slate-50 border border-slate-200 p-2 rounded-[3px] flex-shrink-0" style="gap: 2mm;">
                   <div>
                     <label class="block text-[11px] font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Tanggal Kedatangan</label>
-                    <input type="date" id="bookingDateInput" onchange="handleBookingDateChange(this.value)" class="w-full h-9 sm:h-10 bg-white border border-slate-300 rounded-[3px] px-3 py-1.5 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 shadow-xs cursor-pointer">
+                    <input type="date" id="bookingDateInput" onchange="handleBookingDateChange(this.value)" class="w-full h-9 sm:h-10 bg-white border border-slate-300 rounded-[3px] px-3 py-1 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 shadow-xs cursor-pointer">
                   </div>
 
                   <div id="stallPickerContainer">
                     <label class="block text-[11px] font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Pilih Stall Reguler</label>
                     <input type="hidden" id="bookingStallInput" value="stall1">
-                    <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
+                    <div class="grid grid-cols-2" style="gap: 2mm;">
                       <button type="button" id="btnStall1" onclick="selectStall('stall1')" class="h-9 sm:h-10 px-2 sm:px-3 bg-red-600 text-white font-black text-xs rounded-[3px] border-2 border-red-600 shadow-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
                         <i data-lucide="check" class="w-3.5 h-3.5"></i>
                         <span>Stall EV 1</span>
@@ -1368,18 +1384,17 @@
                   </div>
                 </div>
 
-                <!-- Bar Panduan Warna Status Slot (Jam Dipilih Dihilangkan Sesuai Permintaan) -->
-                <div class="flex items-center justify-between sm:justify-end gap-3 text-[10px] sm:text-[11px] text-slate-600 font-bold px-1">
+                <!-- Bar Panduan Warna Status Slot (Hanya Tersedia dan Dipilih) -->
+                <div class="flex items-center justify-between sm:justify-end gap-3 text-[10px] sm:text-[11px] text-slate-600 font-bold px-1 flex-shrink-0">
                   <span id="selectedSlotBadge" class="hidden">Belum dipilih</span>
                   <div class="flex items-center gap-3">
                     <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-[2px] bg-emerald-500"></span>Tersedia</span>
                     <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-[2px] bg-red-600"></span>Dipilih</span>
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-[2px] bg-rose-700"></span>Penuh</span>
                   </div>
                 </div>
 
-                <!-- Grid Pilihan Jam (Slot Picker) -->
-                <div id="bookingSlotContainer" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1.5 sm:gap-2">
+                <!-- Grid Pilihan Jam (Slot Picker: Mengisi Seluruh Sisa Ruang Tanpa Ruang Kosong Bawah) -->
+                <div id="bookingSlotContainer" class="flex-1 min-h-0 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 auto-rows-fr" style="gap: 2mm;">
                   <!-- Rendered via JS -->
                 </div>
 
@@ -1413,11 +1428,11 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-4">
-                  <!-- Kolom Kiri -->
+                  <!-- Kolom Kiri: Data Kendaraan -->
                   <div class="space-y-2 sm:space-y-2.5">
                     <div>
                       <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Model / Type</label>
-                      <select id="inputEvModel" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500">
+                      <select id="inputEvModel" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 shadow-2xs">
                         <option value="Polytron Fox-R">Polytron Fox-R</option>
                         <option value="Polytron Fox-S">Polytron Fox-S</option>
                         <option value="Polytron Fox-500">Polytron Fox-500</option>
@@ -1428,43 +1443,38 @@
 
                     <div>
                       <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nomor Polisi / Plat</label>
-                      <input type="text" id="inputPlateNumber" placeholder="Contoh: D 1234 ABC" class="w-full uppercase bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold placeholder-slate-400 outline-none focus:border-red-500">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                      <div>
-                        <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nama Pemilik</label>
-                        <input type="text" id="inputOwnerName" placeholder="Nama Lengkap" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none focus:border-red-500">
-                      </div>
-
-                      <div>
-                        <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nomor WhatsApp</label>
-                        <input type="tel" id="inputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none focus:border-red-500">
-                      </div>
+                      <input type="text" id="inputPlateNumber" placeholder="Contoh: D 1234 ABC" class="w-full uppercase bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs">
                     </div>
                   </div>
 
-                  <!-- Kolom Kanan -->
+                  <!-- Kolom Kanan: Data Kontak Pemilik -->
                   <div class="space-y-2 sm:space-y-2.5">
                     <div>
-                      <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Pilih Keluhan / Kendala Servis</label>
-                      <select id="inputDamageMaster" onchange="handleDamageSelectionChange(this.value)" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium outline-none focus:border-red-500 cursor-pointer">
-                        <!-- Populated dynamically via JS from MASTER_KERUSAKAN -->
-                      </select>
-                      <p id="textDamageDesc" class="text-[11px] text-slate-600 italic mt-1 font-medium"></p>
-
-                      <!-- Hidden Level Card (dipertahankan untuk referensi script) -->
-                      <div id="damageLevelInfoCard" class="hidden">
-                        <span id="badgeDamageLevel"></span>
-                        <span id="badgeDamageHours"></span>
-                        <span id="badgeDamageStall"></span>
-                      </div>
+                      <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nama Pemilik</label>
+                      <input type="text" id="inputOwnerName" placeholder="Nama Lengkap" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs">
                     </div>
 
                     <div>
-                      <label class="block text-[11px] font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Catatan Tambahan (Opsional):</label>
-                      <textarea id="inputNotes" rows="2" placeholder="Catatan tambahan jika ada..." class="w-full bg-white border border-slate-300 rounded-[3px] p-2 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500"></textarea>
+                      <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nomor WhatsApp</label>
+                      <input type="tel" id="inputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs">
                     </div>
+                  </div>
+                </div>
+
+                <!-- Baris Penuh: Catatan Tambahan -->
+                <div class="pt-0.5">
+                  <label class="block text-[11px] font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Catatan Tambahan (Opsional):</label>
+                  <textarea id="inputNotes" rows="2" placeholder="Catatan tambahan jika ada..." class="w-full bg-white border border-slate-300 rounded-[3px] p-2 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs"></textarea>
+                </div>
+
+                <!-- Hidden Damage Elements (Disinkronkan otomatis dari Tahap 2, tidak tampil di layar) -->
+                <div class="hidden">
+                  <select id="inputDamageMaster" onchange="handleDamageSelectionChange(this.value)"></select>
+                  <p id="textDamageDesc"></p>
+                  <div id="damageLevelInfoCard">
+                    <span id="badgeDamageLevel"></span>
+                    <span id="badgeDamageHours"></span>
+                    <span id="badgeDamageStall"></span>
                   </div>
                 </div>
               </div>
@@ -1492,48 +1502,44 @@
       <!-- ============================================================== -->
       <!-- MODUL KHUSUS: CEK KETERSEDIAAN STOK SPAREPART PER CABANG       -->
       <!-- ============================================================== -->
-      <section id="role-section-part" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col h-screen max-h-screen overflow-hidden">
-        <!-- Sticky Header Cek Stok (Diam Tidak Terskrol) -->
-        <div class="bg-gradient-to-r from-[#380202] via-[#8c0c0c] to-[#ef4444] text-white p-3 sm:p-4 shadow-md border-b border-white/10 flex-shrink-0">
-          <div class="w-full flex items-center justify-between gap-2.5">
-            <div class="flex items-center gap-3">
-              <div>
+      <section id="role-section-part" class="hidden">
+        
+        <!-- MODEL 3: FULL SCREEN WHITE CARD CONTAINER (SAMA PERSIS DENGAN MENU LAIN) -->
+        <div class="model3-card flex flex-col flex-1 h-full overflow-hidden">
+          
+          <!-- Header Judul & Search di Dalam Card (Diam Tidak Terskrol) -->
+          <div class="p-3 sm:px-6 sm:py-3.5 border-b border-slate-200 flex-shrink-0 bg-white">
+            <div class="w-full max-w-4xl mx-auto">
+              <div class="text-center mb-1.5 flex-shrink-0">
+                <h2 class="text-lg sm:text-2xl font-black text-slate-900 leading-tight uppercase tracking-wider mb-0.5">
+                  KETERSEDIAAN STOK SPAREPART
+                </h2>
+                <p class="text-[11px] sm:text-xs text-slate-600 font-medium">Stok ketersediaan part lokasi service terpilih</p>
+              </div>
+
+              <!-- Filter & Search Bar -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
                 <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                  <h2 class="text-sm sm:text-lg font-black text-white uppercase tracking-wider">Ketersediaan Stok Sparepart</h2>
-                </div>
-                <p class="text-[11px] text-red-100 font-medium">Stok ketersediaan part lokasi service terpilih</p>
-              </div>
-            </div>
-
-            <!-- Hidden Site Selector for JS compatibility (No visible dropdown per user request) -->
-            <select id="partSectionSiteSelector" onchange="handlePartSectionSiteChange(this.value)" class="hidden">
-              <!-- Populated via JS -->
-            </select>
-          </div>
-        </div>
-
-        <!-- Konten Card Tabel Sparepart (Full Height ke Bawah Layar, Header Diam, Tab Chrome Bebas Scroll) -->
-        <div class="p-2 sm:p-4 max-w-5xl mx-auto w-full flex-1 min-h-0 flex flex-col overflow-hidden">
-          <div class="bg-white border border-slate-200 rounded-[4px] shadow-lg p-3 sm:p-4 flex-1 min-h-0 flex flex-col space-y-2.5 overflow-hidden">
-            
-            <!-- Filter & Search Bar (Diam Tidak Terskrol) -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-100 flex-shrink-0">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-1 bg-red-100 text-red-700 text-xs font-mono font-black rounded-[2px]" id="partSectionSiteCodeBadge">---</span>
-                <div>
+                  <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-mono font-black rounded-[2px]" id="partSectionSiteCodeBadge">---</span>
                   <div class="text-xs sm:text-sm font-black text-slate-900" id="partSectionSiteNameTitle">Cabang Terpilih</div>
-                  <div class="text-[10px] text-slate-500 font-medium">Daftar suku cadang resmi siap pakai di lokasi service terpilih</div>
+                </div>
+                <div class="relative w-full sm:w-72">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="partSectionSearchInput" oninput="renderDedicatedPartsTable(this.value)" placeholder="Cari nama suku cadang..." style="padding-left: 36px !important;" class="w-full h-9 pr-3 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
                 </div>
               </div>
-              <div class="relative w-full sm:w-72">
-                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5"></i>
-                <input type="text" id="partSectionSearchInput" oninput="renderDedicatedPartsTable(this.value)" placeholder="Cari nama suku cadang..." class="w-full h-9 pl-9 pr-3 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
-              </div>
-            </div>
 
-            <!-- Table Container (HANYA BAGIAN INI YANG BISA DISCROLL) -->
-            <div class="overflow-y-auto overflow-x-auto border border-slate-200 rounded-[3px] flex-1 min-h-0">
+              <!-- Hidden site selector for JS compatibility -->
+              <select id="partSectionSiteSelector" onchange="handlePartSectionSiteChange(this.value)" class="hidden"></select>
+            </div>
+          </div>
+
+          <!-- Table Container (HANYA BAGIAN INI YANG BISA DISCROLL, TAB CHROME DIAM) -->
+          <div class="stage-content-scroll flex-1 min-h-0 overflow-y-auto overflow-x-auto p-2 sm:px-6 sm:py-3 bg-slate-50/50">
+            <div class="w-full max-w-4xl mx-auto border border-slate-200 rounded-[3px] bg-white overflow-hidden shadow-2xs">
               <table class="w-full text-left text-xs border-collapse">
                 <thead class="sticky top-0 z-10 bg-slate-100">
                   <tr class="bg-slate-100 text-slate-700 font-black border-b border-slate-200 uppercase tracking-wider text-[11px]">
@@ -1547,16 +1553,18 @@
                 </tbody>
               </table>
             </div>
+          </div>
 
-            <!-- Bottom summary (Ukuran Tombol Seragam dengan Tombol Kembali Lainnya) -->
-            <div class="pt-2 flex items-center justify-end flex-shrink-0">
-              <button type="button" onclick="handlePartBack()" class="h-9 px-4 sm:px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-[3px] font-bold text-xs sm:text-sm flex items-center gap-2 cursor-pointer shadow-xs transition">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <!-- Tombol Aksi di Bawah Selalu (Sticky Bottom Bar) - Ukuran & Padding Seragam -->
+          <div class="booking-bottom-bar flex-shrink-0 border-t border-slate-200 bg-white/98 px-3 sm:px-6 py-2.5 sm:py-3">
+            <div class="flex items-center justify-between sm:justify-end gap-3 w-full max-w-4xl mx-auto">
+              <button type="button" onclick="handlePartBack()" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
+                <i data-lucide="arrow-left" class="w-4 h-4 flex-shrink-0"></i>
                 <span>Kembali</span>
               </button>
             </div>
-
           </div>
+
         </div>
       </section>
 
@@ -1691,8 +1699,11 @@
 
             <!-- Input Pencarian -->
             <div class="relative w-full md:w-64">
-              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2"></i>
-              <input type="text" id="saSearchInput" onkeyup="renderSABoard()" placeholder="Cari Plat, Nama, Kode..." class="w-full bg-white border border-slate-300 pl-8 pr-2.5 py-1 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 rounded-[2px] shadow-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2 pointer-events-none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="saSearchInput" onkeyup="renderSABoard()" placeholder="Cari Plat, Nama, Kode..." style="padding-left: 32px !important;" class="w-full bg-white border border-slate-300 pr-2.5 py-1 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 rounded-[2px] shadow-xs">
             </div>
           </div>
         </div>
@@ -2183,11 +2194,11 @@
       <div class="w-10 h-1 bg-red-600 mx-auto mb-3 rounded-full"></div>
 
       <!-- Title -->
-      <h3 class="text-sm sm:text-base font-black text-slate-900 mb-1.5 uppercase tracking-wide">Kategori Perbaikan Level 2 (2 Jam)</h3>
+      <h3 id="level2AlertTitle" class="text-sm sm:text-base font-black text-slate-900 mb-1.5 uppercase tracking-wide">Kategori Perbaikan Durasi Servis</h3>
 
       <!-- Message Content -->
       <div id="level2AlertMessage" class="text-xs text-slate-600 leading-relaxed mb-4 text-left bg-slate-50 border border-slate-200 rounded-[3px] p-3 space-y-1.5 font-medium">
-        Kerusakan yang Anda pilih membutuhkan waktu pengerjaan 2 jam. Waktu yang Anda pilih tidak dapat ditambah karena slot berikutnya sudah terisi atau di luar jam operasional. Silakan pilih waktu yang memiliki durasi 2 jam berurutan.
+        Kerusakan yang Anda pilih membutuhkan waktu pengerjaan lebih dari 1 jam. Waktu yang Anda pilih tidak dapat ditambah karena slot berikutnya sudah terisi atau di luar jam operasional. Silakan pilih waktu yang memiliki durasi berurutan yang cukup.
       </div>
 
       <!-- Action Buttons -->
@@ -2439,6 +2450,56 @@
       { id: 'KEL-023', level: 'Express', hours: 0.5, name: 'Pelumasan Standar Samping & Engsel Bodi', stall: 'Express Bay', category: 'Express', desc: 'Penyemprotan pelumas silikon/grease pada engsel & standar' }
     ];
 
+    // MASTER TYPE / MODEL MOTOR (DARI GOOGLE SHEET Master_Type)
+    const MASTER_MODELS_STORAGE_KEY = 'POLYTRON_MASTER_MODELS_CACHE_v1';
+    let MASTER_MODELS = [
+      'Polytron Fox-R',
+      'Polytron Fox-S',
+      'Polytron Fox-500',
+      'Polytron T-Rex',
+      'Polytron Evo'
+    ];
+    try {
+      const cachedModels = localStorage.getItem(MASTER_MODELS_STORAGE_KEY);
+      if (cachedModels) {
+        const parsed = JSON.parse(cachedModels);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          MASTER_MODELS = parsed;
+        }
+      }
+    } catch(e) {}
+
+    function populateModelDropdowns() {
+      const elConsumer = document.getElementById('inputEvModel');
+      const elModal = document.getElementById('modalInputModel');
+
+      [elConsumer, elModal].forEach(selectEl => {
+        if (!selectEl) return;
+        const currentVal = selectEl.value;
+        selectEl.innerHTML = '';
+        MASTER_MODELS.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.innerText = m;
+          selectEl.appendChild(opt);
+        });
+        if (currentVal && MASTER_MODELS.includes(currentVal)) {
+          selectEl.value = currentVal;
+        } else if (MASTER_MODELS.length > 0) {
+          selectEl.value = MASTER_MODELS[0];
+        }
+      });
+    }
+
+    function getNextRegularSlot(timeStr) {
+      if (!timeStr) return null;
+      const idx = REGULAR_HOURS.indexOf(timeStr);
+      if (idx !== -1 && idx + 1 < REGULAR_HOURS.length) {
+        return REGULAR_HOURS[idx + 1];
+      }
+      return null;
+    }
+
     // GOOGLE SHEET CONSTANTS
     const GOOGLE_SPREADSHEET_ID = '1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww';
     const GOOGLE_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762';
@@ -2588,32 +2649,64 @@
       '2027-12-25': 'Hari Raya Natal'
     };
 
-    function checkHolidayOrSunday(dateStr) {
-      if (!dateStr) return null;
+    function isSiteOpenOnDate(siteObj, dateStr) {
+      if (!dateStr) return { isOpen: false, isHoliday: false, reason: 'Tanggal tidak valid' };
       const norm = normalizeDateString(dateStr);
       
-      // 1. Cek Hari Minggu (Sunday = 0)
+      // 1. Cek Tanggal Merah Terdaftar
+      if (INDONESIAN_HOLIDAYS[norm]) {
+        return { isOpen: false, isHoliday: true, reason: `Tanggal Merah (${INDONESIAN_HOLIDAYS[norm]})` };
+      }
+
+      // 2. Cek Tanggal Merah Tetap Tahunan
+      const mmdd = norm.substring(5);
+      if (mmdd === '01-01') return { isOpen: false, isHoliday: true, reason: 'Tanggal Merah (Tahun Baru Masehi)' };
+      if (mmdd === '05-01') return { isOpen: false, isHoliday: true, reason: 'Tanggal Merah (Hari Buruh Internasional)' };
+      if (mmdd === '06-01') return { isOpen: false, isHoliday: true, reason: 'Tanggal Merah (Hari Lahir Pancasila)' };
+      if (mmdd === '08-17') return { isOpen: false, isHoliday: true, reason: 'Tanggal Merah (Hari Kemerdekaan RI)' };
+      if (mmdd === '12-25') return { isOpen: false, isHoliday: true, reason: 'Tanggal Merah (Hari Raya Natal)' };
+
+      // 3. Cek Hari Kerja Cabang (Dinamis dari Kolom HariKerja di Master_Sites Google Sheet)
       const parts = norm.split('-').map(Number);
       if (parts.length === 3) {
         const d = new Date(parts[0], parts[1] - 1, parts[2]);
-        if (d.getDay() === 0) {
-          return { isHoliday: true, type: 'sunday', reason: 'Hari Minggu (Bengkel Tutup)' };
+        const dayNum = d.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+        const rawWorkDays = String(siteObj?.workDays || '1,2,3,4,5,6').toLowerCase().trim();
+
+        let isWorkingDay = false;
+        if (dayNum === 0) { // Minggu
+          if (rawWorkDays.includes('0') || rawWorkDays.includes('7') || rawWorkDays.includes('minggu') || rawWorkDays.includes('sun') || rawWorkDays.includes('senin-minggu') || rawWorkDays.includes('1-7')) {
+            isWorkingDay = true;
+          }
+        } else if (dayNum === 6) { // Sabtu
+          if (rawWorkDays.includes('6') || rawWorkDays.includes('sabtu') || rawWorkDays.includes('sat') || rawWorkDays.includes('1-6') || rawWorkDays.includes('1-7') || rawWorkDays.includes('senin-sabtu') || rawWorkDays.includes('senin-minggu')) {
+            isWorkingDay = true;
+          }
+        } else { // 1..5 (Senin - Jumat)
+          if (rawWorkDays.includes(String(dayNum)) || rawWorkDays.includes('1-5') || rawWorkDays.includes('1-6') || rawWorkDays.includes('1-7') || rawWorkDays.includes('senin')) {
+            isWorkingDay = true;
+          }
         }
+
+        if (!isWorkingDay) {
+          const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+          return { isOpen: false, isHoliday: true, reason: `Hari ${dayNames[dayNum]} (Cabang Tutup)` };
+        }
+
+        return { isOpen: true, isHoliday: false, dayNum: dayNum };
       }
 
-      // 2. Cek Tanggal Merah Terdaftar
-      if (INDONESIAN_HOLIDAYS[norm]) {
-        return { isHoliday: true, type: 'holiday', reason: `Tanggal Merah (${INDONESIAN_HOLIDAYS[norm]})` };
+      return { isOpen: true, isHoliday: false, dayNum: 1 };
+    }
+
+    function checkHolidayOrSunday(dateStr, siteId = null) {
+      if (!dateStr) return null;
+      const sId = siteId || document.getElementById('bookingSiteInput')?.value || currentSiteId;
+      const site = SITES.find(s => s.id === sId || isSameSite(s.id, sId)) || SITES[0];
+      const res = isSiteOpenOnDate(site, dateStr);
+      if (!res.isOpen) {
+        return { isHoliday: true, type: res.isHoliday ? 'holiday' : 'closed', reason: res.reason };
       }
-
-      // 3. Cek Tanggal Merah Tetap Tahunan
-      const mmdd = norm.substring(5);
-      if (mmdd === '01-01') return { isHoliday: true, type: 'holiday', reason: 'Tanggal Merah (Tahun Baru Masehi)' };
-      if (mmdd === '05-01') return { isHoliday: true, type: 'holiday', reason: 'Tanggal Merah (Hari Buruh Internasional)' };
-      if (mmdd === '06-01') return { isHoliday: true, type: 'holiday', reason: 'Tanggal Merah (Hari Lahir Pancasila)' };
-      if (mmdd === '08-17') return { isHoliday: true, type: 'holiday', reason: 'Tanggal Merah (Hari Kemerdekaan RI)' };
-      if (mmdd === '12-25') return { isHoliday: true, type: 'holiday', reason: 'Tanggal Merah (Hari Raya Natal)' };
-
       return null;
     }
 
@@ -2698,9 +2791,16 @@
       if (!b || !slotTime) return false;
       if (isSameSlot(b.slot, slotTime)) return true;
       if (b.secondarySlot && isSameSlot(b.secondarySlot, slotTime)) return true;
-      if (b.estimatedHours && b.estimatedHours >= 2) {
-        const nextSlot = getNextRegularSlot(b.slot);
-        if (nextSlot && isSameSlot(nextSlot, slotTime)) return true;
+      if (b.tertiarySlot && isSameSlot(b.tertiarySlot, slotTime)) return true;
+      const hours = parseInt(b.estimatedHours || (b.level === 'Level 3' ? 3 : (b.level === 'Level 2' ? 2 : 1)), 10);
+      if (hours >= 2) {
+        const s2 = getNextRegularSlot(b.slot);
+        if (s2 && isSameSlot(s2, slotTime)) return true;
+      }
+      if (hours >= 3) {
+        const s2 = getNextRegularSlot(b.slot);
+        const s3 = s2 ? getNextRegularSlot(s2) : null;
+        if (s3 && isSameSlot(s3, slotTime)) return true;
       }
       return false;
     }
@@ -2727,6 +2827,7 @@
       renderBookingPartsList();
       selectedBookingSlot = null;
       selectedBookingSecondarySlot = null;
+      selectedBookingTertiarySlot = null;
       const slotBadge = document.getElementById('selectedSlotBadge');
       if (slotBadge) slotBadge.innerText = 'Belum dipilih';
       renderBookingSlotPicker();
@@ -3197,6 +3298,7 @@
 
       initSiteDropdowns();
       populateDamageDropdowns();
+      populateModelDropdowns();
       setInterval(updateLiveClock, 1000);
       updateLiveClock();
 
@@ -3592,7 +3694,8 @@
         const parts = String(dateStr).trim().split('-');
         if (parts.length === 3) {
           const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-          return d.getDay() === 6;
+          const day = d.getDay();
+          return day === 6 || day === 0; // Sabtu atau Minggu (Jam operasional & batas booking sama: max 11.30 WIB)
         }
       } catch(e) {}
       return false;
@@ -3790,6 +3893,16 @@
       const partsForSite = MASTER_PARTS.filter(p => {
         const itemCode = String(p.kode || p.code || '').toUpperCase();
         if (itemCode !== siteCode) return false;
+
+        // Filter kategori sparepart jika dibuka dari alur booking konsumen (Express vs Reguler)
+        if (partReturnSource === 'konsumen-step2' && selectedBookingService && p.category) {
+          const pCat = String(p.category).toLowerCase().trim();
+          const targetCat = selectedBookingService.toLowerCase().trim();
+          if (pCat === 'express' || pCat === 'reguler') {
+            if (pCat !== targetCat) return false;
+          }
+        }
+
         if (!query) return true;
         return (p.name || '').toLowerCase().includes(query) || (p.category || '').toLowerCase().includes(query);
       });
@@ -3839,36 +3952,88 @@
       renderDedicatedPartsTable(query);
     }
 
+    function filterStage2DamageOptions(searchQuery = '') {
+      const selectStage2 = document.getElementById('stage2DamageMaster');
+      if (!selectStage2) return;
+
+      const currentCategory = selectedBookingService === 'express' ? 'Express' : 'Reguler';
+      const q = String(searchQuery || '').toLowerCase().trim();
+
+      // Filter berdasarkan kategori yang dipilih konsumen (Reguler / Express)
+      let items = MASTER_KERUSAKAN.filter(item => {
+        const itemCat = String(item.category || 'Reguler').toLowerCase();
+        if (currentCategory.toLowerCase() === 'express') {
+          return itemCat === 'express';
+        } else {
+          return itemCat === 'reguler';
+        }
+      });
+
+      // Filter dengan kata kunci pencarian jika ada
+      if (q) {
+        items = items.filter(item => {
+          const mName = String(item.name || '').toLowerCase().includes(q);
+          const mDesc = String(item.desc || '').toLowerCase().includes(q);
+          const mId = String(item.id || '').toLowerCase().includes(q);
+          const mLevel = String(item.level || '').toLowerCase().includes(q);
+          const mStall = String(item.stall || '').toLowerCase().includes(q);
+          return mName || mDesc || mId || mLevel || mStall;
+        });
+      }
+
+      let html = '';
+      if (items.length === 0) {
+        html = `<option value="" disabled selected>Tidak ada keluhan yang cocok dengan "${searchQuery}"</option>`;
+      } else {
+        items.forEach(item => {
+          html += `<option value="${item.id}">${item.name}</option>`;
+        });
+        if (!q) {
+          html += `<option value="CUSTOM">Kendala / Kerusakan Lainnya</option>`;
+        }
+      }
+
+      const prevVal = selectStage2.value;
+      selectStage2.innerHTML = html;
+
+      if (items.some(it => it.id === prevVal)) {
+        selectStage2.value = prevVal;
+      } else if (items.length > 0) {
+        selectStage2.value = items[0].id;
+      }
+
+      handleStage2DamageChange(selectStage2.value);
+    }
+
     function populateDamageDropdowns() {
       const selectConsumer = document.getElementById('inputDamageMaster');
       const selectStage2 = document.getElementById('stage2DamageMaster');
       const selectModal = document.getElementById('modalInputDamageMaster');
-      if (!selectConsumer && !selectModal && !selectStage2) return;
 
-      // Pilihan bersih tanpa label estimasi jam / level agar tampilan konsumen rapi & tidak membingungkan
-      const generateOptionsHtml = () => {
-        let html = '';
-        html += `<option value="" disabled>-- Pilih Keluhan / Kendala Motor --</option>`;
-        MASTER_KERUSAKAN.forEach(item => {
-          html += `<option value="${item.id}">${item.name}</option>`;
-        });
-        html += `<option value="CUSTOM">Kendala / Kerusakan Lainnya</option>`;
-        return html;
-      };
-
-      const optionsHtml = generateOptionsHtml();
-      if (selectStage2) {
-        selectStage2.innerHTML = optionsHtml;
-        if (!selectStage2.value) selectStage2.value = MASTER_KERUSAKAN[0].id;
-        handleStage2DamageChange(selectStage2.value);
+      const catBadge = document.getElementById('stage2CategoryBadge');
+      if (catBadge) {
+        catBadge.innerText = selectedBookingService === 'express' ? 'Express' : 'Reguler';
+        catBadge.className = selectedBookingService === 'express'
+          ? 'text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-amber-100 text-amber-700 uppercase'
+          : 'text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-red-100 text-red-700 uppercase';
       }
-      if (selectConsumer) {
-        selectConsumer.innerHTML = optionsHtml;
-        if (!selectConsumer.value) selectConsumer.value = MASTER_KERUSAKAN[0].id;
-        handleDamageSelectionChange(selectConsumer.value);
+
+      const searchInput = document.getElementById('stage2DamageSearchInput');
+      const query = searchInput ? searchInput.value : '';
+      filterStage2DamageOptions(query);
+
+      // Sinkronkan ke modal & hidden consumer input di Tahap 4
+      if (selectConsumer && selectStage2) {
+        selectConsumer.innerHTML = selectStage2.innerHTML;
+        selectConsumer.value = selectStage2.value;
       }
       if (selectModal) {
-        selectModal.innerHTML = optionsHtml;
+        let modalHtml = `<option value="" disabled>-- Pilih Keluhan / Kendala Motor --</option>`;
+        MASTER_KERUSAKAN.forEach(item => {
+          modalHtml += `<option value="${item.id}">${item.name}</option>`;
+        });
+        modalHtml += `<option value="CUSTOM">Kendala / Kerusakan Lainnya</option>`;
+        selectModal.innerHTML = modalHtml;
         if (!selectModal.value) selectModal.value = MASTER_KERUSAKAN[0].id;
         handleModalDamageChange(selectModal.value);
       }
@@ -3897,6 +4062,7 @@
       // Reset slot pilihan jika level berubah
       selectedBookingSlot = null;
       selectedBookingSecondarySlot = null;
+      selectedBookingTertiarySlot = null;
       const slotBadge = document.getElementById('selectedSlotBadge');
       if (slotBadge) slotBadge.innerText = 'Belum dipilih';
       renderBookingSlotPicker();
@@ -5229,33 +5395,35 @@
       const bookingDate = normalizeDateString(bookingDateRaw);
       const isSat = isSaturday(bookingDate);
 
-      // Cek Batas Jam Operasional
+      // Cek Batas Jam Booking (Sabtu/Minggu max 11.30, Senin-Jumat max 14.30)
       if (isSat) {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '11.30') {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot reguler terakhir pukul 10.30 WIB). Silakan pilih slot jam yang tersedia.', 'Jam Operasional Sabtu', 'warning');
+        if (selectedBookingService === 'reguler' && selectedBookingSlot > '11.30') {
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
-        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 6) {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot express terakhir pukul 11.00 WIB). Silakan pilih slot jam sebelum 11.30 WIB.', 'Jam Operasional Sabtu', 'warning');
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 6) {
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
       } else {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '14.30') {
-          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot reguler terakhir pukul 13.30 WIB). Silakan pilih slot jam yang tersedia.', 'Slot Tidak Tersedia', 'warning');
+        if (selectedBookingService === 'reguler' && selectedBookingSlot > '14.30') {
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
-        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 12) {
-          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot express terakhir pukul 14.00 WIB). Silakan pilih slot jam yang tersedia.', 'Slot Tidak Tersedia', 'warning');
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 12) {
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
       }
 
-      // Validasi Khusus Level 2 (Butuh 2 Jam Berurutan)
+      // Validasi Khusus Level 2 (2 Jam) & Level 3 (3 Jam Berurutan)
       const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
       const currentDamageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
-      const isLevel2 = (selectedBookingService === 'reguler' && currentDamageItem && (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2));
+      const reqHours = (selectedBookingService === 'reguler' && currentDamageItem) 
+        ? (currentDamageItem.level === 'Level 3' || currentDamageItem.hours === 3 ? 3 : (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2 ? 2 : 1))
+        : 1;
 
-      if (isLevel2) {
+      if (reqHours >= 2) {
         const stall = document.getElementById('bookingStallInput')?.value || 'stall1';
         const siteId = document.getElementById('bookingSiteInput')?.value || currentSiteId;
         const allBookings = loadBookings();
@@ -5265,18 +5433,12 @@
           b.status !== 'Batal'
         );
 
-        const activeRegularHours = REGULAR_HOURS.filter(time => {
-          if (isSat) return time < '11.30';
-          return time < '14.30';
-        });
+        const nextTime = getNextRegularSlot(selectedBookingSlot);
+        const maxLimit = isSat ? '11.30' : '14.30';
 
-        const tIdx = activeRegularHours.indexOf(selectedBookingSlot);
-        const nextTime = (tIdx !== -1 && tIdx + 1 < activeRegularHours.length) ? activeRegularHours[tIdx + 1] : null;
-
-        // Cek apakah slot kedua valid dan tersedia
-        if (!nextTime) {
-          const closingHour = isSat ? '11.30' : '14.30';
-          openLevel2AlertModal(selectedBookingSlot, `sudah mencapai batas jam operasional servis (${closingHour} WIB)`);
+        // Cek apakah slot kedua valid dan dalam jam operasional
+        if (!nextTime || nextTime > maxLimit) {
+          openLevel2AlertModal(selectedBookingSlot, `sudah mencapai batas jam operasional servis (${maxLimit} WIB)`, reqHours);
           return;
         }
 
@@ -5293,24 +5455,60 @@
           } else {
             reasonText = `slot jam berikutnya (${nextTime} WIB) sudah terlewati untuk hari ini`;
           }
-          openLevel2AlertModal(selectedBookingSlot, reasonText);
+          openLevel2AlertModal(selectedBookingSlot, reasonText, reqHours);
           return;
         }
 
-        // Slot kedua aman dan tersedia
         selectedBookingSecondarySlot = nextTime;
+
+        if (reqHours >= 3) {
+          const thirdTime = getNextRegularSlot(nextTime);
+          if (!thirdTime || thirdTime > maxLimit) {
+            openLevel2AlertModal(selectedBookingSlot, `slot ke-3 (${thirdTime || 'setelah ' + nextTime}) sudah mencapai batas jam operasional servis (${maxLimit} WIB)`, reqHours);
+            return;
+          }
+
+          const isBreakThird = (stall === 'stall1' && thirdTime === '12.30') || (stall === 'stall2' && thirdTime === '13.30');
+          const bookedThird = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, thirdTime));
+          const isPassedThird = isSlotTimePassed(thirdTime, bookingDate);
+
+          if (isBreakThird || bookedThird || isPassedThird) {
+            let reasonText = '';
+            if (isBreakThird) {
+              reasonText = `slot jam ke-3 (${thirdTime} WIB) adalah jam istirahat teknisi`;
+            } else if (bookedThird) {
+              reasonText = `slot jam ke-3 (${thirdTime} WIB) sudah dipesan oleh pelanggan lain`;
+            } else {
+              reasonText = `slot jam ke-3 (${thirdTime} WIB) sudah terlewati untuk hari ini`;
+            }
+            openLevel2AlertModal(selectedBookingSlot, reasonText, reqHours);
+            return;
+          }
+
+          selectedBookingTertiarySlot = thirdTime;
+        } else {
+          selectedBookingTertiarySlot = null;
+        }
+      } else {
+        selectedBookingSecondarySlot = null;
+        selectedBookingTertiarySlot = null;
       }
 
       goToBookingStep(4);
     }
 
-    function openLevel2AlertModal(chosenTime, reason) {
+    function openLevel2AlertModal(chosenTime, reason, reqHours = 2) {
       const modal = document.getElementById('level2AlertModal');
+      const title = document.getElementById('level2AlertTitle');
       const msg = document.getElementById('level2AlertMessage');
       if (!modal) return;
 
+      if (title) {
+        title.innerText = `Kategori Perbaikan Level ${reqHours} (${reqHours} Jam)`;
+      }
+
       if (msg) {
-        msg.innerHTML = `Kerusakan yang Anda pilih membutuhkan waktu pengerjaan <b>2 jam</b>. Karena waktu yang Anda pilih (<b>${chosenTime} WIB</b>) tidak dapat ditambah durasinya (${reason}), silakan pilih waktu yang memiliki durasi 2 jam berurutan atau gunakan pilihan otomatis di bawah.`;
+        msg.innerHTML = `Kerusakan yang Anda pilih membutuhkan waktu pengerjaan <b>${reqHours} jam</b>. Karena waktu yang Anda pilih (<b>${chosenTime} WIB</b>) tidak dapat ditambah durasinya (${reason}), silakan pilih waktu yang memiliki durasi ${reqHours} jam berurutan atau gunakan pilihan otomatis di bawah.`;
       }
 
       modal.classList.remove('hidden');
@@ -5340,6 +5538,17 @@
     }
 
     let selectedBookingSecondarySlot = null;
+    let selectedBookingTertiarySlot = null;
+
+    function getRequiredDamageHours() {
+      if (selectedBookingService !== 'reguler') return 1;
+      const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
+      const currentDamageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
+      if (!currentDamageItem) return 1;
+      if (currentDamageItem.level === 'Level 3' || currentDamageItem.hours === 3) return 3;
+      if (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2) return 2;
+      return 1;
+    }
 
     function updateBookingSummary() {
       const site = SITES.find(s => s.id === currentSiteId) || SITES[0];
@@ -5348,7 +5557,17 @@
       const summaryDate = document.getElementById('summaryDateTime');
 
       if (summarySite) summarySite.innerText = site.name;
-      if (summaryService) summaryService.innerText = selectedBookingService === 'express' ? 'Express Bay (< 30 Mnt)' : (selectedBookingSecondarySlot ? 'Reguler (2 Jam)' : 'Reguler (1 Jam)');
+      if (summaryService) {
+        let srvLabel = 'Reguler (1 Jam)';
+        if (selectedBookingService === 'express') {
+          srvLabel = 'Express Bay (< 30 Mnt)';
+        } else if (selectedBookingTertiarySlot) {
+          srvLabel = 'Reguler (3 Jam)';
+        } else if (selectedBookingSecondarySlot) {
+          srvLabel = 'Reguler (2 Jam)';
+        }
+        summaryService.innerText = srvLabel;
+      }
       
       const bDate = normalizeDateString(document.getElementById('bookingDateInput')?.value || currentDate);
       const holiday = checkHolidayOrSunday(bDate);
@@ -5359,6 +5578,8 @@
       } else if (selectedBookingSlot) {
         if (selectedBookingService === 'express') {
           slotText = `${bDate} &bull; ${EXPRESS_SLOTS[parseInt(selectedBookingSlot)]} WIB`;
+        } else if (selectedBookingTertiarySlot) {
+          slotText = `${bDate} &bull; ${selectedBookingSlot} - ${getNextHour(selectedBookingTertiarySlot)} WIB (3 Jam)`;
         } else if (selectedBookingSecondarySlot) {
           slotText = `${bDate} &bull; ${selectedBookingSlot} - ${getNextHour(selectedBookingSecondarySlot)} WIB (2 Jam)`;
         } else {
@@ -5372,6 +5593,7 @@
       selectedBookingService = type;
       selectedBookingSlot = null;
       selectedBookingSecondarySlot = null;
+      selectedBookingTertiarySlot = null;
       document.getElementById('selectedSlotBadge').innerText = 'Belum dipilih';
 
       const optReg = document.getElementById('opt-service-reguler');
@@ -5388,11 +5610,12 @@
         if (stallContainer) stallContainer.classList.add('hidden');
       }
 
+      populateDamageDropdowns();
       renderBookingSlotPicker();
       updateBookingSummary();
     }
 
-    function autoSelectLevel2ConsecutiveSlots() {
+    function autoSelectConsecutiveSlots(targetHours = 2) {
       const bookingDateRaw = document.getElementById('bookingDateInput')?.value || currentDate;
       const bookingDate = normalizeDateString(bookingDateRaw);
       const stall = document.getElementById('bookingStallInput')?.value || 'stall1';
@@ -5400,43 +5623,74 @@
       const allBookings = loadBookings();
       const activeBookings = allBookings.filter(b => isSameDate(b.date, bookingDate) && isSameSite(b.siteId, siteId) && b.status !== 'Batal');
       const isBookingSat = isSaturday(bookingDate);
-      const activeRegularHours = REGULAR_HOURS.filter(time => isBookingSat ? time < '11.30' : time < '14.30');
+      const selectableStartHours = REGULAR_HOURS.filter(time => isBookingSat ? time <= '11.30' : time <= '14.30');
+      const maxLimit = isBookingSat ? '11.30' : '14.30';
 
-      for (let i = 0; i < activeRegularHours.length - 1; i++) {
-        const t1 = activeRegularHours[i];
-        const t2 = activeRegularHours[i + 1];
-
+      for (let i = 0; i < selectableStartHours.length; i++) {
+        const t1 = selectableStartHours[i];
         const isBreak1 = (stall === 'stall1' && t1 === '12.30') || (stall === 'stall2' && t1 === '13.30');
-        const isBreak2 = (stall === 'stall1' && t2 === '12.30') || (stall === 'stall2' && t2 === '13.30');
-        if (isBreak1 || isBreak2) continue;
-
         const isPassed1 = isSlotTimePassed(t1, bookingDate);
-        const isPassed2 = isSlotTimePassed(t2, bookingDate);
-        if (isPassed1 || isPassed2) continue;
-
         const b1 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t1));
-        const b2 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t2));
-        if (b1 || b2) continue;
+        if (isBreak1 || isPassed1 || b1) continue;
 
-        // Ketemu pasangan 2 slot berurutan yang kosong!
-        selectedBookingSlot = t1;
-        selectedBookingSecondarySlot = t2;
-        const badge = document.getElementById('selectedSlotBadge');
-        if (badge) badge.innerText = `${t1} - ${getNextHour(t2)} WIB`;
-        renderBookingSlotPicker();
-        updateBookingSummary();
-        showPopup(`Sistem berhasil memilihkan 2 jam berurutan: ${t1} s/d ${getNextHour(t2)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '2 Jam Berurutan Terpilih', 'success');
-        return true;
+        if (targetHours >= 2) {
+          const t2 = getNextRegularSlot(t1);
+          if (!t2 || t2 > maxLimit) continue;
+          const isBreak2 = (stall === 'stall1' && t2 === '12.30') || (stall === 'stall2' && t2 === '13.30');
+          const isPassed2 = isSlotTimePassed(t2, bookingDate);
+          const b2 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t2));
+          if (isBreak2 || isPassed2 || b2) continue;
+
+          if (targetHours >= 3) {
+            const t3 = getNextRegularSlot(t2);
+            if (!t3 || t3 > maxLimit) continue;
+            const isBreak3 = (stall === 'stall1' && t3 === '12.30') || (stall === 'stall2' && t3 === '13.30');
+            const isPassed3 = isSlotTimePassed(t3, bookingDate);
+            const b3 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t3));
+            if (isBreak3 || isPassed3 || b3) continue;
+
+            // Ketemu 3 jam berurutan yang kosong!
+            selectedBookingSlot = t1;
+            selectedBookingSecondarySlot = t2;
+            selectedBookingTertiarySlot = t3;
+            const badge = document.getElementById('selectedSlotBadge');
+            if (badge) badge.innerText = `${t1} - ${getNextHour(t3)} WIB (3 Jam)`;
+            renderBookingSlotPicker();
+            updateBookingSummary();
+            showPopup(`Sistem berhasil memilihkan 3 jam berurutan: ${t1} s/d ${getNextHour(t3)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '3 Jam Berurutan Terpilih', 'success');
+            return true;
+          }
+
+          // Ketemu 2 jam berurutan yang kosong!
+          selectedBookingSlot = t1;
+          selectedBookingSecondarySlot = t2;
+          selectedBookingTertiarySlot = null;
+          const badge = document.getElementById('selectedSlotBadge');
+          if (badge) badge.innerText = `${t1} - ${getNextHour(t2)} WIB (2 Jam)`;
+          renderBookingSlotPicker();
+          updateBookingSummary();
+          showPopup(`Sistem berhasil memilihkan 2 jam berurutan: ${t1} s/d ${getNextHour(t2)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '2 Jam Berurutan Terpilih', 'success');
+          return true;
+        }
       }
 
-      showPopup('Tidak ditemukan 2 jam berurutan yang kosong pada stall ini. Silakan coba ganti ke stall lain atau pilih tanggal besok.', 'Tidak Ada Slot Berurutan', 'warning');
+      showPopup(`Tidak ditemukan ${targetHours} jam berurutan yang kosong pada stall ini. Silakan coba ganti ke stall lain atau pilih tanggal besok.`, 'Tidak Ada Slot Berurutan', 'warning');
       return false;
     }
 
-    function handleRegularSlotClick(time, tIdx, activeRegularHours, stall, activeBookings, bookingDate, isLevel2) {
-      if (!isLevel2) {
+    function autoSelectLevel2ConsecutiveSlots() {
+      const reqHours = getRequiredDamageHours();
+      return autoSelectConsecutiveSlots(reqHours >= 2 ? reqHours : 2);
+    }
+
+    function handleRegularSlotClick(time, tIdx, activeRegularHours, stall, activeBookings, bookingDate, reqHours) {
+      const isSat = isSaturday(bookingDate);
+      const maxLimit = isSat ? '11.30' : '14.30';
+
+      if (reqHours === 1) {
         selectedBookingSlot = time;
         selectedBookingSecondarySlot = null;
+        selectedBookingTertiarySlot = null;
         const badge = document.getElementById('selectedSlotBadge');
         if (badge) badge.innerText = `${time} - ${getNextHour(time)} WIB`;
         renderBookingSlotPicker();
@@ -5444,29 +5698,95 @@
         return;
       }
 
-      // KETENTUAN LEVEL 2:
-      // Jika slot berikutnya tersedia (tidak break, tidak penuh, tidak lewat, dalam jam operasional) -> otomatis pilih 2 kotak!
-      const nextTime = (tIdx + 1 < activeRegularHours.length) ? activeRegularHours[tIdx + 1] : null;
-      const isBreakNext = nextTime && ((stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30'));
-      const bookedNext = nextTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
-      const isPassedNext = nextTime && isSlotTimePassed(nextTime, bookingDate);
+      if (reqHours === 2) {
+        const nextTime = getNextRegularSlot(time);
+        const isBeyondOps = !nextTime || nextTime > maxLimit;
+        const isBreakNext = nextTime && ((stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30'));
+        const bookedNext = nextTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
+        const isPassedNext = nextTime && isSlotTimePassed(nextTime, bookingDate);
 
-      if (nextTime && !isBreakNext && !bookedNext && !isPassedNext) {
-        selectedBookingSlot = time;
-        selectedBookingSecondarySlot = nextTime;
-        const badge = document.getElementById('selectedSlotBadge');
-        if (badge) badge.innerText = `${time} - ${getNextHour(nextTime)} WIB`;
-      } else {
-        // Jika depannya terisi / break / tutup, tetap tandai slot ini tapi secondary null.
-        // Notifikasi popup akan muncul saat konsumen klik tombol "Lanjut"!
-        selectedBookingSlot = time;
-        selectedBookingSecondarySlot = null;
-        const badge = document.getElementById('selectedSlotBadge');
-        if (badge) badge.innerText = `${time} WIB`;
+        if (nextTime && !isBeyondOps && !isBreakNext && !bookedNext && !isPassedNext) {
+          selectedBookingSlot = time;
+          selectedBookingSecondarySlot = nextTime;
+          selectedBookingTertiarySlot = null;
+          const badge = document.getElementById('selectedSlotBadge');
+          if (badge) badge.innerText = `${time} - ${getNextHour(nextTime)} WIB (2 Jam)`;
+          renderBookingSlotPicker();
+          updateBookingSummary();
+        } else {
+          selectedBookingSlot = time;
+          selectedBookingSecondarySlot = null;
+          selectedBookingTertiarySlot = null;
+          const badge = document.getElementById('selectedSlotBadge');
+          if (badge) badge.innerText = `${time} WIB`;
+          renderBookingSlotPicker();
+          updateBookingSummary();
+
+          let reason = '';
+          if (isBeyondOps) {
+            reason = `slot jam berikutnya (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+          } else if (isBreakNext) {
+            reason = `slot jam berikutnya (${nextTime} WIB) adalah jam istirahat teknisi`;
+          } else if (bookedNext) {
+            reason = `slot jam berikutnya (${nextTime} WIB) sudah dipesan antrian lain`;
+          } else {
+            reason = `slot jam berikutnya (${nextTime} WIB) sudah terlewati untuk hari ini`;
+          }
+          openLevel2AlertModal(time, reason, 2);
+        }
+        return;
       }
 
-      renderBookingSlotPicker();
-      updateBookingSummary();
+      if (reqHours === 3) {
+        const nextTime = getNextRegularSlot(time);
+        const thirdTime = nextTime ? getNextRegularSlot(nextTime) : null;
+
+        const isBeyondOps2 = !nextTime || nextTime > maxLimit;
+        const isBreak2 = nextTime && ((stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30'));
+        const booked2 = nextTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
+        const isPassed2 = nextTime && isSlotTimePassed(nextTime, bookingDate);
+
+        const isBeyondOps3 = !thirdTime || thirdTime > maxLimit;
+        const isBreak3 = thirdTime && ((stall === 'stall1' && thirdTime === '12.30') || (stall === 'stall2' && thirdTime === '13.30'));
+        const booked3 = thirdTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, thirdTime));
+        const isPassed3 = thirdTime && isSlotTimePassed(thirdTime, bookingDate);
+
+        const isSlot2Ok = nextTime && !isBeyondOps2 && !isBreak2 && !booked2 && !isPassed2;
+        const isSlot3Ok = thirdTime && !isBeyondOps3 && !isBreak3 && !booked3 && !isPassed3;
+
+        if (isSlot2Ok && isSlot3Ok) {
+          selectedBookingSlot = time;
+          selectedBookingSecondarySlot = nextTime;
+          selectedBookingTertiarySlot = thirdTime;
+          const badge = document.getElementById('selectedSlotBadge');
+          if (badge) badge.innerText = `${time} - ${getNextHour(thirdTime)} WIB (3 Jam)`;
+          renderBookingSlotPicker();
+          updateBookingSummary();
+        } else {
+          selectedBookingSlot = time;
+          selectedBookingSecondarySlot = null;
+          selectedBookingTertiarySlot = null;
+          const badge = document.getElementById('selectedSlotBadge');
+          if (badge) badge.innerText = `${time} WIB`;
+          renderBookingSlotPicker();
+          updateBookingSummary();
+
+          let reason = '';
+          if (!isSlot2Ok) {
+            if (isBeyondOps2) reason = `slot jam ke-2 (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+            else if (isBreak2) reason = `slot jam ke-2 (${nextTime} WIB) adalah jam istirahat teknisi`;
+            else if (booked2) reason = `slot jam ke-2 (${nextTime} WIB) sudah dipesan antrian lain`;
+            else reason = `slot jam ke-2 (${nextTime} WIB) sudah terlewati untuk hari ini`;
+          } else {
+            if (isBeyondOps3) reason = `slot jam ke-3 (${thirdTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+            else if (isBreak3) reason = `slot jam ke-3 (${thirdTime} WIB) adalah jam istirahat teknisi`;
+            else if (booked3) reason = `slot jam ke-3 (${thirdTime} WIB) sudah dipesan antrian lain`;
+            else reason = `slot jam ke-3 (${thirdTime} WIB) sudah terlewati untuk hari ini`;
+          }
+          openLevel2AlertModal(time, reason, 3);
+        }
+        return;
+      }
     }
 
     function renderBookingSlotPicker() {
@@ -5491,23 +5811,23 @@
 
         const isHolidaySat = isSaturday(bookingDate);
         if (selectedBookingService === 'reguler') {
-          const holidayRegHours = isHolidaySat ? REGULAR_HOURS.filter(t => t < '11.30') : REGULAR_HOURS.filter(t => t < '14.30');
+          const holidayRegHours = isHolidaySat ? REGULAR_HOURS.filter(t => t <= '11.30') : REGULAR_HOURS.filter(t => t <= '14.30');
           holidayRegHours.forEach(time => {
             const slotBtn = document.createElement('button');
             slotBtn.type = 'button';
             slotBtn.disabled = true;
-            slotBtn.className = 'py-2 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-60 flex flex-col items-center justify-center';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-60 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] font-bold text-rose-600 bg-rose-100 px-1 py-0.2 rounded-[2px] border border-rose-200">Libur</span>`;
             slotBtn.title = `Bengkel Tutup: ${holidayInfo.reason}`;
             container.appendChild(slotBtn);
           });
         } else {
-          const holidayExpSlots = isHolidaySat ? EXPRESS_SLOTS.slice(0, 6) : EXPRESS_SLOTS.slice(0, 12);
+          const holidayExpSlots = isHolidaySat ? EXPRESS_SLOTS.slice(0, 7) : EXPRESS_SLOTS.slice(0, 13);
           holidayExpSlots.forEach(timeRange => {
             const slotBtn = document.createElement('button');
             slotBtn.type = 'button';
             slotBtn.disabled = true;
-            slotBtn.className = 'py-2 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-60 flex flex-col items-center justify-center';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-60 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${timeRange.split(' - ')[0]}</div><span class="text-[9px] font-bold text-rose-600 bg-rose-100 px-1 py-0.2 rounded-[2px] border border-rose-200">Libur</span>`;
             slotBtn.title = `Bengkel Tutup: ${holidayInfo.reason}`;
             container.appendChild(slotBtn);
@@ -5528,100 +5848,100 @@
 
       const isBookingSat = isSaturday(bookingDate);
 
-      // Cek apakah keluhan yang dipilih masuk Level 2 (2 Jam)
+      // Cek apakah keluhan yang dipilih masuk Level 2 (2 Jam) atau Level 3 (3 Jam)
       const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
       const currentDamageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
-      const isLevel2 = (selectedBookingService === 'reguler' && currentDamageItem && (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2));
+      const reqHours = (selectedBookingService === 'reguler' && currentDamageItem) 
+        ? (currentDamageItem.level === 'Level 3' || currentDamageItem.hours === 3 ? 3 : (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2 ? 2 : 1))
+        : 1;
 
-      // Saring daftar jam yang beroperasi:
-      // - Pada hari Sabtu: hanya sampai 11.30 (slot reguler terakhir s/d 10.30)
-      // - Pada hari selain Sabtu: hanya sampai 14.30 (slot reguler terakhir s/d 13.30)
+      // Saring daftar jam operasional booking:
+      // - Sabtu / Minggu (jika buka): batas booking sampai 11.30 WIB
+      // - Senin - Jumat: batas booking sampai 14.30 WIB
       const activeRegularHours = REGULAR_HOURS.filter(time => {
-        if (isBookingSat) return time < '11.30';
-        return time < '14.30';
+        if (isBookingSat) return time <= '11.30';
+        return time <= '14.30';
       });
 
       // Reset slot jika sebelumnya terpilih slot di luar jam operasional
       if (selectedBookingService === 'reguler' && selectedBookingSlot && !activeRegularHours.includes(selectedBookingSlot)) {
         selectedBookingSlot = null;
         selectedBookingSecondarySlot = null;
+        selectedBookingTertiarySlot = null;
         const badge = document.getElementById('selectedSlotBadge');
         if (badge) badge.innerText = 'Belum dipilih';
       } else if (selectedBookingService === 'express') {
         const idx = parseInt(selectedBookingSlot, 10);
-        const maxLimit = isBookingSat ? 6 : 12;
+        const maxLimit = isBookingSat ? 7 : 13;
         if (!isNaN(idx) && idx >= maxLimit) {
           selectedBookingSlot = null;
           selectedBookingSecondarySlot = null;
+          selectedBookingTertiarySlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
         }
-      }
-
-      if (isBookingSat) {
-        const satNotice = document.createElement('div');
-        satNotice.className = 'col-span-full py-1.5 px-3 bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold rounded-[2px] flex items-center gap-1.5 shadow-2xs mb-1';
-        satNotice.innerHTML = '<i data-lucide="info" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i><span>Jadwal Khusus Hari Sabtu: Jam operasional 08.30 &ndash; 11.30 WIB (Pilihan slot Express s/d 11.00, Reguler s/d 10.30 WIB).</span>';
-        container.appendChild(satNotice);
       }
 
       if (selectedBookingService === 'reguler') {
         activeRegularHours.forEach((time, tIdx) => {
           const isBreak = (stall === 'stall1' && time === '12.30') || (stall === 'stall2' && time === '13.30');
           
-          // Cari booking aktif yang menempati stall, cabang, tanggal, dan jam ini (termasuk pengerjaan Level 2)
+          // Cari booking aktif yang menempati stall, cabang, tanggal, dan jam ini (termasuk pengerjaan Level 2 / 3)
           const booked = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, time));
           const isBooked = !!booked;
           const isPassed = isSlotTimePassed(time, bookingDate);
           const isPrimarySelected = selectedBookingSlot && isSameSlot(selectedBookingSlot, time);
           const isSecondarySelected = selectedBookingSecondarySlot && isSameSlot(selectedBookingSecondarySlot, time);
-          const isSelected = isPrimarySelected || isSecondarySelected;
+          const isTertiarySelected = selectedBookingTertiarySlot && isSameSlot(selectedBookingTertiarySlot, time);
+          const isSelected = isPrimarySelected || isSecondarySelected || isTertiarySelected;
 
           const slotBtn = document.createElement('button');
           slotBtn.type = 'button';
 
           if (isBreak) {
-            slotBtn.className = 'py-2 px-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-[3px] text-xs font-bold cursor-not-allowed opacity-80';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-[3px] text-xs font-bold cursor-not-allowed opacity-80 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] font-normal text-amber-600">Break</span>`;
             slotBtn.disabled = true;
           } else if (isBooked) {
-            slotBtn.className = 'py-2 px-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-90';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-90 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] font-bold text-rose-600 bg-rose-100 px-1 py-0.2 rounded-[2px] border border-rose-200">Penuh</span>`;
             slotBtn.disabled = true;
             slotBtn.title = `Slot ${time} WIB sudah terisi oleh antrian ${booked.queueNumber} (${booked.plate || booked.model})`;
             if (isSelected) {
               selectedBookingSlot = null;
               selectedBookingSecondarySlot = null;
+              selectedBookingTertiarySlot = null;
               const badge = document.getElementById('selectedSlotBadge');
               if (badge) badge.innerText = 'Belum dipilih';
             }
           } else if (isPassed) {
-            slotBtn.className = 'py-2 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-medium cursor-not-allowed opacity-60';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-medium cursor-not-allowed opacity-60 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] font-medium text-slate-400 bg-slate-200 px-1 py-0.2 rounded-[2px]">Lewat</span>`;
             slotBtn.disabled = true;
             slotBtn.title = `Slot jam ${time} WIB sudah terlewati untuk hari ini`;
             if (isSelected) {
               selectedBookingSlot = null;
               selectedBookingSecondarySlot = null;
+              selectedBookingTertiarySlot = null;
               const badge = document.getElementById('selectedSlotBadge');
               if (badge) badge.innerText = 'Belum dipilih';
             }
           } else if (isSelected) {
-            slotBtn.className = 'py-2 px-1 bg-red-600 text-white border-2 border-red-500 rounded-[3px] text-xs font-bold shadow';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-red-600 text-white border-2 border-red-500 rounded-[3px] text-xs font-bold shadow flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] text-red-100 font-semibold">Dipilih</span>`;
           } else {
-            slotBtn.className = 'py-2 px-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 rounded-[3px] text-xs font-bold shadow-sm transition hover:border-slate-400';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 rounded-[3px] text-xs font-bold shadow-sm transition hover:border-slate-400 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${time}</div><span class="text-[9px] text-emerald-600 font-semibold">Tersedia</span>`;
             slotBtn.onclick = () => {
-              handleRegularSlotClick(time, tIdx, activeRegularHours, stall, activeBookings, bookingDate, isLevel2);
+              handleRegularSlotClick(time, tIdx, activeRegularHours, stall, activeBookings, bookingDate, reqHours);
             };
           }
 
           container.appendChild(slotBtn);
         });
       } else {
-        // Express Bay: Sabtu s/d 11.30 (6 slot: 08.30 - 11.30), Hari Biasa s/d 14.30 (12 slot: 08.30 - 14.30)
-        const activeExpressSlots = isBookingSat ? EXPRESS_SLOTS.slice(0, 6) : EXPRESS_SLOTS.slice(0, 12);
+        // Express Bay: Sabtu / Minggu s/d 11.30 (7 slot: 08.30 - 12.00), Hari Biasa s/d 14.30 (13 slot: 08.30 - 15.00)
+        const activeExpressSlots = isBookingSat ? EXPRESS_SLOTS.slice(0, 7) : EXPRESS_SLOTS.slice(0, 13);
         activeExpressSlots.forEach((timeRange, idx) => {
 
           const booked = activeBookings.find(b => 
@@ -5636,7 +5956,7 @@
           slotBtn.type = 'button';
 
           if (isBooked) {
-            slotBtn.className = 'py-2 px-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-90 flex flex-col items-center justify-center';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-[3px] text-xs font-semibold cursor-not-allowed opacity-90 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${timeRange.split(' - ')[0]}</div><span class="text-[9px] font-bold text-rose-600 bg-rose-100 px-1 py-0.2 rounded-[2px] border border-rose-200">Penuh</span>`;
             slotBtn.disabled = true;
             slotBtn.title = `Slot Express ${timeRange} WIB sudah terisi (${booked.queueNumber})`;
@@ -5646,7 +5966,7 @@
               if (badge) badge.innerText = 'Belum dipilih';
             }
           } else if (isPassed) {
-            slotBtn.className = 'py-2 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-medium cursor-not-allowed opacity-60 flex flex-col items-center justify-center';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-slate-100 text-slate-400 border border-slate-200 rounded-[3px] text-xs font-medium cursor-not-allowed opacity-60 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${timeRange.split(' - ')[0]}</div><span class="text-[9px] font-medium text-slate-400 bg-slate-200 px-1 py-0.2 rounded-[2px]">Lewat</span>`;
             slotBtn.disabled = true;
             slotBtn.title = `Slot Express ${timeRange} WIB sudah terlewati untuk hari ini`;
@@ -5656,10 +5976,10 @@
               if (badge) badge.innerText = 'Belum dipilih';
             }
           } else if (isSelected) {
-            slotBtn.className = 'py-2 px-1 bg-red-600 text-white border-2 border-red-500 rounded-[3px] text-xs font-bold shadow flex flex-col items-center justify-center';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-red-600 text-white border-2 border-red-500 rounded-[3px] text-xs font-bold shadow flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${timeRange.split(' - ')[0]}</div><span class="text-[9px] text-red-100 font-semibold">Dipilih</span>`;
           } else {
-            slotBtn.className = 'py-2 px-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 rounded-[3px] text-xs font-bold shadow-sm transition hover:border-slate-400 flex flex-col items-center justify-center';
+            slotBtn.className = 'h-full w-full py-1 sm:py-1.5 px-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 rounded-[3px] text-xs font-bold shadow-sm transition hover:border-slate-400 flex flex-col items-center justify-center text-center';
             slotBtn.innerHTML = `<div>${timeRange.split(' - ')[0]}</div><span class="text-[9px] text-emerald-600 font-semibold">Tersedia</span>`;
             slotBtn.onclick = () => {
               selectedBookingSlot = String(idx);
@@ -5719,18 +6039,22 @@
 
       // VALIDASI: OPERASIONAL KHUSUS HARI SABTU & HARI BIASA
       if (isSaturday(bookingDate)) {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '11.30') {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot reguler terakhir pukul 10.30 WIB).\n\nSilakan pilih slot yang tersedia.', 'Jam Operasional Sabtu', 'warning');
+        if (selectedBookingService === 'reguler' && selectedBookingSlot > '11.30') {
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB.\n\nSilakan pilih slot yang tersedia.', 'Jam Operasional Sabtu', 'warning');
           selectedBookingSlot = null;
+          selectedBookingSecondarySlot = null;
+          selectedBookingTertiarySlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
           renderBookingSlotPicker();
           goToBookingStep(3);
           return;
         }
-        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 6) {
-          showPopup('Untuk hari Sabtu, jam operasional servis hanya sampai pukul 11.30 WIB (Pilihan slot express terakhir pukul 11.00 WIB).\n\nSilakan pilih slot sebelum pukul 11.30 WIB.', 'Jam Operasional Sabtu', 'warning');
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 6) {
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB (Pilihan slot express terakhir pukul 11.30 WIB).\n\nSilakan pilih slot sebelum pukul 11.30 WIB.', 'Jam Operasional Sabtu', 'warning');
           selectedBookingSlot = null;
+          selectedBookingSecondarySlot = null;
+          selectedBookingTertiarySlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
           renderBookingSlotPicker();
@@ -5738,18 +6062,22 @@
           return;
         }
       } else {
-        if (selectedBookingService === 'reguler' && selectedBookingSlot >= '14.30') {
-          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot reguler terakhir pukul 13.30 WIB).\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
+        if (selectedBookingService === 'reguler' && selectedBookingSlot > '14.30') {
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
           selectedBookingSlot = null;
+          selectedBookingSecondarySlot = null;
+          selectedBookingTertiarySlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
           renderBookingSlotPicker();
           goToBookingStep(3);
           return;
         }
-        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) >= 12) {
-          showPopup('Untuk hari biasa (Senin - Jumat), jam operasional servis hanya sampai pukul 14.30 WIB (Pilihan slot express terakhir pukul 14.00 WIB).\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
+        if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 12) {
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
           selectedBookingSlot = null;
+          selectedBookingSecondarySlot = null;
+          selectedBookingTertiarySlot = null;
           const badge = document.getElementById('selectedSlotBadge');
           if (badge) badge.innerText = 'Belum dipilih';
           renderBookingSlotPicker();
@@ -5766,7 +6094,11 @@
         isSameDate(b.date, bookingDate) &&
         isSameSite(b.siteId, siteId) &&
         isSameStall(b.stall, stall) &&
-        (isBookingInSlot(b, selectedBookingSlot) || (selectedBookingSecondarySlot && isBookingInSlot(b, selectedBookingSecondarySlot))) &&
+        (
+          isBookingInSlot(b, selectedBookingSlot) || 
+          (selectedBookingSecondarySlot && isBookingInSlot(b, selectedBookingSecondarySlot)) ||
+          (selectedBookingTertiarySlot && isBookingInSlot(b, selectedBookingTertiarySlot))
+        ) &&
         b.status !== 'Batal'
       );
 
@@ -5776,6 +6108,7 @@
         showPopup(`Slot waktu jam ${timeDisplay} pada tanggal ${bookingDate} di ${siteObj.name} (${stallLabel}) sudah terisi oleh antrian ${conflict.queueNumber} (${conflict.plate}).\n\nSilakan pilih jam kedatangan atau stall lain yang masih kosong.`, 'Slot Sudah Terisi', 'warning');
         selectedBookingSlot = null;
         selectedBookingSecondarySlot = null;
+        selectedBookingTertiarySlot = null;
         const badge = document.getElementById('selectedSlotBadge');
         if (badge) badge.innerText = 'Belum dipilih';
         renderBookingSlotPicker();
@@ -5792,7 +6125,9 @@
         ? `${EXPRESS_SLOTS[parseInt(chosenSlot)] || chosenSlot} WIB` 
         : `${chosenSlot} - ${getNextHour(chosenSlot)} WIB`;
 
-      if (chosenService === 'reguler' && selectedBookingSecondarySlot) {
+      if (chosenService === 'reguler' && selectedBookingTertiarySlot) {
+        timeDisplay = `${chosenSlot} - ${getNextHour(selectedBookingTertiarySlot)} WIB (3 Jam Penuh)`;
+      } else if (chosenService === 'reguler' && selectedBookingSecondarySlot) {
         timeDisplay = `${chosenSlot} - ${getNextHour(selectedBookingSecondarySlot)} WIB (2 Jam Penuh)`;
       }
 
@@ -5838,7 +6173,14 @@
     }
 
     function executeSubmitBooking() {
-      closeBookingConfirmModal();
+      // Sembunyikan modal konfirmasi secara langsung tanpa history.back agar modal tiket tidak tertutup prematur
+      const confirmModal = document.getElementById('bookingConfirmModal');
+      if (confirmModal) {
+        confirmModal.classList.add('hidden');
+        confirmModal.style.setProperty('display', 'none', 'important');
+      }
+      const cIdx = openModalStack.indexOf('bookingConfirmModal');
+      if (cIdx !== -1) openModalStack.splice(cIdx, 1);
 
       if (!selectedBookingSlot) {
         showPopup('Silakan pilih jam kedatangan (slot) terlebih dahulu pada Tahap 3!', 'Pilih Jam Kedatangan', 'warning');
@@ -5861,12 +6203,15 @@
       // Kunci data slot dan tampilan waktu SEBELUM saveBookings
       const chosenSlot = selectedBookingSlot;
       const secondarySlot = selectedBookingSecondarySlot;
+      const tertiarySlot = selectedBookingTertiarySlot;
       const chosenService = selectedBookingService;
       let timeDisplay = chosenService === 'express' 
         ? `${EXPRESS_SLOTS[parseInt(chosenSlot)] || chosenSlot} WIB` 
         : `${chosenSlot} - ${getNextHour(chosenSlot)} WIB`;
 
-      if (chosenService === 'reguler' && secondarySlot) {
+      if (chosenService === 'reguler' && tertiarySlot) {
+        timeDisplay = `${chosenSlot} - ${getNextHour(tertiarySlot)} WIB (3 Jam Penuh)`;
+      } else if (chosenService === 'reguler' && secondarySlot) {
         timeDisplay = `${chosenSlot} - ${getNextHour(secondarySlot)} WIB (2 Jam Penuh)`;
       }
 
@@ -5900,6 +6245,7 @@
         stall: stall,
         slot: chosenSlot,
         secondarySlot: secondarySlot || null,
+        tertiarySlot: tertiarySlot || null,
         serviceType: chosenService,
         queueNumber: queueNumber,
         model: model,
@@ -5934,7 +6280,10 @@
       if (ticketModal) {
         ticketModal.classList.remove('hidden');
         ticketModal.style.setProperty('display', 'flex', 'important');
-        pushModalHistoryState('ticketSuccessModal');
+        if (!openModalStack.includes('ticketSuccessModal')) openModalStack.push('ticketSuccessModal');
+        try {
+          window.history.replaceState({ modalOpen: true, modalId: 'ticketSuccessModal', stackLen: openModalStack.length }, '');
+        } catch(e) {}
       }
 
       // Bersihkan formulir input
@@ -5943,6 +6292,8 @@
       document.getElementById('inputPhone').value = '';
       document.getElementById('inputNotes').value = '';
       selectedBookingSlot = null;
+      selectedBookingSecondarySlot = null;
+      selectedBookingTertiarySlot = null;
       renderBookingSlotPicker();
       refreshAllBoards();
       if (window.lucide && lucide.createIcons) lucide.createIcons();
@@ -5955,6 +6306,7 @@
         modal.style.setProperty('display', 'none', 'important');
         popModalHistoryState();
       }
+      goToBookingStep(1);
     }
 
     // ==============================================================
@@ -6247,32 +6599,65 @@
       }
 
       let secondarySlot = null;
-      if (currentModalTarget.stall !== 'express' && estimatedHours >= 2) {
-        secondarySlot = getNextRegularSlot(currentModalTarget.slot);
+      let tertiarySlot = null;
+      if (currentModalTarget.stall !== 'express') {
         const isSat = isSaturday(currentDate);
-        if (!secondarySlot || (isSat && secondarySlot > '11.30') || (!isSat && secondarySlot > '14.30')) {
-          showPopup(
-            `Kerusakan ini masuk kategori Level 2 (estimasi 2 jam pengerjaan), namun slot berikutnya tidak tersedia atau di luar jam operasional (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki 2 jam berurutan!`,
-            'Waktu 2 Jam Tidak Cukup',
-            'warning'
+        const maxLimit = isSat ? '11.30' : '14.30';
+
+        if (estimatedHours >= 2) {
+          secondarySlot = getNextRegularSlot(currentModalTarget.slot);
+          if (!secondarySlot || secondarySlot > maxLimit) {
+            showPopup(
+              `Kerusakan ini membutuhkan durasi ${estimatedHours} jam, namun slot berikutnya melebihi batas jam operasional servis (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki durasi berurutan cukup!`,
+              'Waktu Tidak Cukup',
+              'warning'
+            );
+            return;
+          }
+
+          const secConflict = bookings.find(b => 
+            isSameDate(b.date, currentDate) &&
+            isSameSite(b.siteId, currentSite.id) &&
+            isSameStall(b.stall, currentModalTarget.stall) &&
+            isBookingInSlot(b, secondarySlot) &&
+            b.status !== 'Batal'
           );
-          return;
+          if (secConflict) {
+            showPopup(
+              `Kerusakan ini membutuhkan durasi ${estimatedHours} jam. Namun slot jam berikutnya (${secondarySlot}) sudah terisi oleh antrian ${secConflict.queueNumber} (${secConflict.plate}).\n\nSilakan pilih waktu yang memiliki slot berurutan kosong!`,
+              'Slot Berikutnya Terisi',
+              'warning'
+            );
+            return;
+          }
         }
 
-        const secConflict = bookings.find(b => 
-          isSameDate(b.date, currentDate) &&
-          isSameSite(b.siteId, currentSite.id) &&
-          isSameStall(b.stall, currentModalTarget.stall) &&
-          isBookingInSlot(b, secondarySlot) &&
-          b.status !== 'Batal'
-        );
-        if (secConflict) {
-          showPopup(
-            `Kerusakan ini masuk kategori Level 2 (estimasi 2 jam pengerjaan). Namun slot jam berikutnya (${secondarySlot}) sudah terisi oleh antrian ${secConflict.queueNumber} (${secConflict.plate}).\n\nSilakan pilih jam kedatangan yang memiliki 2 jam berurutan!`,
-            'Slot Berikutnya Sudah Terisi',
-            'warning'
+        if (estimatedHours >= 3) {
+          tertiarySlot = secondarySlot ? getNextRegularSlot(secondarySlot) : null;
+          if (!tertiarySlot || tertiarySlot > maxLimit) {
+            showPopup(
+              `Kerusakan ini membutuhkan durasi 3 jam, namun slot ke-3 melebihi batas jam operasional servis (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki 3 jam berurutan!`,
+              'Waktu Tidak Cukup',
+              'warning'
+            );
+            return;
+          }
+
+          const tertConflict = bookings.find(b => 
+            isSameDate(b.date, currentDate) &&
+            isSameSite(b.siteId, currentSite.id) &&
+            isSameStall(b.stall, currentModalTarget.stall) &&
+            isBookingInSlot(b, tertiarySlot) &&
+            b.status !== 'Batal'
           );
-          return;
+          if (tertConflict) {
+            showPopup(
+              `Kerusakan ini membutuhkan durasi 3 jam. Namun slot ke-3 (${tertiarySlot}) sudah terisi oleh antrian ${tertConflict.queueNumber} (${tertConflict.plate}).\n\nSilakan pilih waktu yang memiliki slot berurutan kosong!`,
+              'Slot Ke-3 Terisi',
+              'warning'
+            );
+            return;
+          }
         }
       }
 
@@ -6298,6 +6683,7 @@
         stall: currentModalTarget.stall,
         slot: currentModalTarget.slot,
         secondarySlot: secondarySlot,
+        tertiarySlot: tertiarySlot,
         serviceType: currentModalTarget.stall === 'express' ? 'express' : 'reguler',
         queueNumber,
         model,
@@ -6687,7 +7073,7 @@
       const btnSyncText = document.getElementById('btnSyncText');
       if (syncIcon) syncIcon.classList.add('animate-spin');
       if (headerRefreshIcon) headerRefreshIcon.classList.add('animate-spin');
-      if (btnSyncText) btnSyncText.innerText = 'Menghubungkan...';
+      if (btnSyncText) btnSyncText.innerText = 'Memuat data...';
 
       let success = false;
       let remoteBookings = [];
@@ -6795,6 +7181,7 @@
             const city = nonEmpty[3] || rawName;
             const addr = nonEmpty[4] || '';
             const phone = nonEmpty[5] || '';
+            const workDays = String(r[6] !== undefined && r[6] !== null ? r[6] : (nonEmpty[6] || '1,2,3,4,5,6')).trim();
 
             const displayName = branchName.toLowerCase().startsWith('polytron') ? branchName : `Polytron SC ${branchName}`;
             const sId = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -6806,7 +7193,8 @@
               city: city,
               address: addr || displayName,
               phone: phone || '-',
-              badge: city || 'Cabang Resmi'
+              badge: city || 'Cabang Resmi',
+              workDays: workDays || '1,2,3,4,5,6'
             });
           });
 
@@ -6830,7 +7218,7 @@
         console.warn('GViz JSONP Master_Sites terkendala:', errSites);
       }
 
-      // 4. Ambil & Perbarui Sheet PART (Kolom A: KODE, Kolom B: Nama Part, Kolom C: QTY)
+      // 4. Ambil & Perbarui Sheet PART (Kolom A: KODE, Fleksibel Kolom B: Kategori / Nama Part, Kolom C/D: QTY)
       try {
         const pTable = await fetchGvizJsonp('PART');
         if (pTable) {
@@ -6841,9 +7229,33 @@
             if (nonEmpty.length < 3) return;
             const pKode = String(nonEmpty[0] || '').trim().toUpperCase();
             if (pKode === 'KODE' || pKode === 'CODE') return;
-            const pName = String(nonEmpty[1] || '').trim();
-            const pQty = parseInt(nonEmpty[2], 10);
-            const pCat = String(nonEmpty[3] || 'Sparepart').trim();
+
+            const col1 = String(r[1] !== undefined && r[1] !== null ? r[1] : (nonEmpty[1] || '')).trim();
+            const col2 = String(r[2] !== undefined && r[2] !== null ? r[2] : (nonEmpty[2] || '')).trim();
+            const col3 = String(r[3] !== undefined && r[3] !== null ? r[3] : (nonEmpty[3] || '')).trim();
+
+            let pName = '';
+            let pCat = 'Sparepart';
+            let pQty = 0;
+
+            const isCol3Num = !isNaN(parseInt(col3, 10)) && col3 !== '';
+            const isCol2Num = !isNaN(parseInt(col2, 10)) && col2 !== '';
+
+            if (isCol3Num || ['express', 'reguler', 'regular', 'sparepart', 'braking', 'tire', 'battery', 'electrical', 'body', 'suspension'].includes(col1.toLowerCase())) {
+              // Format Kolom B adalah KATEGORI: A=KODE, B=KATEGORI, C=NAMA PART, D=QTY
+              pCat = col1 || 'Sparepart';
+              pName = col2 || col1;
+              pQty = parseInt(col3, 10);
+            } else if (isCol2Num) {
+              // Format Kolom B adalah NAMA PART: A=KODE, B=NAMA PART, C=QTY, D=KATEGORI
+              pName = col1;
+              pQty = parseInt(col2, 10);
+              pCat = col3 || 'Sparepart';
+            } else {
+              pName = col1;
+              pQty = parseInt(col2, 10) || parseInt(col3, 10) || 0;
+              pCat = col3 || 'Sparepart';
+            }
 
             if (pKode && pName) {
               newParts.push({
@@ -6870,7 +7282,44 @@
         console.warn('GViz JSONP PART terkendala:', errParts);
       }
 
-      // 5. Fallback via Apps Script jika diakses via http:// dan GViz belum dapat
+      // 5. Ambil & Perbarui Master_Type dari Google Sheet via JSONP
+      try {
+        let tTable = await fetchGvizJsonp('Master_Type');
+        if (!tTable) tTable = await fetchGvizJsonp('Master_Model');
+        if (tTable) {
+          const tRows = extractRowsFromGvizTable(tTable);
+          const newModels = [];
+          tRows.forEach(r => {
+            const nonEmpty = r.map(c => String(c !== undefined && c !== null ? c : '').trim()).filter(s => s !== '');
+            if (nonEmpty.length === 0) return;
+            const first = nonEmpty[0].toLowerCase();
+            if (first === 'id' || first === 'kode' || first === 'model' || first === 'type' || first === 'namamodel' || first === 'modelmotor') return;
+
+            let modelName = '';
+            if (nonEmpty.length >= 2 && (/^mod-/i.test(nonEmpty[0]) || /^[0-9]+$/.test(nonEmpty[0]))) {
+              modelName = nonEmpty[1];
+            } else {
+              modelName = nonEmpty[0];
+            }
+            if (modelName && !newModels.includes(modelName)) {
+              newModels.push(modelName);
+            }
+          });
+
+          if (newModels.length > 0) {
+            MASTER_MODELS.length = 0;
+            MASTER_MODELS.push(...newModels);
+            try {
+              localStorage.setItem(MASTER_MODELS_STORAGE_KEY, JSON.stringify(MASTER_MODELS));
+            } catch(e) {}
+            populateModelDropdowns();
+          }
+        }
+      } catch (errTypes) {
+        console.warn('GViz JSONP Master_Type terkendala:', errTypes);
+      }
+
+      // 6. Fallback via Apps Script jika diakses via http:// dan GViz belum dapat
       if (!success && window.location.protocol !== 'file:') {
         const gasUrl = localStorage.getItem(GAS_URL_STORAGE_KEY) || DEFAULT_GAS_URL;
         if (gasUrl) {
@@ -6912,7 +7361,8 @@
                     city: s.city || sId,
                     address: s.address || s.name || '',
                     phone: s.phone || '-',
-                    badge: s.city || 'Cabang Resmi'
+                    badge: s.city || 'Cabang Resmi',
+                    workDays: s.workDays || '1,2,3,4,5,6'
                   });
                 });
                 try {
@@ -6920,6 +7370,18 @@
                 } catch(e) {}
                 initSiteDropdowns();
                 updateSiteDisplay();
+              }
+              if ((json.types || json.models) && Array.isArray(json.types || json.models)) {
+                const rawList = json.types || json.models;
+                const mList = rawList.map(m => typeof m === 'object' ? (m.name || m.model || m.modelMotor) : String(m)).filter(Boolean);
+                if (mList.length > 0) {
+                  MASTER_MODELS.length = 0;
+                  MASTER_MODELS.push(...mList);
+                  try {
+                    localStorage.setItem(MASTER_MODELS_STORAGE_KEY, JSON.stringify(MASTER_MODELS));
+                  } catch(e) {}
+                  populateModelDropdowns();
+                }
               }
             }
           } catch(e) {}
