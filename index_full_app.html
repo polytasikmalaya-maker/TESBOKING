@@ -3168,7 +3168,7 @@
       let stallClean = String(s).trim();
       if (/stall.*1/i.test(stallClean)) stallClean = 'STALL 1';
       else if (/stall.*2/i.test(stallClean)) stallClean = 'STALL 2';
-      else if (/express/i.test(stallClean)) stallClean = 'EXPRESS BAY';
+      else if (/express/i.test(stallClean)) stallClean = 'STALL EXPRESS';
 
       const parts = [];
       if (q) parts.push(q);
@@ -3198,12 +3198,12 @@
         .replace(/polytron/gi, '')
         .replace(/\bmotor\s+(fox-r|fox-s|fox-500|t-rex|evo)\b/gi, '')
         .replace(/\b(fox-r|fox-s|fox-500|t-rex|evo)\b/gi, '')
-        // KOREKSI SUARA: TIDAK ADA ISTILAH EXPRESS A ATAU B (EXPRESS HANYA 1 = EXPRESS BAY)
-        .replace(/\bexpres\s*(?:bay\s*)?[a-b]\b/gi, 'Express Bay')
-        .replace(/\bexpress\s*(?:bay\s*)?[a-b]\b/gi, 'Express Bay')
-        .replace(/\bexpres\s*[a-b]\b/gi, 'Express Bay')
-        .replace(/\bexpress\s*[a-b]\b/gi, 'Express Bay')
-        .replace(/\bstall\s+express\s*[a-b]?\b/gi, 'Express Bay')
+        // KOREKSI SUARA: HAPUS ISTILAH EXPRESS A / B DAN KATA "BAY" (KARENA TERDENGAR SEPERTI HURUF "B")
+        .replace(/\b(?:stall\s+)?expres(?:s)?\s*(?:bay\s*)?[a-b]\b/gi, 'Stall Express')
+        .replace(/\b(?:stall\s+)?expres(?:s)?\s+bay\b/gi, 'Stall Express')
+        .replace(/\bstall\s+stall\s+express\b/gi, 'Stall Express')
+        .replace(/\bdi\s+express\b/gi, 'di Stall Express')
+        .replace(/\balokasi\s+express\b/gi, 'Alokasi Stall Express')
         .replace(/,\s*,/g, ',')
         .replace(/\s{2,}/g, ' ')
         .trim();
@@ -4111,13 +4111,12 @@
         }
       });
 
-      // Filter dengan kata kunci pencarian HANYA berdasarkan kata kunci keluhan yang ditulis
+      // Filter dengan kata kunci pencarian MURNI HANYA berdasarkan nama keluhan yang tertera pada dropdown
       if (q) {
         const words = q.split(/\s+/).filter(w => w.length > 0);
         items = items.filter(item => {
           const mName = String(item.name || '').toLowerCase();
-          const mDesc = String(item.desc || '').toLowerCase();
-          return words.every(w => mName.includes(w) || mDesc.includes(w));
+          return words.every(w => mName.includes(w));
         });
       }
 
@@ -4777,7 +4776,7 @@
         saveBookings(bookings);
         syncStatusToGoogleSheet(b.id, newStatus);
 
-        const stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
+        const stallLabel = b.stall === 'express' ? 'Stall Express' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
 
         // Trigger Audio Announcement on TV
         if (newStatus === 'In Progress') {
@@ -5126,7 +5125,7 @@
       if (idx === -1) return;
 
       const b = bookings[idx];
-      const stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
+      const stallLabel = b.stall === 'express' ? 'Stall Express' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
 
       // Validasi Hari H: Tombol SA hanya aktif untuk antrian Hari Ini
       const todayIso = getLocalDateIso();
@@ -6916,7 +6915,7 @@
         saveBookings(bookings);
         syncStatusToGoogleSheet(b.id, newStatus);
 
-        const stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
+        const stallLabel = b.stall === 'express' ? 'Stall Express' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
 
         if (newStatus === 'Checked In') {
           announceVoice(`Nomor antrian ${b.queueNumber}, dengan plat ${b.plate}, telah tiba di bengkel.`, b);

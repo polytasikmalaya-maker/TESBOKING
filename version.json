@@ -1,5 +1,5 @@
 {
-  "version": "20261019_v43",
-  "updatedAt": "2026-10-19T12:45:00+07:00",
-  "description": "Penyempurnaan teks peringatan validasi data booking menjadi: 'Mohon lengkapi data Plat Nomor, Nama Pemilik, dan Nomor WhatsApp!' dengan tetap mempertahankan efek garis merah kedip-kedip dan auto-focus pada kolom input yang masih kosong."
+  "version": "20261019_v44",
+  "updatedAt": "2026-10-19T13:08:00+07:00",
+  "description": "Koreksi tuntas panggilan suara: menghapus kata 'Bay' (yang terdengar persis seperti huruf 'B') dan semua variasi Express A/B, serta menggantinya secara konsisten menjadi 'Stall Express' pada seluruh modul panggilan suara (SA, Teknisi, dan TV Monitor)."
 }
