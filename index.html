@@ -1175,6 +1175,12 @@
         .replace(/polytron/gi, '')
         .replace(/\bmotor\s+(fox-r|fox-s|fox-500|t-rex|evo)\b/gi, '')
         .replace(/\b(fox-r|fox-s|fox-500|t-rex|evo)\b/gi, '')
+        // KOREKSI SUARA: TIDAK ADA ISTILAH EXPRESS A ATAU B (EXPRESS HANYA 1 = EXPRESS BAY)
+        .replace(/\bexpres\s*(?:bay\s*)?[a-b]\b/gi, 'Express Bay')
+        .replace(/\bexpress\s*(?:bay\s*)?[a-b]\b/gi, 'Express Bay')
+        .replace(/\bexpres\s*[a-b]\b/gi, 'Express Bay')
+        .replace(/\bexpress\s*[a-b]\b/gi, 'Express Bay')
+        .replace(/\bstall\s+express\s*[a-b]?\b/gi, 'Express Bay')
         .replace(/,\s*,/g, ',')
         .replace(/\s{2,}/g, ' ')
         .trim();

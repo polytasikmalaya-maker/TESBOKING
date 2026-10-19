@@ -1,5 +1,5 @@
 {
-  "version": "20261019_v39",
-  "updatedAt": "2026-10-19T11:58:00+07:00",
-  "description": "Removed redundant 'PILIHAN AKSES SISTEM' & 'Silakan Pilih Menu' header titles, updated Google Apps Script Web App URL to AKfycbyBCztuCRN4e3CzDZOC3Q3zbNSVzb9Pbx88VWQPsoKcPfQsSC10R00pjNm_NmstrBgYqQ, and refined ticket popup button label to 'Screenshot' (removing SS)."
+  "version": "20261019_v43",
+  "updatedAt": "2026-10-19T12:45:00+07:00",
+  "description": "Penyempurnaan teks peringatan validasi data booking menjadi: 'Mohon lengkapi data Plat Nomor, Nama Pemilik, dan Nomor WhatsApp!' dengan tetap mempertahankan efek garis merah kedip-kedip dan auto-focus pada kolom input yang masih kosong."
 }

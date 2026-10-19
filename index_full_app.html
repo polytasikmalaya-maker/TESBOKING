@@ -46,10 +46,9 @@
       try {
         var params = new URLSearchParams(window.location.search);
         var roleParam = params.get('role');
-        var savedRole = localStorage.getItem('LAST_ACTIVE_ROLE');
-        var validRoles = ['portal', 'konsumen', 'teknisi', 'sa', 'tv'];
-        var targetRole = (roleParam && validRoles.includes(roleParam)) ? roleParam :
-                         (savedRole && validRoles.includes(savedRole)) ? savedRole : 'portal';
+        // KETENTUAN: Tampilan pertama saat masuk web selalu Menu Utama (portal)
+        var validDirectRoles = ['tv', 'sa', 'teknisi', 'part'];
+        var targetRole = (roleParam && validDirectRoles.includes(roleParam)) ? roleParam : 'portal';
         
         var css = '';
         validRoles.forEach(function(r) {
@@ -892,6 +891,26 @@
     .tv-ticker-track:hover {
       animation-play-state: paused;
     }
+
+    /* ============================================================== */
+    /* VALIDASI FORM: GARIS MERAH KEDIP-KEDIP PADA FIELD KOSONG        */
+    /* ============================================================== */
+    @keyframes blink-red-border {
+      0%, 100% {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.45) !important;
+        background-color: #ffffff;
+      }
+      50% {
+        border-color: #b91c1c !important;
+        box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.8) !important;
+        background-color: #fef2f2;
+      }
+    }
+    .field-error-blink {
+      animation: blink-red-border 0.65s ease-in-out infinite !important;
+      border: 2px solid #ef4444 !important;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -1209,7 +1228,7 @@
             <!-- Tombol Aksi di Bawah Selalu (Sticky Bottom Bar) -->
             <div class="booking-bottom-bar flex-shrink-0 border-t border-slate-200 bg-white/98 px-3 sm:px-6 py-2.5 sm:py-3">
               <div class="flex items-center justify-between sm:justify-end gap-3 w-full max-w-xl mx-auto">
-                <button type="button" onclick="switchRole('portal')" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
+                <button type="button" onclick="handleBookingStepBack(1)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
                   <i data-lucide="arrow-left" class="w-4 h-4 flex-shrink-0"></i>
                   <span>Kembali</span>
                 </button>
@@ -1295,7 +1314,10 @@
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <input type="text" id="stage2DamageSearchInput" oninput="filterStage2DamageOptions(this.value)" placeholder="Cari kata kunci kerusakan" style="padding-left: 36px !important;" class="w-full h-9 pr-3 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
+                    <input type="text" id="stage2DamageSearchInput" oninput="handleDamageSearchInput(this.value)" placeholder="Cari kata kunci kerusakan" style="padding-left: 36px !important; padding-right: 32px !important;" class="w-full h-9 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
+                    <button type="button" id="btnClearDamageSearch" onclick="clearDamageSearch()" title="Hapus pencarian" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-900 flex items-center justify-center text-xs font-black cursor-pointer transition">
+                      &#x2715;
+                    </button>
                   </div>
 
                   <select id="stage2DamageMaster" onchange="handleStage2DamageChange(this.value)" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 cursor-pointer shadow-2xs">
@@ -1331,7 +1353,7 @@
             <!-- Tombol Aksi di Bawah Selalu (Sticky Bottom Bar) -->
             <div class="booking-bottom-bar flex-shrink-0 border-t border-slate-200 bg-white/98 px-3 sm:px-6 py-2.5 sm:py-3">
               <div class="flex items-center justify-between sm:justify-end gap-3 w-full max-w-2xl mx-auto">
-                <button type="button" onclick="goToBookingStep(1)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
+                <button type="button" onclick="handleBookingStepBack(2)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
                   <i data-lucide="arrow-left" class="w-4 h-4 flex-shrink-0"></i>
                   <span>Kembali</span>
                 </button>
@@ -1398,7 +1420,7 @@
             <!-- Tombol Aksi di Bawah Selalu (Sticky Bottom Bar) -->
             <div class="booking-bottom-bar flex-shrink-0 border-t border-slate-200 bg-white/98 px-3 sm:px-6 py-2.5 sm:py-3">
               <div class="flex items-center justify-between sm:justify-end gap-3 w-full max-w-2xl mx-auto">
-                <button type="button" onclick="goToBookingStep(2)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
+                <button type="button" onclick="handleBookingStepBack(3)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
                   <i data-lucide="arrow-left" class="w-4 h-4 flex-shrink-0"></i>
                   <span>Kembali</span>
                 </button>
@@ -1477,7 +1499,7 @@
             <!-- Tombol Aksi di Bawah Selalu (Sticky Bottom Bar) -->
             <div class="booking-bottom-bar flex-shrink-0 border-t border-slate-200 bg-white/98 px-3 sm:px-6 py-2.5 sm:py-3">
               <div class="flex items-center justify-between sm:justify-end gap-3 w-full max-w-3xl mx-auto">
-                <button type="button" onclick="goToBookingStep(3)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
+                <button type="button" onclick="handleBookingStepBack(4)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
                   <i data-lucide="arrow-left" class="w-4 h-4 flex-shrink-0"></i>
                   <span>Kembali</span>
                 </button>
@@ -1522,7 +1544,10 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <input type="text" id="partSectionSearchInput" oninput="renderDedicatedPartsTable(this.value)" placeholder="Cari nama suku cadang..." style="padding-left: 36px !important;" class="w-full h-9 pr-3 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
+                  <input type="text" id="partSectionSearchInput" oninput="handlePartSearchInput(this.value)" placeholder="Cari nama suku cadang..." style="padding-left: 36px !important; padding-right: 32px !important;" class="w-full h-9 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
+                  <button type="button" id="btnClearPartSearch" onclick="clearPartSearch()" title="Hapus pencarian" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-900 flex items-center justify-center text-xs font-black cursor-pointer transition">
+                    &#x2715;
+                  </button>
                 </div>
               </div>
 
@@ -1697,7 +1722,10 @@
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
-              <input type="text" id="saSearchInput" onkeyup="renderSABoard()" placeholder="Cari Plat, Nama, Kode..." style="padding-left: 32px !important;" class="w-full bg-white border border-slate-300 pr-2.5 py-1 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 rounded-[2px] shadow-xs">
+              <input type="text" id="saSearchInput" oninput="handleSaSearchInput(this.value)" placeholder="Cari Plat, Nama, Kode..." style="padding-left: 32px !important; padding-right: 28px !important;" class="w-full bg-white border border-slate-300 py-1 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 rounded-[2px] shadow-xs">
+              <button type="button" id="btnClearSaSearch" onclick="clearSaSearch()" title="Hapus pencarian" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-900 flex items-center justify-center text-[10px] font-black cursor-pointer transition">
+                &#x2715;
+              </button>
             </div>
           </div>
         </div>
@@ -3170,6 +3198,12 @@
         .replace(/polytron/gi, '')
         .replace(/\bmotor\s+(fox-r|fox-s|fox-500|t-rex|evo)\b/gi, '')
         .replace(/\b(fox-r|fox-s|fox-500|t-rex|evo)\b/gi, '')
+        // KOREKSI SUARA: TIDAK ADA ISTILAH EXPRESS A ATAU B (EXPRESS HANYA 1 = EXPRESS BAY)
+        .replace(/\bexpres\s*(?:bay\s*)?[a-b]\b/gi, 'Express Bay')
+        .replace(/\bexpress\s*(?:bay\s*)?[a-b]\b/gi, 'Express Bay')
+        .replace(/\bexpres\s*[a-b]\b/gi, 'Express Bay')
+        .replace(/\bexpress\s*[a-b]\b/gi, 'Express Bay')
+        .replace(/\bstall\s+express\s*[a-b]?\b/gi, 'Express Bay')
         .replace(/,\s*,/g, ',')
         .replace(/\s{2,}/g, ' ')
         .trim();
@@ -3339,11 +3373,12 @@
       // Inisialisasi Realtime Sync (MQTT + BroadcastChannel + Storage)
       initRealtimeSync();
 
-      // Default initial role: prioritize URL parameter or saved role, default to 'portal' (Layar Pertama Pilihan Menu)
+      // Tampilan pertama saat masuk web selalu Menu Utama (portal)
       const urlParams = new URLSearchParams(window.location.search);
       const roleFromUrl = urlParams.get('role');
-      const savedRole = localStorage.getItem('LAST_ACTIVE_ROLE');
-      switchRole(window.__INITIAL_ACTIVE_ROLE__ || roleFromUrl || savedRole || 'portal', true);
+      const validDirectRoles = ['tv', 'sa', 'teknisi', 'part'];
+      const initialRole = (roleFromUrl && validDirectRoles.includes(roleFromUrl)) ? roleFromUrl : 'portal';
+      switchRole(initialRole, true);
 
       // Tanamkan URL Google Apps Script yang ditentukan pengguna
       localStorage.setItem(GAS_URL_STORAGE_KEY, DEFAULT_GAS_URL);
@@ -3435,20 +3470,24 @@
       if (window.history && window.history.pushState) {
         const currentParam = new URLSearchParams(window.location.search).get('role');
         if (role !== 'portal') {
-          if (currentParam !== role) {
+          if (currentParam !== role || replaceHistory) {
+            const stateObj = { role: role, step: (role === 'konsumen' ? 1 : undefined) };
+            const stateUrl = `?role=${role}` + (role === 'konsumen' ? '&step=1' : '');
             if (replaceHistory) {
-              window.history.replaceState({ role: role }, '', '?role=' + role);
+              window.history.replaceState(stateObj, '', stateUrl);
             } else {
-              window.history.pushState({ role: role }, '', '?role=' + role);
+              // Pastikan entry portal selalu ada di bawah role/step pada browser history
+              if (!window.history.state || window.history.state.role !== 'portal') {
+                window.history.replaceState({ role: 'portal' }, '', window.location.pathname);
+              }
+              window.history.pushState(stateObj, '', stateUrl);
             }
           }
         } else {
-          if (currentParam) {
-            if (replaceHistory) {
-              window.history.replaceState({ role: 'portal' }, '', window.location.pathname);
-            } else {
-              window.history.pushState({ role: 'portal' }, '', window.location.pathname);
-            }
+          if (replaceHistory || currentParam) {
+            window.history.replaceState({ role: 'portal' }, '', window.location.pathname);
+          } else {
+            window.history.pushState({ role: 'portal' }, '', window.location.pathname);
           }
         }
       }
@@ -3497,7 +3536,7 @@
       if (role === 'teknisi') renderTechnicianBoard();
       if (role === 'sa') renderSABoard();
       if (role === 'konsumen') {
-        goToBookingStep(1);
+        goToBookingStep(1, false);
         renderBookingSlotPicker();
       }
       if (role === 'part') {
@@ -3526,12 +3565,24 @@
         btn.classList.remove('hidden');
         btn.classList.add('flex');
         if (currentRole === 'konsumen') {
-          if (label) label.innerText = 'Kembali';
+          if (label) label.innerText = (currentBookingStep === 1) ? 'Menu Utama' : 'Kembali';
         } else if (currentRole === 'part') {
           if (label) label.innerText = (partReturnSource === 'konsumen-step2') ? 'Kembali ke Form' : 'Menu Utama';
         } else {
           if (label) label.innerText = 'Menu Utama';
         }
+      }
+    }
+
+    function handleBookingStepBack(fromStep) {
+      if (fromStep <= 1) {
+        switchRole('portal');
+        return;
+      }
+      if (window.history && window.history.state && window.history.state.role === 'konsumen' && window.history.state.step === fromStep) {
+        window.history.back();
+      } else {
+        goToBookingStep(fromStep - 1, true);
       }
     }
 
@@ -3541,13 +3592,13 @@
         return;
       }
       if (currentRole === 'konsumen') {
-        if (currentBookingStep > 1) {
-          goToBookingStep(currentBookingStep - 1);
+        handleBookingStepBack(currentBookingStep);
+      } else {
+        if (window.history.length > 1 && window.history.state && window.history.state.role === currentRole) {
+          window.history.back();
         } else {
           switchRole('portal');
         }
-      } else {
-        switchRole('portal');
       }
     }
 
@@ -3659,14 +3710,21 @@
         return;
       }
 
-      if (currentRole === 'konsumen') {
-        if (currentBookingStep > 1) {
-          goToBookingStep(currentBookingStep - 1);
-        } else {
-          switchRole('portal');
+      // 4. Navigasi bertahap pada Konsumen booking & role lain
+      const st = e.state;
+      if (st && st.role === 'konsumen' && typeof st.step === 'number') {
+        // Jika sedang berada di Tahap 1 (Pilih Lokasi Service) dan tombol Back HP ditekan,
+        // atau state yang diterima tetap Tahap 1, larikan langsung ke Menu Utama (portal)!
+        if (currentRole === 'konsumen' && currentBookingStep === 1 && st.step === 1) {
+          switchRole('portal', true);
+          return;
         }
-      } else if (currentRole !== 'portal') {
-        switchRole('portal');
+        goToBookingStep(st.step, false);
+      } else if (st && st.role && st.role !== 'portal') {
+        switchRole(st.role, true);
+      } else {
+        // Jika tidak ada state atau kembali ke awal, selalu tampilkan Menu Utama (portal)
+        switchRole('portal', true);
       }
     });
 
@@ -3925,14 +3983,17 @@
         }
 
         if (!query) return true;
-        return (p.name || '').toLowerCase().includes(query) || (p.category || '').toLowerCase().includes(query);
+        // HANYA memunculkan suku cadang yang namanya cocok dengan kata kunci text pencarian
+        const pName = String(p.name || '').toLowerCase();
+        const words = query.split(/\s+/).filter(w => w.length > 0);
+        return words.every(w => pName.includes(w));
       });
 
       if (partsForSite.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="3" class="p-6 text-center text-xs text-slate-500 font-medium">
-              ${query ? 'Tidak ditemukan sparepart yang cocok dengan kata kunci pencarian.' : `Belum ada data stok sparepart untuk kode cabang <b>${siteCode}</b> di Sheet PART.`}
+              ${query ? `Tidak ditemukan suku cadang yang cocok dengan kata kunci "<b>${searchQuery}</b>".` : `Belum ada data stok sparepart untuk kode cabang <b>${siteCode}</b> di Sheet PART.`}
             </td>
           </tr>
         `;
@@ -3973,6 +4034,66 @@
       renderDedicatedPartsTable(query);
     }
 
+    function handlePartSearchInput(val) {
+      const btn = document.getElementById('btnClearPartSearch');
+      if (btn) {
+        if (val && val.trim().length > 0) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+      }
+      renderDedicatedPartsTable(val);
+    }
+
+    function clearPartSearch() {
+      const inp = document.getElementById('partSectionSearchInput');
+      const btn = document.getElementById('btnClearPartSearch');
+      if (inp) {
+        inp.value = '';
+        inp.focus();
+      }
+      if (btn) btn.classList.add('hidden');
+      renderDedicatedPartsTable('');
+    }
+
+    function handleDamageSearchInput(val) {
+      const btn = document.getElementById('btnClearDamageSearch');
+      if (btn) {
+        if (val && val.trim().length > 0) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+      }
+      filterStage2DamageOptions(val);
+    }
+
+    function clearDamageSearch() {
+      const inp = document.getElementById('stage2DamageSearchInput');
+      const btn = document.getElementById('btnClearDamageSearch');
+      if (inp) {
+        inp.value = '';
+        inp.focus();
+      }
+      if (btn) btn.classList.add('hidden');
+      filterStage2DamageOptions('');
+    }
+
+    function handleSaSearchInput(val) {
+      const btn = document.getElementById('btnClearSaSearch');
+      if (btn) {
+        if (val && val.trim().length > 0) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+      }
+      renderSABoard();
+    }
+
+    function clearSaSearch() {
+      const inp = document.getElementById('saSearchInput');
+      const btn = document.getElementById('btnClearSaSearch');
+      if (inp) {
+        inp.value = '';
+        inp.focus();
+      }
+      if (btn) btn.classList.add('hidden');
+      renderSABoard();
+    }
+
     function filterStage2DamageOptions(searchQuery = '') {
       const selectStage2 = document.getElementById('stage2DamageMaster');
       if (!selectStage2) return;
@@ -3990,15 +4111,13 @@
         }
       });
 
-      // Filter dengan kata kunci pencarian jika ada
+      // Filter dengan kata kunci pencarian HANYA berdasarkan kata kunci keluhan yang ditulis
       if (q) {
+        const words = q.split(/\s+/).filter(w => w.length > 0);
         items = items.filter(item => {
-          const mName = String(item.name || '').toLowerCase().includes(q);
-          const mDesc = String(item.desc || '').toLowerCase().includes(q);
-          const mId = String(item.id || '').toLowerCase().includes(q);
-          const mLevel = String(item.level || '').toLowerCase().includes(q);
-          const mStall = String(item.stall || '').toLowerCase().includes(q);
-          return mName || mDesc || mId || mLevel || mStall;
+          const mName = String(item.name || '').toLowerCase();
+          const mDesc = String(item.desc || '').toLowerCase();
+          return words.every(w => mName.includes(w) || mDesc.includes(w));
         });
       }
 
@@ -5366,7 +5485,7 @@
     // ==============================================================
     // ROLE 1: KONSUMEN BOOKING FLOW (BERTAHAP 1-5)
     // ==============================================================
-    function goToBookingStep(step) {
+    function goToBookingStep(step, updateHistory = true) {
       if (step < 1) {
         switchRole('portal');
         return;
@@ -5376,7 +5495,7 @@
       if (step === 4) {
         if (!selectedBookingSlot) {
           showPopup('Silakan pilih jam kedatangan (slot) terlebih dahulu pada Tahap 3!', 'Pilih Jam Kedatangan', 'warning');
-          goToBookingStep(3);
+          goToBookingStep(3, false);
           return;
         }
       }
@@ -5400,6 +5519,16 @@
 
       if (step === 3) {
         renderBookingSlotPicker();
+      }
+
+      // Sinkronkan browser history untuk navigasi tombol Back HP fisik / swipe gesture
+      if (updateHistory && window.history && window.history.pushState) {
+        try {
+          const currentState = window.history.state;
+          if (!currentState || currentState.role !== 'konsumen' || currentState.step !== step) {
+            window.history.pushState({ role: 'konsumen', step: step }, '', `?role=konsumen&step=${step}`);
+          }
+        } catch(e) {}
       }
 
       updateHeaderBackButton();
@@ -6014,17 +6143,67 @@
 
       const siteId = document.getElementById('bookingSiteInput').value;
       const siteObj = SITES.find(s => s.id === siteId) || SITES[0];
-      const plate = document.getElementById('inputPlateNumber').value.trim();
-      const name = document.getElementById('inputOwnerName').value.trim();
-      const phone = document.getElementById('inputPhone').value.trim();
+      const plateInput = document.getElementById('inputPlateNumber');
+      const nameInput = document.getElementById('inputOwnerName');
+      const phoneInput = document.getElementById('inputPhone');
+
+      const plate = plateInput ? plateInput.value.trim() : '';
+      const name = nameInput ? nameInput.value.trim() : '';
+      const phone = phoneInput ? phoneInput.value.trim() : '';
       const model = document.getElementById('inputEvModel').value;
       const notes = document.getElementById('inputNotes').value.trim();
       const bookingDateRaw = document.getElementById('bookingDateInput').value;
       const bookingDate = normalizeDateString(bookingDateRaw);
       const stall = selectedBookingService === 'express' ? 'express' : document.getElementById('bookingStallInput').value;
 
-      if (!plate || !name || !phone) {
-        showPopup('Mohon lengkapi Plat Nomor, Nama Pemilik, dan Nomor WhatsApp!', 'Data Belum Lengkap', 'warning');
+      // Bersihkan indikator kedip sebelumnya
+      [plateInput, nameInput, phoneInput].forEach(el => {
+        if (el) el.classList.remove('field-error-blink');
+      });
+
+      let hasEmpty = false;
+      let firstEmpty = null;
+
+      if (!plate) {
+        if (plateInput) {
+          plateInput.classList.add('field-error-blink');
+          if (!firstEmpty) firstEmpty = plateInput;
+        }
+        hasEmpty = true;
+      }
+      if (!name) {
+        if (nameInput) {
+          nameInput.classList.add('field-error-blink');
+          if (!firstEmpty) firstEmpty = nameInput;
+        }
+        hasEmpty = true;
+      }
+      if (!phone) {
+        if (phoneInput) {
+          phoneInput.classList.add('field-error-blink');
+          if (!firstEmpty) firstEmpty = phoneInput;
+        }
+        hasEmpty = true;
+      }
+
+      if (hasEmpty) {
+        // Pasang listener agar begitu user mengetik pada kolom, efek merah kedip langsung hilang
+        [plateInput, nameInput, phoneInput].forEach(el => {
+          if (el && !el.dataset.hasBlinkListener) {
+            el.dataset.hasBlinkListener = 'true';
+            el.addEventListener('input', function() {
+              if (this.value.trim().length > 0) {
+                this.classList.remove('field-error-blink');
+              }
+            });
+          }
+        });
+
+        if (firstEmpty) {
+          firstEmpty.focus();
+          firstEmpty.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        showPopup('Mohon lengkapi data Plat Nomor, Nama Pemilik, dan Nomor WhatsApp!', 'Data Belum Lengkap', 'warning');
         return;
       }
 
@@ -6315,7 +6494,11 @@
         modal.style.setProperty('display', 'none', 'important');
         popModalHistoryState();
       }
-      goToBookingStep(1);
+      switchRole('konsumen', true);
+      goToBookingStep(1, false);
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({ role: 'konsumen', step: 1 }, '', '?role=konsumen&step=1');
+      }
     }
 
     // ==============================================================
@@ -6777,14 +6960,45 @@
     }
 
     function saveManualBooking() {
-      const plate = document.getElementById('modalInputPlate').value.trim();
-      const name = document.getElementById('modalInputName').value.trim();
+      const plateInput = document.getElementById('modalInputPlate');
+      const nameInput = document.getElementById('modalInputName');
+      const plate = plateInput ? plateInput.value.trim() : '';
+      const name = nameInput ? nameInput.value.trim() : '';
       const phone = document.getElementById('modalInputPhone').value.trim();
       const model = document.getElementById('modalInputModel').value;
       const notes = document.getElementById('modalInputNotes').value.trim();
 
-      if (!plate || !name) {
-        showPopup('Harap isi nomor plat dan nama pelanggan.', 'Data Belum Lengkap', 'warning');
+      if (plateInput) plateInput.classList.remove('field-error-blink');
+      if (nameInput) nameInput.classList.remove('field-error-blink');
+
+      let hasEmpty = false;
+      let firstEmpty = null;
+      if (!plate) {
+        if (plateInput) {
+          plateInput.classList.add('field-error-blink');
+          if (!firstEmpty) firstEmpty = plateInput;
+        }
+        hasEmpty = true;
+      }
+      if (!name) {
+        if (nameInput) {
+          nameInput.classList.add('field-error-blink');
+          if (!firstEmpty) firstEmpty = nameInput;
+        }
+        hasEmpty = true;
+      }
+
+      if (hasEmpty) {
+        [plateInput, nameInput].forEach(el => {
+          if (el && !el.dataset.hasBlinkListener) {
+            el.dataset.hasBlinkListener = 'true';
+            el.addEventListener('input', function() {
+              if (this.value.trim().length > 0) this.classList.remove('field-error-blink');
+            });
+          }
+        });
+        if (firstEmpty) firstEmpty.focus();
+        showPopup('Harap isi nomor plat dan nama pelanggan yang berkedip merah.', 'Data Belum Lengkap', 'warning');
         return;
       }
 
