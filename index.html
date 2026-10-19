@@ -75,6 +75,10 @@
   <script src="https://unpkg.com/mqtt@5.3.5/dist/mqtt.min.js"></script>
   <!-- html2canvas for Screenshot E-Ticket Feature -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- QRCode.js for Dynamic Ticket Barcode / QR Code Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- html5-qrcode for Realtime Camera Barcode / QR Scanning in SA -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -597,6 +601,33 @@
         border-radius: 4px !important; /* Sudut 90 derajat tidak lancip (micro-fillet) */
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+      }
+
+      /* Khusus Menu Booking di Layar Laptop: Padding elemen ke card kasih 2mm saja */
+      #role-section-konsumen .model3-card > div[id^="booking-stage-"] > div:first-child,
+      #role-section-konsumen .model3-card .stage-content-scroll,
+      #role-section-part .model3-card > div:first-child,
+      #role-section-part .model3-card .stage-content-scroll {
+        padding: 2mm !important;
+      }
+
+      #role-section-konsumen .model3-card .booking-bottom-bar,
+      #role-section-part .model3-card .booking-bottom-bar {
+        padding: 2mm !important;
+      }
+
+      #role-section-konsumen .model3-card .max-w-xl,
+      #role-section-konsumen .model3-card .max-w-2xl,
+      #role-section-konsumen .model3-card .max-w-3xl,
+      #role-section-konsumen .model3-card .max-w-4xl,
+      #role-section-part .model3-card .max-w-xl,
+      #role-section-part .model3-card .max-w-2xl,
+      #role-section-part .model3-card .max-w-3xl,
+      #role-section-part .model3-card .max-w-4xl {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
       }
     }
 
@@ -1465,44 +1496,43 @@
                   <p class="text-[11px] sm:text-xs text-slate-600 font-medium">Lengkapi data motor dan kontak pemilik untuk verifikasi kedatangan</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-4">
-                  <!-- Kolom Kiri: Data Kendaraan -->
-                  <div class="space-y-2 sm:space-y-2.5">
-                    <div>
-                      <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Model / Type</label>
-                      <select id="inputEvModel" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 shadow-2xs">
-                        <option value="Polytron Fox-R">Polytron Fox-R</option>
-                        <option value="Polytron Fox-S">Polytron Fox-S</option>
-                        <option value="Polytron Fox-500">Polytron Fox-500</option>
-                        <option value="Polytron T-Rex">Polytron T-Rex</option>
-                        <option value="Lainnya">Lainnya</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nomor Polisi / Plat</label>
-                      <input type="text" id="inputPlateNumber" placeholder="Contoh: D 1234 ABC" class="w-full uppercase bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs">
-                    </div>
+                <!-- Form Input Data Unit & Kontak: Ke Bawah Rapi (1 Baris = 1 Kolom) -->
+                <div class="flex flex-col space-y-2 sm:space-y-2.5 pt-1">
+                  <!-- 1. Model / Type -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Model / Type</label>
+                    <select id="inputEvModel" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 shadow-2xs h-10 sm:h-11 cursor-pointer">
+                      <option value="Polytron Fox-R">Polytron Fox-R</option>
+                      <option value="Polytron Fox-S">Polytron Fox-S</option>
+                      <option value="Polytron Fox-500">Polytron Fox-500</option>
+                      <option value="Polytron T-Rex">Polytron T-Rex</option>
+                      <option value="Lainnya">Lainnya</option>
+                    </select>
                   </div>
 
-                  <!-- Kolom Kanan: Data Kontak Pemilik -->
-                  <div class="space-y-2 sm:space-y-2.5">
-                    <div>
-                      <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nama Pemilik</label>
-                      <input type="text" id="inputOwnerName" placeholder="Nama Lengkap" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs">
-                    </div>
-
-                    <div>
-                      <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nomor WhatsApp</label>
-                      <input type="tel" id="inputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs">
-                    </div>
+                  <!-- 2. Nomor Polisi / Plat -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nomor Polisi / Plat</label>
+                    <input type="text" id="inputPlateNumber" placeholder="Contoh: D 1234 ABC" class="w-full uppercase bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs h-10 sm:h-11">
                   </div>
-                </div>
 
-                <!-- Baris Penuh: Catatan Tambahan -->
-                <div class="pt-0.5">
-                  <label class="block text-[11px] font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Catatan Tambahan (Opsional):</label>
-                  <textarea id="inputNotes" rows="2" placeholder="Catatan tambahan jika ada..." class="w-full bg-white border border-slate-300 rounded-[3px] p-2 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs"></textarea>
+                  <!-- 3. Nama Pemilik -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nama Pemilik</label>
+                    <input type="text" id="inputOwnerName" placeholder="Nama Lengkap" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs h-10 sm:h-11">
+                  </div>
+
+                  <!-- 4. Nomor WhatsApp -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Nomor WhatsApp</label>
+                    <input type="tel" id="inputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs h-10 sm:h-11 font-mono">
+                  </div>
+
+                  <!-- 5. Catatan Tambahan (Opsional) -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-800 mb-1 text-left uppercase tracking-wider">Catatan Tambahan (Opsional):</label>
+                    <textarea id="inputNotes" rows="2" placeholder="Catatan tambahan jika ada..." class="w-full bg-white border border-slate-300 rounded-[3px] p-2.5 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-red-500 shadow-2xs"></textarea>
+                  </div>
                 </div>
 
                 <!-- Hidden Damage Elements (Disinkronkan otomatis dari Tahap 2, tidak tampil di layar) -->
@@ -1701,6 +1731,10 @@
               <button onclick="switchRole('portal')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]">
                 <i data-lucide="home" class="w-3.5 h-3.5 text-red-600"></i>
                 <span>Menu Utama</span>
+              </button>
+              <button onclick="openBarcodeScannerModal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]" title="Buka Alat Scan Barcode / QR Tiket Konsumen">
+                <i data-lucide="scan-line" class="w-3.5 h-3.5 text-white"></i>
+                <span>Scan Barcode / QR Tiket</span>
               </button>
               <button onclick="openWalkinModalFromSA()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]">
                 <i data-lucide="user-plus" class="w-3.5 h-3.5 text-slate-800"></i>
@@ -2376,6 +2410,10 @@
             <span id="ticketPlate" class="font-bold text-slate-900">D 1234 ABC</span>
           </div>
           <div class="flex justify-between">
+            <span class="text-slate-700">Nama Pemilik:</span>
+            <span id="ticketOwnerName" class="font-bold text-slate-900">-</span>
+          </div>
+          <div class="flex justify-between">
             <span class="text-slate-700">Alokasi Stall:</span>
             <span id="ticketStall" class="font-bold text-slate-900">Stall EV 1</span>
           </div>
@@ -2386,10 +2424,8 @@
         </div>
 
         <div class="pt-2 border-t border-dashed border-slate-200 flex flex-col items-center justify-center">
-          <div class="w-24 h-24 bg-white p-2 shadow border border-slate-200 rounded-[2px] flex items-center justify-center">
-            <svg class="w-full h-full text-slate-900" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v4h-4v-4zm-4 4h4v4h-4v-4zm0-4h4v4h-4v-4zm4-4h4v4h-4v-4zm-4 0h4v4h-4v-4zm0-4h4v4h-4V6z"/>
-            </svg>
+          <div id="ticketQrWrapper" class="bg-white p-2 shadow border border-slate-200 rounded-[2px] flex items-center justify-center min-w-[124px] min-h-[124px]">
+            <div id="ticketQrCode" class="flex items-center justify-center"></div>
           </div>
           <span class="text-[9px] text-slate-500 mt-1">Scan / Verifikasi di Meja Service Advisor (SA)</span>
         </div>
@@ -2398,13 +2434,84 @@
       <div class="mt-4 flex gap-2">
         <button type="button" onclick="downloadTicketScreenshot(false)" id="btnScreenshotTicket" class="flex-1 py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center gap-1.5" title="Unduh gambar tiket langsung">
           <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
-          <span>Unduh Tiket (SS)</span>
+          <span>Unduh Tiket</span>
         </button>
         <button type="button" onclick="closeTicketModal();" class="flex-1 py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
           <span>Tutup</span>
         </button>
       </div>
-      <p class="text-[10px] text-emerald-600 font-bold mt-2">✓ E-Tiket otomatis terunduh & tersimpan langsung</p>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL SCANNER BARCODE / QR CODE TIKET (SERVICE ADVISOR)        -->
+  <!-- ============================================================== -->
+  <div id="barcodeScannerModal" onclick="if(event.target === this) closeBarcodeScannerModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-2 hidden" style="z-index: 99999 !important;">
+    <div class="bg-white border border-slate-200 w-full max-w-md p-4 sm:p-5 shadow-2xl relative rounded-[3px] text-left">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-[2px] bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700">
+            <i data-lucide="qr-code" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-black text-slate-900 uppercase">Scan Tiket Check-In SA</h3>
+            <p class="text-[11px] text-slate-500">Scan QR e-tiket konsumen untuk otomatis check-in kehadiran</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeBarcodeScannerModal()" class="text-slate-400 hover:text-slate-700 p-1 rounded transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Kamera Scanner Viewport -->
+      <div class="mt-3 relative">
+        <div id="barcodeScannerReader" class="w-full bg-slate-950 rounded-[3px] overflow-hidden min-h-[220px] flex items-center justify-center relative text-white border border-slate-800">
+          <div id="scannerPlaceholder" class="p-6 text-center space-y-2">
+            <i data-lucide="camera" class="w-8 h-8 text-slate-500 mx-auto animate-pulse"></i>
+            <p class="text-xs text-slate-400 font-medium">Menghubungkan ke kamera perangkat...</p>
+          </div>
+        </div>
+        
+        <!-- Controls Kamera (Switch / Toggle) -->
+        <div class="mt-2 flex items-center justify-between text-[11px]">
+          <div id="scannerStatusText" class="text-slate-600 font-medium flex items-center gap-1.5 truncate">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span>Arahkan kamera ke QR Code Tiket Konsumen</span>
+          </div>
+          <button type="button" id="btnSwitchCamera" onclick="switchScannerCamera()" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-300 rounded-[2px] transition flex items-center gap-1">
+            <i data-lucide="camera" class="w-3 h-3 text-slate-600"></i>
+            <span>Ganti Kamera</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Input Manual / Barcode Scanner Gun -->
+      <div class="mt-3 bg-slate-50 border border-slate-200 p-2.5 rounded-[3px]">
+        <label class="block text-[10px] font-black text-slate-700 uppercase mb-1 flex items-center justify-between">
+          <span>Barcode Scanner Gun / Input Manual</span>
+          <span class="text-[9px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">Tekan Enter</span>
+        </label>
+        <div class="flex gap-1.5">
+          <input type="text" id="barcodeManualInput" placeholder="Scan Barcode / ketik Kode Booking / No. Plat..." class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold border border-slate-300 rounded-[2px] outline-none focus:border-red-600 bg-white" onkeydown="if(event.key==='Enter'){event.preventDefault();submitManualBarcodeScan();}">
+          <button type="button" onclick="submitManualBarcodeScan()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-[2px] shadow-xs transition flex items-center gap-1">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>Verifikasi</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Area Feedback Hasil Scan -->
+      <div id="barcodeScanResultArea" class="hidden mt-3"></div>
+
+      <!-- Modal Footer -->
+      <div class="mt-4 pt-2.5 border-t border-slate-200 flex justify-end gap-2">
+        <button type="button" onclick="closeBarcodeScannerModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-[2px] transition border border-slate-300">
+          Tutup Scanner
+        </button>
+      </div>
 
     </div>
   </div>
@@ -3721,6 +3828,12 @@
       const gsModal = document.getElementById('googleSheetModal');
       if (gsModal && !gsModal.classList.contains('hidden')) {
         gsModal.classList.add('hidden');
+        closed = true;
+      }
+
+      const scannerModal = document.getElementById('barcodeScannerModal');
+      if (scannerModal && (!scannerModal.classList.contains('hidden') || scannerModal.style.display === 'flex')) {
+        closeBarcodeScannerModal();
         closed = true;
       }
 
@@ -6456,7 +6569,7 @@
       const originalBtn4 = btnNext4 ? btnNext4.innerHTML : '';
       if (btnNext4) {
         btnNext4.disabled = true;
-        btnNext4.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1.5"></span><span>Mengecek Google Sheet...</span>`;
+        btnNext4.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1.5"></span><span>Memproses...</span>`;
       }
 
       try {
@@ -6485,7 +6598,7 @@
       if (conflict) {
         const stallLabel = stall === 'express' ? 'Express Bay' : (stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
         const timeDisplay = selectedBookingService === 'express' ? `${EXPRESS_SLOTS[parseInt(selectedBookingSlot)] || selectedBookingSlot} WIB` : `${selectedBookingSlot} WIB`;
-        showPopup(`Mohon maaf, slot jam ${timeDisplay} pada tanggal ${bookingDate} di ${siteObj.name} (${stallLabel}) sudah terisi di Google Sheet.\n\nData terbaru telah dimuat, silakan pilih jam kedatangan atau stall lain yang masih kosong.`, 'Slot Sudah Terisi', 'warning');
+        showPopup(`Mohon maaf, slot jam ${timeDisplay} pada tanggal ${bookingDate} di ${siteObj.name} (${stallLabel}) sudah terisi.\n\nData terbaru telah dimuat, silakan pilih jam kedatangan atau stall lain yang masih kosong.`, 'Slot Sudah Terisi', 'warning');
         selectedBookingSlot = null;
         selectedBookingSecondarySlot = null;
         selectedBookingTertiarySlot = null;
@@ -6557,7 +6670,7 @@
       const originalSubmitText = btnSubmit ? btnSubmit.innerHTML : '';
       if (btnSubmit) {
         btnSubmit.disabled = true;
-        btnSubmit.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1.5"></span><span>Mengecek Google Sheet...</span>`;
+        btnSubmit.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1.5"></span><span>Memproses...</span>`;
       }
 
       // Validasi sekali lagi langsung ke Google Sheet secara realtime
@@ -6641,7 +6754,7 @@
         goToBookingStep(3, false);
         renderBookingSlotPicker();
         showPopup(
-          `Mohon maaf, slot jam <b>${chosenService === 'express' ? (EXPRESS_SLOTS[parseInt(chosenSlot, 10)] || chosenSlot) : chosenSlot} WIB</b> pada tanggal <b>${bookingDate}</b> baru saja terisi di Google Sheet.<br><br>Data terbaru telah dimuat, silakan pilih tanggal atau jam slot yang masih tersedia!`,
+          `Mohon maaf, slot jam <b>${chosenService === 'express' ? (EXPRESS_SLOTS[parseInt(chosenSlot, 10)] || chosenSlot) : chosenSlot} WIB</b> pada tanggal <b>${bookingDate}</b> baru saja terisi.<br><br>Data terbaru telah dimuat, silakan pilih tanggal atau jam slot yang masih tersedia!`,
           'Slot Waktu Sudah Terisi',
           'warning'
         );
@@ -6739,8 +6852,18 @@
       document.getElementById('ticketSite').innerText = siteObj.name;
       document.getElementById('ticketVehicle').innerText = model;
       document.getElementById('ticketPlate').innerText = plate.toUpperCase();
+      const ticketOwnerEl = document.getElementById('ticketOwnerName');
+      if (ticketOwnerEl) ticketOwnerEl.innerText = name;
       document.getElementById('ticketStall').innerText = stall === 'express' ? 'Express Bay' : (stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
       document.getElementById('ticketTime').innerText = timeDisplay;
+
+      // Render Barcode / QR Code Dinamis Tiket (No Tiket, No Plat Motor, No Antrian, Nama)
+      generateTicketQr({
+        id: bookingCode,
+        plate: plate.toUpperCase(),
+        queueNumber: queueNumber,
+        name: name
+      });
 
       const ticketMapsLink = document.getElementById('ticketMapsLink');
       if (ticketMapsLink && siteObj.mapsUrl) ticketMapsLink.href = siteObj.mapsUrl;
@@ -6753,11 +6876,6 @@
         try {
           window.history.replaceState({ modalOpen: true, modalId: 'ticketSuccessModal', stackLen: openModalStack.length }, '');
         } catch(e) {}
-
-        // Otomatis download screenshot e-tiket langsung tersimpan ke perangkat
-        setTimeout(function() {
-          downloadTicketScreenshot(true);
-        }, 600);
       }
 
       // Bersihkan formulir input
@@ -6976,6 +7094,501 @@
         console.error('Fallback canvas error:', err);
         if (finish) finish();
       }
+    }
+
+    // ==============================================================
+    // GENERATOR BARCODE / QR CODE TIKET DIGITAL (NO TIKET, PLAT, ANTRIAN, NAMA)
+    // ==============================================================
+    function generateTicketQr(ticketData) {
+      const container = document.getElementById('ticketQrCode');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const payload = {
+        code: ticketData.id || ticketData.code || '',
+        plate: ticketData.plate || '',
+        queue: ticketData.queueNumber || ticketData.queue || '',
+        name: ticketData.name || ''
+      };
+      const qrText = JSON.stringify(payload);
+
+      try {
+        if (typeof QRCode !== 'undefined') {
+          new QRCode(container, {
+            text: qrText,
+            width: 110,
+            height: 110,
+            colorDark: "#0f172a",
+            colorLight: "#ffffff",
+            correctLevel: (typeof QRCode.CorrectLevel !== 'undefined') ? QRCode.CorrectLevel.M : 0
+          });
+        } else {
+          // Fallback image jika CDN QRCode.js belum termuat
+          const img = document.createElement('img');
+          img.src = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(qrText)}`;
+          img.alt = "QR Code Tiket";
+          img.className = "w-[110px] h-[110px] object-contain";
+          container.appendChild(img);
+        }
+      } catch (err) {
+        console.warn('QRCode generation fallback triggered:', err);
+        const img = document.createElement('img');
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(qrText)}`;
+        img.alt = "QR Code Tiket";
+        img.className = "w-[110px] h-[110px] object-contain";
+        container.appendChild(img);
+      }
+    }
+
+    // ==============================================================
+    // AUDIO BEEP FEEDBACK SCANNER (SINTETIS AUDIO CONTEXT)
+    // ==============================================================
+    function playScanBeep(success = true) {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (success) {
+          // Melodi 2 nada gembira (sukses)
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, ctx.currentTime);
+          osc.frequency.setValueAtTime(1320, ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.25, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.22);
+        } else {
+          // Nada rendah (peringatan/gagal)
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, ctx.currentTime);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.35);
+        }
+      } catch (e) {}
+    }
+
+    // ==============================================================
+    // SERVICE ADVISOR (SA) BARCODE / QR SCANNER & AUTO CHECK-IN SYSTEM
+    // ==============================================================
+    let html5QrScannerInstance = null;
+    let availableCameraList = [];
+    let currentCameraIndex = 0;
+    let isScannerScanning = false;
+    let isScanProcessing = false;
+
+    async function openBarcodeScannerModal() {
+      const modal = document.getElementById('barcodeScannerModal');
+      if (!modal) return;
+
+      modal.classList.remove('hidden');
+      modal.style.setProperty('display', 'flex', 'important');
+      pushModalHistoryState('barcodeScannerModal');
+
+      // Reset feedback hasil scan
+      const resArea = document.getElementById('barcodeScanResultArea');
+      if (resArea) {
+        resArea.innerHTML = '';
+        resArea.classList.add('hidden');
+      }
+
+      // Reset & auto-fokus input manual / scanner gun
+      const inputManual = document.getElementById('barcodeManualInput');
+      if (inputManual) {
+        inputManual.value = '';
+        setTimeout(() => inputManual.focus(), 350);
+      }
+
+      isScanProcessing = false;
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+
+      // Nyalakan scanner kamera
+      startBarcodeCameraScanner();
+    }
+
+    async function closeBarcodeScannerModal() {
+      await stopBarcodeCameraScanner();
+
+      const modal = document.getElementById('barcodeScannerModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.setProperty('display', 'none', 'important');
+        popModalHistoryState('barcodeScannerModal');
+      }
+    }
+
+    async function startBarcodeCameraScanner() {
+      if (typeof Html5Qrcode === 'undefined') {
+        updateScannerStatus('Library scanner belum siap. Silakan gunakan scanner gun / input manual.');
+        return;
+      }
+
+      try {
+        if (!html5QrScannerInstance) {
+          html5QrScannerInstance = new Html5Qrcode("barcodeScannerReader");
+        }
+
+        if (isScannerScanning) {
+          await stopBarcodeCameraScanner();
+        }
+
+        try {
+          availableCameraList = await Html5Qrcode.getCameras();
+        } catch (e) {
+          availableCameraList = [];
+        }
+
+        const qrConfig = {
+          fps: 15,
+          qrbox: { width: 220, height: 220 },
+          aspectRatio: 1.0
+        };
+
+        const onScanSuccess = (decodedText, decodedResult) => {
+          if (isScanProcessing) return;
+          isScanProcessing = true;
+          handleBarcodeScanResult(decodedText);
+        };
+
+        const onScanError = (errorMessage) => {
+          // frame scan ignore
+        };
+
+        if (availableCameraList && availableCameraList.length > 0) {
+          // Pilih kamera belakang jika ada
+          const backIdx = availableCameraList.findIndex(c => /back|belakang|rear|environment/i.test(c.label));
+          currentCameraIndex = backIdx !== -1 ? backIdx : 0;
+          await html5QrScannerInstance.start(
+            availableCameraList[currentCameraIndex].id,
+            qrConfig,
+            onScanSuccess,
+            onScanError
+          );
+        } else {
+          // Fallback facingMode
+          await html5QrScannerInstance.start(
+            { facingMode: "environment" },
+            qrConfig,
+            onScanSuccess,
+            onScanError
+          );
+        }
+
+        isScannerScanning = true;
+        updateScannerStatus('Kamera aktif. Arahkan ke QR Code Tiket Konsumen.', true);
+      } catch (err) {
+        console.warn("Gagal membuka kamera scanner:", err);
+        updateScannerStatus('Kamera tidak aktif (' + (err.message || 'Izin kamera ditolak') + '). Gunakan input manual/scanner gun.');
+      }
+    }
+
+    async function stopBarcodeCameraScanner() {
+      if (html5QrScannerInstance && isScannerScanning) {
+        try {
+          await html5QrScannerInstance.stop();
+        } catch (e) {}
+        isScannerScanning = false;
+      }
+    }
+
+    async function switchScannerCamera() {
+      if (!availableCameraList || availableCameraList.length <= 1) {
+        showToast('Hanya 1 kamera yang terdeteksi pada perangkat ini.', 2000);
+        return;
+      }
+      currentCameraIndex = (currentCameraIndex + 1) % availableCameraList.length;
+      await stopBarcodeCameraScanner();
+      startBarcodeCameraScanner();
+    }
+
+    function updateScannerStatus(text, isLive = false) {
+      const el = document.getElementById('scannerStatusText');
+      if (!el) return;
+      el.innerHTML = isLive
+        ? `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0"></span><span class="text-emerald-700 font-semibold truncate">${text}</span>`
+        : `<span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span><span class="text-slate-600 truncate">${text}</span>`;
+    }
+
+    function submitManualBarcodeScan() {
+      const input = document.getElementById('barcodeManualInput');
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) {
+        showToast('Ketik atau scan barcode tiket terlebih dahulu.', 2000);
+        return;
+      }
+      handleBarcodeScanResult(val);
+    }
+
+    function handleBarcodeScanResult(rawText) {
+      if (!rawText) {
+        isScanProcessing = false;
+        return;
+      }
+
+      const cleanText = String(rawText).trim();
+      let ticketCode = '';
+      let ticketPlate = '';
+      let ticketQueue = '';
+      let ticketName = '';
+
+      try {
+        const parsed = JSON.parse(cleanText);
+        if (parsed && typeof parsed === 'object') {
+          ticketCode = parsed.code || parsed.id || '';
+          ticketPlate = parsed.plate || '';
+          ticketQueue = parsed.queue || parsed.queueNumber || '';
+          ticketName = parsed.name || '';
+        }
+      } catch (e) {
+        if (cleanText.includes('|')) {
+          const parts = cleanText.split('|');
+          parts.forEach(p => {
+            const item = p.trim();
+            if (item.startsWith('PLY-')) ticketCode = item;
+            else if (/^[A-Z]{1,2}\s*\d{1,4}\s*[A-Z]{1,3}$/i.test(item)) ticketPlate = item;
+            else if (/^[A-Z0-9\-]+$/i.test(item) && item.includes('-')) ticketQueue = item;
+          });
+        } else {
+          if (cleanText.toUpperCase().startsWith('PLY-')) {
+            ticketCode = cleanText.toUpperCase();
+          } else if (/^[A-Z]{1,2}\s*\d{1,4}\s*[A-Z]{1,3}$/i.test(cleanText)) {
+            ticketPlate = cleanText.toUpperCase();
+          } else {
+            ticketCode = cleanText;
+          }
+        }
+      }
+
+      const bookings = loadBookings();
+      const todayIso = getLocalDateIso();
+
+      let idx = -1;
+
+      // 1. Cari berdasarkan kode booking persis
+      if (ticketCode) {
+        idx = bookings.findIndex(b => b.id && b.id.toUpperCase() === ticketCode.toUpperCase());
+      }
+
+      // 2. Cari berdasarkan nomor antrian
+      if (idx === -1 && ticketQueue) {
+        idx = bookings.findIndex(b => b.queueNumber && b.queueNumber.toUpperCase() === ticketQueue.toUpperCase() && isSameDate(b.date, todayIso));
+        if (idx === -1) {
+          idx = bookings.findIndex(b => b.queueNumber && b.queueNumber.toUpperCase() === ticketQueue.toUpperCase());
+        }
+      }
+
+      // 3. Cari berdasarkan nomor plat motor
+      if (idx === -1 && ticketPlate) {
+        const normPlate = ticketPlate.replace(/\s+/g, '').toUpperCase();
+        idx = bookings.findIndex(b => (b.plate || '').replace(/\s+/g, '').toUpperCase() === normPlate && isSameDate(b.date, todayIso));
+        if (idx === -1) {
+          idx = bookings.findIndex(b => (b.plate || '').replace(/\s+/g, '').toUpperCase() === normPlate);
+        }
+      }
+
+      // 4. Cari pencarian bebas (fuzzy/partial match)
+      if (idx === -1) {
+        const normQuery = cleanText.replace(/\s+/g, '').toUpperCase();
+        idx = bookings.findIndex(b =>
+          (b.id && b.id.replace(/\s+/g, '').toUpperCase().includes(normQuery)) ||
+          (b.plate && b.plate.replace(/\s+/g, '').toUpperCase() === normQuery) ||
+          (b.queueNumber && b.queueNumber.replace(/\s+/g, '').toUpperCase() === normQuery)
+        );
+      }
+
+      const resArea = document.getElementById('barcodeScanResultArea');
+      if (!resArea) return;
+      resArea.classList.remove('hidden');
+
+      if (idx === -1) {
+        playScanBeep(false);
+        resArea.innerHTML = `
+          <div class="bg-rose-50 border border-rose-300 p-3 rounded-[3px] text-rose-800 text-xs flex items-start gap-2.5">
+            <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600 shrink-0 mt-0.5"></i>
+            <div class="flex-1">
+              <div class="font-black uppercase text-[11px] text-rose-900">Tiket Tidak Ditemukan!</div>
+              <p class="mt-0.5 text-rose-700">Data barcode <b>${cleanText}</b> tidak cocok dengan daftar booking sistem.</p>
+              <button type="button" onclick="resumeScannerCapture()" class="mt-2 px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-[2px] font-bold text-[10px] cursor-pointer">
+                Scan Lagi
+              </button>
+            </div>
+          </div>
+        `;
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+        setTimeout(() => { isScanProcessing = false; }, 2500);
+        return;
+      }
+
+      const b = bookings[idx];
+      const stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
+
+      // Periksa jika status Batal
+      if (b.status === 'Batal') {
+        playScanBeep(false);
+        resArea.innerHTML = `
+          <div class="bg-amber-50 border border-amber-300 p-3 rounded-[3px] text-amber-900 text-xs flex items-start gap-2.5">
+            <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+            <div class="flex-1">
+              <div class="font-black uppercase text-[11px] text-amber-900">Status Booking: BATAL</div>
+              <p class="mt-0.5 text-amber-800">Antrian <b>${b.queueNumber}</b> (${b.name} - ${b.plate}) telah dibatalkan karena tidak hadir melewati batas toleransi.</p>
+              <button type="button" onclick="resumeScannerCapture()" class="mt-2 px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-[2px] font-bold text-[10px] cursor-pointer">
+                Scan Tiket Lain
+              </button>
+            </div>
+          </div>
+        `;
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+        setTimeout(() => { isScanProcessing = false; }, 3000);
+        return;
+      }
+
+      // Jika sudah Checked In sebelumnya
+      if (b.status === 'Checked In') {
+        playScanBeep(true);
+        saCallVoice(b.id, 'hadir');
+        resArea.innerHTML = `
+          <div class="bg-sky-50 border border-sky-300 p-3 rounded-[3px] text-sky-900 text-xs space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
+              <span class="font-black uppercase text-xs text-sky-900">SUDAH CHECK-IN SEBELUMNYA</span>
+            </div>
+            <div class="bg-white p-2.5 rounded border border-sky-200 text-xs space-y-1">
+              <div class="flex justify-between"><span class="text-slate-500">No. Antrian:</span><b class="text-base text-slate-900 font-mono">${b.queueNumber}</b></div>
+              <div class="flex justify-between"><span class="text-slate-500">Pemilik & Plat:</span><b class="text-slate-900">${b.name} (${b.plate})</b></div>
+              <div class="flex justify-between"><span class="text-slate-500">Alokasi:</span><b class="text-emerald-700">${stallLabel} (${b.timeDisplay || b.slot})</b></div>
+              <div class="flex justify-between"><span class="text-slate-500">Waktu Tiba:</span><span class="text-slate-700 font-bold">${b.checkInTime || 'Tercatat Hadir'}</span></div>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[10px] text-sky-700 font-medium italic">Panggilan suara kedatangan telah diputar ulang.</span>
+              <button type="button" onclick="resumeScannerCapture()" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-[2px] font-bold text-[11px] cursor-pointer">
+                Scan Berikutnya
+              </button>
+            </div>
+          </div>
+        `;
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+        setTimeout(() => { isScanProcessing = false; }, 3000);
+        return;
+      }
+
+      // Jika sedang In Progress atau Done
+      if (b.status === 'In Progress' || b.status === 'Done') {
+        playScanBeep(true);
+        const labelStatus = b.status === 'In Progress' ? 'SEDANG DIKERJAKAN TEKNISI' : 'SERVIS SELESAI';
+        resArea.innerHTML = `
+          <div class="bg-slate-50 border border-slate-300 p-3 rounded-[3px] text-slate-800 text-xs space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full ${b.status === 'In Progress' ? 'bg-cyan-500' : 'bg-emerald-500'}"></span>
+              <span class="font-black uppercase text-xs text-slate-900">STATUS: ${labelStatus}</span>
+            </div>
+            <div class="bg-white p-2.5 rounded border border-slate-200 text-xs space-y-1">
+              <div class="flex justify-between"><span class="text-slate-500">No. Antrian:</span><b class="text-base text-slate-900 font-mono">${b.queueNumber}</b></div>
+              <div class="flex justify-between"><span class="text-slate-500">Pemilik & Plat:</span><b class="text-slate-900">${b.name} (${b.plate})</b></div>
+              <div class="flex justify-between"><span class="text-slate-500">Stall:</span><b class="text-slate-900">${stallLabel}</b></div>
+            </div>
+            <div class="flex justify-end pt-1">
+              <button type="button" onclick="resumeScannerCapture()" class="px-3 py-1 bg-slate-800 hover:bg-black text-white rounded-[2px] font-bold text-[11px] cursor-pointer">
+                Scan Tiket Lain
+              </button>
+            </div>
+          </div>
+        `;
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+        setTimeout(() => { isScanProcessing = false; }, 3000);
+        return;
+      }
+
+      // ==============================================================
+      // PROSES OTOMATIS CHECK-IN (STATUS DAFTAR BOOKING = CHECK IN)
+      // ==============================================================
+      playScanBeep(true);
+      const nowTimeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+      bookings[idx].status = 'Checked In';
+      bookings[idx].checkInTime = nowTimeStr;
+      saveBookings(bookings);
+      syncStatusToGoogleSheet(b.id, 'Checked In');
+      refreshAllBoards();
+
+      // Putar Panggilan Suara Kedatangan
+      announceVoice(`Nomor antrian ${b.queueNumber}, dengan plat ${b.plate}, telah tiba di service center. Alokasi ${stallLabel}.`, b);
+
+      resArea.innerHTML = `
+        <div class="bg-emerald-50 border-2 border-emerald-500 p-3.5 rounded-[3px] text-emerald-950 text-xs space-y-2.5">
+          <div class="flex items-center justify-between pb-1.5 border-b border-emerald-200">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+              <span class="font-black text-sm uppercase text-emerald-800">CHECK-IN BERHASIL!</span>
+            </div>
+            <span class="px-2 py-0.5 bg-emerald-600 text-white font-mono font-black text-[11px] rounded-[2px]">CHECKED IN</span>
+          </div>
+
+          <div class="bg-white p-2.5 rounded border border-emerald-200 text-xs space-y-1.5 shadow-xs">
+            <div class="flex justify-between items-center pb-1 border-b border-dashed border-slate-200">
+              <span class="text-slate-500">No. Antrian:</span>
+              <span class="text-lg font-mono font-black text-slate-900">${b.queueNumber}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500">Nama Konsumen:</span>
+              <span class="font-black text-slate-900">${b.name}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500">Plat Motor:</span>
+              <span class="font-mono font-black text-slate-900">${b.plate}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500">Alokasi Stall:</span>
+              <span class="font-bold text-emerald-700">${stallLabel}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500">Jadwal Booking:</span>
+              <span class="font-medium text-slate-800">${formatDateIndo(b.date, true)} (${b.timeDisplay || b.slot})</span>
+            </div>
+            <div class="flex justify-between items-center pt-1 border-t border-dashed border-slate-200 text-[11px]">
+              <span class="text-slate-500">Waktu Check-In:</span>
+              <span class="font-bold text-emerald-700">${nowTimeStr}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <p class="text-[10px] text-emerald-700 font-medium italic">Data tersimpan & panggilan suara otomatis diputar.</p>
+            <button type="button" onclick="resumeScannerCapture()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-[2px] font-black text-xs cursor-pointer shadow-xs transition flex items-center gap-1">
+              <i data-lucide="scan" class="w-3.5 h-3.5"></i>
+              <span>Scan Tiket Berikutnya</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+
+      const manualInput = document.getElementById('barcodeManualInput');
+      if (manualInput) manualInput.value = '';
+
+      setTimeout(() => {
+        isScanProcessing = false;
+      }, 3000);
+    }
+
+    function resumeScannerCapture() {
+      const resArea = document.getElementById('barcodeScanResultArea');
+      if (resArea) {
+        resArea.innerHTML = '';
+        resArea.classList.add('hidden');
+      }
+      const inputManual = document.getElementById('barcodeManualInput');
+      if (inputManual) {
+        inputManual.value = '';
+        inputManual.focus();
+      }
+      isScanProcessing = false;
+      updateScannerStatus('Siap scan tiket berikutnya...', true);
     }
 
     // Dengarkan shortcut tombol screenshot / simpan saat modal tiket aktif (Win+Shift+S / PrintScreen / Ctrl+S)
