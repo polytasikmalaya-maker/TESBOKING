@@ -74,6 +74,8 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- MQTT.js for Realtime Cross-Device Audio & Data Sync (HP -> TV Monitor) -->
   <script src="https://unpkg.com/mqtt@5.3.5/dist/mqtt.min.js"></script>
+  <!-- html2canvas for Screenshot E-Ticket Feature -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -916,9 +918,6 @@
               <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
                 Sistem Booking dan Monitoring EV
               </h1>
-              <p class="text-xs sm:text-sm text-red-100 mt-1 max-w-xl">
-                Silakan pilih menu layanan yang ingin Anda buka.
-              </p>
             </div>
           </div>
         </div>
@@ -926,11 +925,6 @@
         <!-- Grid 4 Menu Pilihan Utama (1 Kolom di HP, 2 atau 4 Kolom di Laptop) -->
         <div class="p-3 sm:p-6 lg:p-8 flex-1">
           <div class="w-full">
-            <div class="text-left mb-4">
-              <span class="text-xs font-black uppercase tracking-wider text-red-100 drop-shadow">PILIHAN AKSES SISTEM</span>
-              <h2 class="text-xl sm:text-2xl font-black text-white mt-0.5 drop-shadow">Silakan Pilih Menu</h2>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
               
               <!-- MENU 1: KONSUMEN -->
@@ -2271,14 +2265,14 @@
   <!-- MODAL TIKET DIGITAL (POPUP E-TICKET SETELAH BOOKING)            -->
   <!-- ============================================================== -->
   <div id="ticketSuccessModal" onclick="if(event.target === this) closeTicketModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-2 hidden" style="z-index: 99999 !important;">
-    <div class="bg-white border border-slate-200 w-full max-w-sm p-5 shadow-2xl text-center relative rounded-[3px]">
+    <div id="ticketModalCard" class="bg-white border border-slate-200 w-full max-w-sm p-5 shadow-2xl text-center relative rounded-[3px]">
       
       <div class="w-12 h-1 bg-red-600 mx-auto mb-3 rounded-full"></div>
 
       <h3 class="text-lg font-black text-slate-900 uppercase tracking-wide">BOOKING BERHASIL!</h3>
       <p class="text-xs text-slate-600 font-medium mt-0.5">Tunjukkan e-tiket ini kepada Service Advisor saat tiba.</p>
 
-      <div class="bg-slate-50 border border-slate-200 rounded-[3px] p-3.5 my-3 text-left space-y-1.5 relative text-xs">
+      <div id="ticketCardToCapture" class="bg-slate-50 border border-slate-200 rounded-[3px] p-3.5 my-3 text-left space-y-1.5 relative text-xs">
         <div class="flex items-center justify-between pb-2 border-b border-dashed border-slate-200">
           <div>
             <span class="text-[9px] text-slate-500 uppercase font-bold">KODE BOOKING</span>
@@ -2331,8 +2325,12 @@
         </div>
       </div>
 
-      <div class="mt-4">
-        <button type="button" onclick="closeTicketModal();" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
+      <div class="mt-4 flex gap-2">
+        <button type="button" onclick="downloadTicketScreenshot()" id="btnScreenshotTicket" class="flex-1 py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center gap-1.5">
+          <i data-lucide="camera" class="w-4 h-4 text-red-500"></i>
+          <span>Screenshot</span>
+        </button>
+        <button type="button" onclick="closeTicketModal();" class="flex-1 py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
           <span>Tutup</span>
         </button>
       </div>
@@ -2504,7 +2502,7 @@
     const GOOGLE_SPREADSHEET_ID = '1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww';
     const GOOGLE_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762';
     const GAS_URL_STORAGE_KEY = 'POLYTRON_GAS_WEBAPP_URL';
-    const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbzPNDszqAYl0u5YQJH6AdYWRBxjG79i6NVR03ex01WXyJrQl13mDOcflM1B2Jin_hs1jA/exec';
+    const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyBCztuCRN4e3CzDZOC3Q3zbNSVzb9Pbx88VWQPsoKcPfQsSC10R00pjNm_NmstrBgYqQ/exec';
     
     // Auto-update cached URL jika masih tersimpan script lama
     try {
@@ -2787,6 +2785,29 @@
       return null;
     }
 
+    function isStallBreak(slotTime, stall) {
+      if (!slotTime || !stall) return false;
+      const clean = normalizeSlotString(slotTime, 'stall1');
+      if (isSameStall(stall, 'stall1') && clean === '12.30') return true;
+      if (isSameStall(stall, 'stall2') && clean === '13.30') return true;
+      return false;
+    }
+
+    function getNextWorkingSlot(slotTime, stall) {
+      let cur = slotTime;
+      while (cur) {
+        const next = getNextRegularSlot(cur);
+        if (!next) return null;
+        // Jika slot berikutnya adalah waktu istirahat (break) pada stall ini, lewati otomatis ke slot kerja berikutnya
+        if (stall && isStallBreak(next, stall)) {
+          cur = next;
+          continue;
+        }
+        return next;
+      }
+      return null;
+    }
+
     function isBookingInSlot(b, slotTime) {
       if (!b || !slotTime) return false;
       if (isSameSlot(b.slot, slotTime)) return true;
@@ -2794,12 +2815,12 @@
       if (b.tertiarySlot && isSameSlot(b.tertiarySlot, slotTime)) return true;
       const hours = parseInt(b.estimatedHours || (b.level === 'Level 3' ? 3 : (b.level === 'Level 2' ? 2 : 1)), 10);
       if (hours >= 2) {
-        const s2 = getNextRegularSlot(b.slot);
+        const s2 = getNextWorkingSlot(b.slot, b.stall);
         if (s2 && isSameSlot(s2, slotTime)) return true;
       }
       if (hours >= 3) {
-        const s2 = getNextRegularSlot(b.slot);
-        const s3 = s2 ? getNextRegularSlot(s2) : null;
+        const s2 = getNextWorkingSlot(b.slot, b.stall);
+        const s3 = s2 ? getNextWorkingSlot(s2, b.stall) : null;
         if (s3 && isSameSlot(s3, slotTime)) return true;
       }
       return false;
@@ -5433,7 +5454,8 @@
           b.status !== 'Batal'
         );
 
-        const nextTime = getNextRegularSlot(selectedBookingSlot);
+        // Lewati jam istirahat teknisi secara otomatis
+        const nextTime = getNextWorkingSlot(selectedBookingSlot, stall);
         const maxLimit = isSat ? '11.30' : '14.30';
 
         // Cek apakah slot kedua valid dan dalam jam operasional
@@ -5442,18 +5464,15 @@
           return;
         }
 
-        const isBreakNext = (stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30');
         const bookedNext = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
         const isPassedNext = isSlotTimePassed(nextTime, bookingDate);
 
-        if (isBreakNext || bookedNext || isPassedNext) {
+        if (bookedNext || isPassedNext) {
           let reasonText = '';
-          if (isBreakNext) {
-            reasonText = `slot jam berikutnya (${nextTime} WIB) adalah jam istirahat teknisi`;
-          } else if (bookedNext) {
-            reasonText = `slot jam berikutnya (${nextTime} WIB) sudah dipesan oleh pelanggan lain`;
+          if (bookedNext) {
+            reasonText = `slot jam kerja berikutnya (${nextTime} WIB) sudah dipesan oleh pelanggan lain`;
           } else {
-            reasonText = `slot jam berikutnya (${nextTime} WIB) sudah terlewati untuk hari ini`;
+            reasonText = `slot jam kerja berikutnya (${nextTime} WIB) sudah terlewati untuk hari ini`;
           }
           openLevel2AlertModal(selectedBookingSlot, reasonText, reqHours);
           return;
@@ -5462,24 +5481,21 @@
         selectedBookingSecondarySlot = nextTime;
 
         if (reqHours >= 3) {
-          const thirdTime = getNextRegularSlot(nextTime);
+          const thirdTime = getNextWorkingSlot(nextTime, stall);
           if (!thirdTime || thirdTime > maxLimit) {
-            openLevel2AlertModal(selectedBookingSlot, `slot ke-3 (${thirdTime || 'setelah ' + nextTime}) sudah mencapai batas jam operasional servis (${maxLimit} WIB)`, reqHours);
+            openLevel2AlertModal(selectedBookingSlot, `slot kerja ke-3 (${thirdTime || 'setelah ' + nextTime}) sudah mencapai batas jam operasional servis (${maxLimit} WIB)`, reqHours);
             return;
           }
 
-          const isBreakThird = (stall === 'stall1' && thirdTime === '12.30') || (stall === 'stall2' && thirdTime === '13.30');
           const bookedThird = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, thirdTime));
           const isPassedThird = isSlotTimePassed(thirdTime, bookingDate);
 
-          if (isBreakThird || bookedThird || isPassedThird) {
+          if (bookedThird || isPassedThird) {
             let reasonText = '';
-            if (isBreakThird) {
-              reasonText = `slot jam ke-3 (${thirdTime} WIB) adalah jam istirahat teknisi`;
-            } else if (bookedThird) {
-              reasonText = `slot jam ke-3 (${thirdTime} WIB) sudah dipesan oleh pelanggan lain`;
+            if (bookedThird) {
+              reasonText = `slot jam kerja ke-3 (${thirdTime} WIB) sudah dipesan oleh pelanggan lain`;
             } else {
-              reasonText = `slot jam ke-3 (${thirdTime} WIB) sudah terlewati untuk hari ini`;
+              reasonText = `slot jam kerja ke-3 (${thirdTime} WIB) sudah terlewati untuk hari ini`;
             }
             openLevel2AlertModal(selectedBookingSlot, reasonText, reqHours);
             return;
@@ -5628,28 +5644,26 @@
 
       for (let i = 0; i < selectableStartHours.length; i++) {
         const t1 = selectableStartHours[i];
-        const isBreak1 = (stall === 'stall1' && t1 === '12.30') || (stall === 'stall2' && t1 === '13.30');
+        if (isStallBreak(t1, stall)) continue; // Jam mulai tidak boleh di waktu istirahat
         const isPassed1 = isSlotTimePassed(t1, bookingDate);
         const b1 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t1));
-        if (isBreak1 || isPassed1 || b1) continue;
+        if (isPassed1 || b1) continue;
 
         if (targetHours >= 2) {
-          const t2 = getNextRegularSlot(t1);
+          const t2 = getNextWorkingSlot(t1, stall); // Otomatis lewati jam istirahat
           if (!t2 || t2 > maxLimit) continue;
-          const isBreak2 = (stall === 'stall1' && t2 === '12.30') || (stall === 'stall2' && t2 === '13.30');
           const isPassed2 = isSlotTimePassed(t2, bookingDate);
           const b2 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t2));
-          if (isBreak2 || isPassed2 || b2) continue;
+          if (isPassed2 || b2) continue;
 
           if (targetHours >= 3) {
-            const t3 = getNextRegularSlot(t2);
+            const t3 = getNextWorkingSlot(t2, stall); // Otomatis lewati jam istirahat
             if (!t3 || t3 > maxLimit) continue;
-            const isBreak3 = (stall === 'stall1' && t3 === '12.30') || (stall === 'stall2' && t3 === '13.30');
             const isPassed3 = isSlotTimePassed(t3, bookingDate);
             const b3 = activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, t3));
-            if (isBreak3 || isPassed3 || b3) continue;
+            if (isPassed3 || b3) continue;
 
-            // Ketemu 3 jam berurutan yang kosong!
+            // Ketemu 3 jam kerja yang kosong!
             selectedBookingSlot = t1;
             selectedBookingSecondarySlot = t2;
             selectedBookingTertiarySlot = t3;
@@ -5657,11 +5671,11 @@
             if (badge) badge.innerText = `${t1} - ${getNextHour(t3)} WIB (3 Jam)`;
             renderBookingSlotPicker();
             updateBookingSummary();
-            showPopup(`Sistem berhasil memilihkan 3 jam berurutan: ${t1} s/d ${getNextHour(t3)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '3 Jam Berurutan Terpilih', 'success');
+            showPopup(`Sistem berhasil memilihkan 3 jam kerja: ${t1} s/d ${getNextHour(t3)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '3 Jam Terpilih', 'success');
             return true;
           }
 
-          // Ketemu 2 jam berurutan yang kosong!
+          // Ketemu 2 jam kerja yang kosong!
           selectedBookingSlot = t1;
           selectedBookingSecondarySlot = t2;
           selectedBookingTertiarySlot = null;
@@ -5669,12 +5683,12 @@
           if (badge) badge.innerText = `${t1} - ${getNextHour(t2)} WIB (2 Jam)`;
           renderBookingSlotPicker();
           updateBookingSummary();
-          showPopup(`Sistem berhasil memilihkan 2 jam berurutan: ${t1} s/d ${getNextHour(t2)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '2 Jam Berurutan Terpilih', 'success');
+          showPopup(`Sistem berhasil memilihkan 2 jam kerja: ${t1} s/d ${getNextHour(t2)} WIB pada ${stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2'}.`, '2 Jam Terpilih', 'success');
           return true;
         }
       }
 
-      showPopup(`Tidak ditemukan ${targetHours} jam berurutan yang kosong pada stall ini. Silakan coba ganti ke stall lain atau pilih tanggal besok.`, 'Tidak Ada Slot Berurutan', 'warning');
+      showPopup(`Tidak ditemukan ${targetHours} jam kerja yang kosong pada stall ini. Silakan coba ganti ke stall lain atau pilih tanggal besok.`, 'Tidak Ada Slot Kosong', 'warning');
       return false;
     }
 
@@ -5699,13 +5713,13 @@
       }
 
       if (reqHours === 2) {
-        const nextTime = getNextRegularSlot(time);
+        // Otomatis pasangkan dengan jam kerja berikutnya (lewati waktu istirahat)
+        const nextTime = getNextWorkingSlot(time, stall);
         const isBeyondOps = !nextTime || nextTime > maxLimit;
-        const isBreakNext = nextTime && ((stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30'));
         const bookedNext = nextTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
         const isPassedNext = nextTime && isSlotTimePassed(nextTime, bookingDate);
 
-        if (nextTime && !isBeyondOps && !isBreakNext && !bookedNext && !isPassedNext) {
+        if (nextTime && !isBeyondOps && !bookedNext && !isPassedNext) {
           selectedBookingSlot = time;
           selectedBookingSecondarySlot = nextTime;
           selectedBookingTertiarySlot = null;
@@ -5724,13 +5738,11 @@
 
           let reason = '';
           if (isBeyondOps) {
-            reason = `slot jam berikutnya (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
-          } else if (isBreakNext) {
-            reason = `slot jam berikutnya (${nextTime} WIB) adalah jam istirahat teknisi`;
+            reason = `slot jam kerja berikutnya (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
           } else if (bookedNext) {
-            reason = `slot jam berikutnya (${nextTime} WIB) sudah dipesan antrian lain`;
+            reason = `slot jam kerja berikutnya (${nextTime} WIB) sudah dipesan antrian lain`;
           } else {
-            reason = `slot jam berikutnya (${nextTime} WIB) sudah terlewati untuk hari ini`;
+            reason = `slot jam kerja berikutnya (${nextTime} WIB) sudah terlewati untuk hari ini`;
           }
           openLevel2AlertModal(time, reason, 2);
         }
@@ -5738,21 +5750,20 @@
       }
 
       if (reqHours === 3) {
-        const nextTime = getNextRegularSlot(time);
-        const thirdTime = nextTime ? getNextRegularSlot(nextTime) : null;
+        // Otomatis pasangkan dengan 3 jam kerja (lewati waktu istirahat)
+        const nextTime = getNextWorkingSlot(time, stall);
+        const thirdTime = nextTime ? getNextWorkingSlot(nextTime, stall) : null;
 
         const isBeyondOps2 = !nextTime || nextTime > maxLimit;
-        const isBreak2 = nextTime && ((stall === 'stall1' && nextTime === '12.30') || (stall === 'stall2' && nextTime === '13.30'));
         const booked2 = nextTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, nextTime));
         const isPassed2 = nextTime && isSlotTimePassed(nextTime, bookingDate);
 
         const isBeyondOps3 = !thirdTime || thirdTime > maxLimit;
-        const isBreak3 = thirdTime && ((stall === 'stall1' && thirdTime === '12.30') || (stall === 'stall2' && thirdTime === '13.30'));
         const booked3 = thirdTime && activeBookings.find(b => isSameStall(b.stall, stall) && isBookingInSlot(b, thirdTime));
         const isPassed3 = thirdTime && isSlotTimePassed(thirdTime, bookingDate);
 
-        const isSlot2Ok = nextTime && !isBeyondOps2 && !isBreak2 && !booked2 && !isPassed2;
-        const isSlot3Ok = thirdTime && !isBeyondOps3 && !isBreak3 && !booked3 && !isPassed3;
+        const isSlot2Ok = nextTime && !isBeyondOps2 && !booked2 && !isPassed2;
+        const isSlot3Ok = thirdTime && !isBeyondOps3 && !booked3 && !isPassed3;
 
         if (isSlot2Ok && isSlot3Ok) {
           selectedBookingSlot = time;
@@ -5773,15 +5784,13 @@
 
           let reason = '';
           if (!isSlot2Ok) {
-            if (isBeyondOps2) reason = `slot jam ke-2 (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
-            else if (isBreak2) reason = `slot jam ke-2 (${nextTime} WIB) adalah jam istirahat teknisi`;
-            else if (booked2) reason = `slot jam ke-2 (${nextTime} WIB) sudah dipesan antrian lain`;
-            else reason = `slot jam ke-2 (${nextTime} WIB) sudah terlewati untuk hari ini`;
+            if (isBeyondOps2) reason = `slot jam kerja ke-2 (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+            else if (booked2) reason = `slot jam kerja ke-2 (${nextTime} WIB) sudah dipesan antrian lain`;
+            else reason = `slot jam kerja ke-2 (${nextTime} WIB) sudah terlewati untuk hari ini`;
           } else {
-            if (isBeyondOps3) reason = `slot jam ke-3 (${thirdTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
-            else if (isBreak3) reason = `slot jam ke-3 (${thirdTime} WIB) adalah jam istirahat teknisi`;
-            else if (booked3) reason = `slot jam ke-3 (${thirdTime} WIB) sudah dipesan antrian lain`;
-            else reason = `slot jam ke-3 (${thirdTime} WIB) sudah terlewati untuk hari ini`;
+            if (isBeyondOps3) reason = `slot jam kerja ke-3 (${thirdTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+            else if (booked3) reason = `slot jam kerja ke-3 (${thirdTime} WIB) sudah dipesan antrian lain`;
+            else reason = `slot jam kerja ke-3 (${thirdTime} WIB) sudah terlewati untuk hari ini`;
           }
           openLevel2AlertModal(time, reason, 3);
         }
@@ -6310,6 +6319,209 @@
     }
 
     // ==============================================================
+    // SCREENSHOT E-TIKET DIGITAL BOOKING
+    // ==============================================================
+    function downloadTicketScreenshot() {
+      const btn = document.getElementById('btnScreenshotTicket');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1"></span><span>Menyimpan...</span>`;
+      }
+
+      const bookingCode = document.getElementById('ticketCode')?.innerText || 'PLY-BOOKING';
+      const queueNumber = document.getElementById('ticketQueueNumber')?.innerText || 'ANTRIAN';
+      const filename = `Tiket_${queueNumber}_${bookingCode}.png`;
+
+      function finish(msg) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalHtml;
+          if (window.lucide && lucide.createIcons) lucide.createIcons();
+        }
+        if (msg) {
+          showPopup(msg, 'Screenshot Berhasil', 'success');
+        }
+      }
+
+      function triggerDownloadBlob(blob) {
+        if (!blob) {
+          fallbackCanvasScreenshot(bookingCode, queueNumber, finish);
+          return;
+        }
+        try {
+          if (navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: 'image/png' })] })) {
+            navigator.share({
+              files: [new File([blob], filename, { type: 'image/png' })],
+              title: `Tiket Servis Polytron EV - ${queueNumber}`,
+              text: `E-Tiket Booking Servis Polytron EV (${queueNumber} - ${bookingCode})`
+            }).then(function() {
+              finish();
+            }).catch(function() {
+              saveBlobAsFile(blob, filename);
+              finish('E-tiket berhasil disimpan ke perangkat Anda.');
+            });
+            return;
+          }
+        } catch(e) {}
+        saveBlobAsFile(blob, filename);
+        finish('E-tiket berhasil disimpan ke perangkat Anda.');
+      }
+
+      const ticketCard = document.getElementById('ticketModalCard');
+      if (typeof html2canvas !== 'undefined' && ticketCard) {
+        html2canvas(ticketCard, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          ignoreElements: function(el) {
+            // Abaikan tombol saat screenshot
+            return el.id === 'btnScreenshotTicket' || el.tagName === 'BUTTON';
+          }
+        }).then(function(canvas) {
+          canvas.toBlob(function(blob) {
+            triggerDownloadBlob(blob);
+          }, 'image/png');
+        }).catch(function(err) {
+          console.warn('html2canvas capture error, falling back to canvas draw:', err);
+          fallbackCanvasScreenshot(bookingCode, queueNumber, finish);
+        });
+      } else {
+        fallbackCanvasScreenshot(bookingCode, queueNumber, finish);
+      }
+    }
+
+    function saveBlobAsFile(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function() {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 500);
+    }
+
+    function fallbackCanvasScreenshot(bookingCode, queueNumber, finish) {
+      try {
+        const site = document.getElementById('ticketSite')?.innerText || '-';
+        const vehicle = document.getElementById('ticketVehicle')?.innerText || 'Polytron Fox-R';
+        const plate = document.getElementById('ticketPlate')?.innerText || '-';
+        const stall = document.getElementById('ticketStall')?.innerText || 'Stall EV';
+        const time = document.getElementById('ticketTime')?.innerText || '-';
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 600;
+        canvas.height = 760;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 600, 760);
+
+        // Red top accent
+        ctx.fillStyle = '#dc2626';
+        ctx.fillRect(0, 0, 600, 16);
+
+        // Header Title
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 26px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('POLYTRON SERVICE CENTER', 300, 60);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '500 14px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('E-Tiket Booking Layanan Servis EV', 300, 85);
+
+        // Card Container
+        ctx.fillStyle = '#f8fafc';
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(30, 110, 540, 580);
+        ctx.fillRect(30, 110, 540, 580);
+
+        // Queue Number & Code
+        ctx.fillStyle = '#64748b';
+        ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('KODE BOOKING', 50, 145);
+        ctx.textAlign = 'right';
+        ctx.fillText('NO. ANTRIAN', 550, 145);
+
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 18px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(bookingCode, 50, 172);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '900 32px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(queueNumber, 550, 175);
+
+        // Dashed line
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.setLineDash([6, 6]);
+        ctx.beginPath();
+        ctx.moveTo(50, 195);
+        ctx.lineTo(550, 195);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Details List
+        const items = [
+          ['Lokasi Cabang', site],
+          ['Kendaraan', vehicle],
+          ['Plat Nomor', plate],
+          ['Alokasi Stall', stall],
+          ['Waktu Servis', time]
+        ];
+
+        let startY = 240;
+        ctx.font = '14px "Plus Jakarta Sans", sans-serif';
+        items.forEach(([lbl, val]) => {
+          ctx.fillStyle = '#475569';
+          ctx.textAlign = 'left';
+          ctx.fillText(lbl + ':', 50, startY);
+
+          ctx.fillStyle = lbl === 'Waktu Servis' ? '#047857' : '#0f172a';
+          ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText(val, 550, startY);
+          ctx.font = '14px "Plus Jakarta Sans", sans-serif';
+          startY += 42;
+        });
+
+        // Verification Footer
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '12px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Tunjukkan bukti e-tiket ini kepada Service Advisor saat tiba di bengkel.', 300, 520);
+        ctx.fillText('Terima kasih telah mempercayakan servis Polytron EV Anda.', 300, 545);
+
+        // Barcode decorative lines
+        ctx.fillStyle = '#0f172a';
+        for (let x = 160; x < 440; x += 6) {
+          const w = (x % 12 === 0) ? 3 : ((x % 18 === 0) ? 4 : 1.5);
+          ctx.fillRect(x, 580, w, 60);
+        }
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = 'bold 11px monospace';
+        ctx.fillText(bookingCode, 300, 660);
+
+        canvas.toBlob(function(blob) {
+          saveBlobAsFile(blob, `Tiket_${queueNumber}_${bookingCode}.png`);
+          if (finish) finish('E-tiket berhasil disimpan ke perangkat Anda.');
+        }, 'image/png');
+      } catch(err) {
+        console.error('Fallback canvas error:', err);
+        if (finish) finish();
+      }
+    }
+
+    // ==============================================================
     // POPUP DIALOG IN-APP (PENGGANTI NATIVE ALERT BROWSER)
     // ==============================================================
     function showPopup(message, title = 'Perhatian', type = 'warning') {
@@ -6605,7 +6817,7 @@
         const maxLimit = isSat ? '11.30' : '14.30';
 
         if (estimatedHours >= 2) {
-          secondarySlot = getNextRegularSlot(currentModalTarget.slot);
+          secondarySlot = getNextWorkingSlot(currentModalTarget.slot, currentModalTarget.stall);
           if (!secondarySlot || secondarySlot > maxLimit) {
             showPopup(
               `Kerusakan ini membutuhkan durasi ${estimatedHours} jam, namun slot berikutnya melebihi batas jam operasional servis (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki durasi berurutan cukup!`,
@@ -6633,7 +6845,7 @@
         }
 
         if (estimatedHours >= 3) {
-          tertiarySlot = secondarySlot ? getNextRegularSlot(secondarySlot) : null;
+          tertiarySlot = secondarySlot ? getNextWorkingSlot(secondarySlot, currentModalTarget.stall) : null;
           if (!tertiarySlot || tertiarySlot > maxLimit) {
             showPopup(
               `Kerusakan ini membutuhkan durasi 3 jam, namun slot ke-3 melebihi batas jam operasional servis (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki 3 jam berurutan!`,

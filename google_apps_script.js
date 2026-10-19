@@ -13,7 +13,7 @@
  *    -> WAJIB PILIH: "Siapa saja" (Anyone) !! Jangan pilih "Hanya saya" atau organisasi.
  * 5. Klik "Terapkan" (Deploy).
  * 6. URL Web App Aktif (Paten):
- *    https://script.google.com/macros/s/AKfycbzPNDszqAYl0u5YQJH6AdYWRBxjG79i6NVR03ex01WXyJrQl13mDOcflM1B2Jin_hs1jA/exec
+ *    https://script.google.com/macros/s/AKfycbyBCztuCRN4e3CzDZOC3Q3zbNSVzb9Pbx88VWQPsoKcPfQsSC10R00pjNm_NmstrBgYqQ/exec
  * 
  * CARA SETUP PERTAMA KALI:
  * 1. Buka spreadsheet: https://docs.google.com/spreadsheets/d/1JmAKxJEG2TGkx2P9piXMijwhwyYbX16aVoYn4rsDcww/edit?gid=1701714762#gid=1701714762
@@ -96,15 +96,15 @@ function initDatabase() {
   } else {
     sheetSites.clear();
   }
-  const siteHeaders = ['SiteID', 'KODE', 'NamaCabang', 'Kota', 'Alamat', 'Telepon'];
+  const siteHeaders = ['SiteID', 'KODE', 'NamaCabang', 'Kota', 'Alamat', 'Telepon', 'HariKerja'];
   const siteData = [
-    ['tasikmalaya', 'TSM', 'Polytron SC Tasikmalaya', 'Tasikmalaya', 'Jl. KHZ. Mustofa No. 280', '(0265) 332840'],
-    ['bandung', 'BDG', 'Polytron SC Bandung', 'Bandung', 'Jl. Soekarno Hatta No. 438', '(022) 5201415'],
-    ['cirebon', 'CRB', 'Polytron SC Cirebon', 'Cirebon', 'Jl. Brigjen Dharsono No. 12', '(0231) 246810'],
-    ['jakarta-barat', 'JKT', 'Polytron SC Jakarta Barat', 'Jakarta Barat', 'Jl. Daan Mogot KM 11 No. 8', '(021) 5439876'],
-    ['semarang', 'SMG', 'Polytron SC Semarang', 'Semarang', 'Jl. MT Haryono No. 712', '(024) 8412345'],
-    ['kudus', 'KDS', 'Polytron SC Kudus (Pusat EV)', 'Kudus', 'Jl. AKBP R. Agil Kusumadya', '(0291) 431234'],
-    ['surabaya', 'SBY', 'Polytron SC Surabaya', 'Surabaya', 'Jl. Rungkut Industri IV No. 5', '(031) 8439000']
+    ['tasikmalaya', 'TSM', 'Polytron SC Tasikmalaya', 'Tasikmalaya', 'Jl. KHZ. Mustofa No. 280', '(0265) 332840', '1,2,3,4,5,6'],
+    ['bandung', 'BDG', 'Polytron SC Bandung', 'Bandung', 'Jl. Soekarno Hatta No. 438', '(022) 5201415', '1,2,3,4,5,6'],
+    ['cirebon', 'CRB', 'Polytron SC Cirebon', 'Cirebon', 'Jl. Brigjen Dharsono No. 12', '(0231) 246810', '1,2,3,4,5,6'],
+    ['jakarta-barat', 'JKT', 'Polytron SC Jakarta Barat', 'Jakarta Barat', 'Jl. Daan Mogot KM 11 No. 8', '(021) 5439876', '1,2,3,4,5,6'],
+    ['semarang', 'SMG', 'Polytron SC Semarang', 'Semarang', 'Jl. MT Haryono No. 712', '(024) 8412345', '1,2,3,4,5,6'],
+    ['kudus', 'KDS', 'Polytron SC Kudus (Pusat EV)', 'Kudus', 'Jl. AKBP R. Agil Kusumadya', '(0291) 431234', '1,2,3,4,5,6,0'],
+    ['surabaya', 'SBY', 'Polytron SC Surabaya', 'Surabaya', 'Jl. Rungkut Industri IV No. 5', '(031) 8439000', '1,2,3,4,5,6']
   ];
   sheetSites.getRange(1, 1, 1, siteHeaders.length).setValues([siteHeaders])
     .setBackground('#0f172a').setFontColor('#ffffff').setFontWeight('bold');
@@ -176,7 +176,28 @@ function initDatabase() {
   sheetParts.setFrozenRows(1);
   sheetParts.autoResizeColumns(1, partHeaders.length);
 
-  Logger.log('✅ DATABASE POLYTRON BERHASIL DIBUAT DENGAN LENGKAP (MASTER SITES + KODE & SHEET PART)!');
+  // E. SETUP SHEET MASTER TYPE / MODEL MOTOR
+  let sheetTypes = ss.getSheetByName('Master_Type');
+  if (!sheetTypes) {
+    sheetTypes = ss.insertSheet('Master_Type');
+  } else {
+    sheetTypes.clear();
+  }
+  const typeHeaders = ['ID', 'ModelMotor', 'Tipe', 'Deskripsi'];
+  const typeData = [
+    ['MOD-01', 'Polytron Fox-R', 'Electric Scooter', 'Motor Listrik 3000W'],
+    ['MOD-02', 'Polytron Fox-S', 'Electric Scooter', 'Motor Listrik 3000W Lite'],
+    ['MOD-03', 'Polytron Fox-500', 'Electric Maxi Scooter', 'Motor Listrik 5000W Flagship'],
+    ['MOD-04', 'Polytron T-Rex', 'Electric Super Scooter', 'Motor Listrik Premium'],
+    ['MOD-05', 'Polytron Evo', 'Electric Scooter', 'Motor Listrik Compact']
+  ];
+  sheetTypes.getRange(1, 1, 1, typeHeaders.length).setValues([typeHeaders])
+    .setBackground('#b91c1c').setFontColor('#ffffff').setFontWeight('bold');
+  sheetTypes.getRange(2, 1, typeData.length, typeHeaders.length).setValues(typeData);
+  sheetTypes.setFrozenRows(1);
+  sheetTypes.autoResizeColumns(1, typeHeaders.length);
+
+  Logger.log('✅ DATABASE POLYTRON BERHASIL DIBUAT DENGAN LENGKAP (MASTER SITES + KODE, SHEET PART & MASTER TYPE)!');
 }
 
 // FUNGSI MENGISI 4 DATA SAMPLE ANTRIN (JALANKAN DARI RUN ATAU WEB APP)
@@ -334,6 +355,7 @@ function doGet(e) {
     const code = codeCell ? codeCell.toUpperCase() : cleanName.substring(0, 3).toUpperCase();
     const id = cleanName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     const city = nonEmpty.find(function(str) { return str !== codeCell && str !== nameCell; }) || cleanName;
+    const workDaysCell = nonEmpty.length >= 7 ? nonEmpty[6] : (nonEmpty.find(function(str) { return str !== codeCell && str !== nameCell && str !== city && (/^[0-7,\s-]+$/.test(str) || str.toLowerCase().includes('minggu') || str.toLowerCase().includes('senin')); }) || '');
 
     sitesData.push({
       id: id,
@@ -341,11 +363,12 @@ function doGet(e) {
       name: displayName,
       city: city,
       address: cleanName,
-      phone: '-'
+      phone: '-',
+      workDays: String(workDaysCell || '').trim()
     });
   }
 
-  // BACA SHEET PART (MENDUKUNG SELURUH POSISI KOLOM REALTIME DARI SPREADSHEET)
+  // BACA SHEET PART (MENDUKUNG KOLOM B SEBAGAI KATEGORI ATAU KOLOM D SEBAGAI KATEGORI)
   const sheetParts = ss.getSheetByName('PART');
   const partValues = sheetParts ? sheetParts.getDataRange().getValues() : [];
   const partsData = [];
@@ -353,15 +376,30 @@ function doGet(e) {
     const row = partValues[i];
     const nonEmpty = row.map(function(c) { return String(c || '').trim(); }).filter(function(str) { return str !== ''; });
     if (nonEmpty.length < 3) continue;
-    if (nonEmpty[0].toLowerCase() === 'kode' || nonEmpty[1].toLowerCase() === 'nama part') continue;
+    if (nonEmpty[0].toLowerCase() === 'kode' || nonEmpty[1].toLowerCase() === 'nama part' || nonEmpty[1].toLowerCase() === 'kategori') continue;
 
     const codeCell = nonEmpty.find(function(str) { return str.length >= 2 && str.length <= 4 && /^[A-Z]{2,4}$/i.test(str); }) || nonEmpty[0];
-    const nameCell = nonEmpty.find(function(str) { return str !== codeCell && isNaN(parseFloat(str)); }) || nonEmpty[1];
-    const qtyCell = nonEmpty.find(function(str) { return str !== codeCell && !isNaN(parseFloat(str)); });
-    const catCell = nonEmpty.find(function(str) { return str !== codeCell && str !== nameCell && str !== qtyCell; }) || 'Umum';
+    
+    // Deteksi apakah Kolom B (index 1) adalah Kategori
+    let nameCell = '';
+    let qtyCell = '';
+    let catCell = 'Reguler';
+
+    const col1Lower = nonEmpty[1].toLowerCase();
+    const col1IsCategory = col1Lower === 'express' || col1Lower === 'reguler' || col1Lower.includes('express') || col1Lower.includes('reguler') || (isNaN(parseFloat(nonEmpty[1])) && !isNaN(parseFloat(nonEmpty[3])));
+
+    if (col1IsCategory && nonEmpty.length >= 4) {
+      catCell = nonEmpty[1];
+      nameCell = nonEmpty[2];
+      qtyCell = nonEmpty[3];
+    } else {
+      nameCell = nonEmpty[1];
+      qtyCell = nonEmpty[2];
+      catCell = nonEmpty[3] || 'Reguler';
+    }
 
     const pKode = String(codeCell).trim().toUpperCase();
-    const pQty = qtyCell ? Math.round(parseFloat(qtyCell)) : 0;
+    const pQty = !isNaN(parseFloat(qtyCell)) ? Math.round(parseFloat(qtyCell)) : 0;
 
     if (pKode && nameCell) {
       partsData.push({
@@ -374,11 +412,29 @@ function doGet(e) {
     }
   }
 
+  // BACA MASTER TYPE / MODEL MOTOR (MENDUKUNG SHEET Master_Type / Master_Model)
+  const sheetTypes = ss.getSheetByName('Master_Type') || ss.getSheetByName('Master_Model');
+  const typeValues = sheetTypes ? sheetTypes.getDataRange().getValues() : [];
+  const typesData = [];
+  for (let i = 1; i < typeValues.length; i++) {
+    const row = typeValues[i];
+    const nonEmpty = row.map(function(c) { return String(c || '').trim(); }).filter(function(str) { return str !== ''; });
+    if (nonEmpty.length === 0) continue;
+    if (nonEmpty[0].toLowerCase() === 'id' || nonEmpty[0].toLowerCase() === 'modelmotor' || nonEmpty[0].toLowerCase() === 'model' || nonEmpty[0].toLowerCase() === 'tipe') continue;
+
+    let mName = nonEmpty.length >= 2 && (/^mod-/i.test(nonEmpty[0]) || /^[0-9]+$/.test(nonEmpty[0])) ? nonEmpty[1] : nonEmpty[0];
+    if (mName && typesData.indexOf(mName) === -1) {
+      typesData.push(mName);
+    }
+  }
+
   const response = {
     status: 'success',
     master_kerusakan: masterData,
     sites: sitesData,
     parts: partsData,
+    types: typesData,
+    models: typesData,
     bookings: bookingsData
   };
 
