@@ -1000,7 +1000,7 @@
                   </ul>
                 </div>
                 <div class="mt-3 pt-2 border-t border-slate-100">
-                  <button type="button" class="w-full py-1.5 sm:py-2 px-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
+                  <button type="button" onclick="switchRole('konsumen')" class="w-full py-1.5 sm:py-2 px-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
                     <span>Buka Booking</span>
                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                   </button>
@@ -2430,7 +2430,17 @@
     const MASTER_SITES_STORAGE_KEY = 'POLYTRON_MASTER_SITES_CACHE_V2';
     const MASTER_PARTS_STORAGE_KEY = 'POLYTRON_MASTER_PARTS_CACHE_V2';
 
-    let SITES = [];
+    const DEFAULT_FALLBACK_SITES = [
+      { id: 'tasik', code: 'TSM', name: 'Polytron SC Tasik', city: 'Tasik', address: 'Jl. Ir. H. Juanda No.29, Tasikmalaya', phone: '081234567890', badge: 'Cabang Resmi', workDays: '1,2,3,4,5,6' },
+      { id: 'bandung-soekarno-hatta', code: 'BDG', name: 'Polytron SC Bandung Soekarno Hatta', city: 'Bandung', address: 'Jl. Soekarno Hatta No.338, Bandung', phone: '081234567891', badge: 'Cabang Resmi', workDays: '1,2,3,4,5,6' },
+      { id: 'bandung-padjajaran', code: 'BDU', name: 'Polytron SC Bandung Padjajaran', city: 'Bandung', address: 'Jl. Padjajaran No.88, Bandung', phone: '081234567892', badge: 'Cabang Resmi', workDays: '1,2,3,4,5,6' },
+      { id: 'cirebon', code: 'CRB', name: 'Polytron SC Cirebon', city: 'Cirebon', address: 'Jl. Brigjen Dharsono No.12, Cirebon', phone: '081234567893', badge: 'Cabang Resmi', workDays: '1,2,3,4,5,6' },
+      { id: 'semarang', code: 'SMG', name: 'Polytron SC Semarang', city: 'Semarang', address: 'Jl. Majapahit No.112, Semarang', phone: '081234567894', badge: 'Cabang Resmi', workDays: '1,2,3,4,5,6' },
+      { id: 'kudus', code: 'KDS', name: 'Polytron SC Kudus', city: 'Kudus', address: 'Jl. Jendral Sudirman No.54, Kudus', phone: '081234567895', badge: 'Kantor Pusat & Servis', workDays: '1,2,3,4,5,6' },
+      { id: 'surabaya-rungkut', code: 'SBY', name: 'Polytron SC Surabaya Rungkut', city: 'Surabaya', address: 'Jl. Raya Rungkut No.27, Surabaya', phone: '081234567896', badge: 'Cabang Resmi', workDays: '1,2,3,4,5,6' }
+    ];
+
+    let SITES = [...DEFAULT_FALLBACK_SITES];
     try {
       const cachedSites = localStorage.getItem(MASTER_SITES_STORAGE_KEY);
       if (cachedSites) {
@@ -3563,6 +3573,13 @@
       if (role === 'konsumen') {
         goToBookingStep(1, false);
         renderBookingSlotPicker();
+        // Otomatis tarik data sheet booking terbaru dari Google Sheet saat membuka menu booking
+        showToast('Menyinkronkan data booking terbaru dari Google Sheet...', 2000);
+        fetchBookingsFromSheet(true).then(bList => {
+          if (bList && bList.length > 0) {
+            showToast(`Data booking terbaru berhasil disinkronkan (${bList.length} data)`, 2000);
+          }
+        });
       }
       if (role === 'part') {
         populatePartSectionSiteDropdown();
@@ -5598,6 +5615,8 @@
 
       if (step === 3) {
         renderBookingSlotPicker();
+        // Pastikan slot di Tahap 3 (Pilih Jam) selalu mengecek data sheet booking terbaru
+        fetchBookingsFromSheet(true);
       }
 
       // Sinkronkan browser history untuk navigasi tombol Back HP fisik / swipe gesture
@@ -5652,15 +5671,48 @@
         ? (currentDamageItem.level === 'Level 3' || currentDamageItem.hours === 3 ? 3 : (currentDamageItem.level === 'Level 2' || currentDamageItem.hours === 2 ? 2 : 1))
         : 1;
 
-      if (reqHours >= 2) {
-        const stall = document.getElementById('bookingStallInput')?.value || 'stall1';
-        const siteId = document.getElementById('bookingSiteInput')?.value || currentSiteId;
-        const allBookings = loadBookings();
-        const activeBookings = allBookings.filter(b => 
-          isSameDate(b.date, bookingDate) && 
-          isSameSite(b.siteId, siteId) && 
-          b.status !== 'Batal'
+      // Cek validitas ketersediaan slot utama (Anti Double-Booking)
+      const stall = selectedBookingService === 'express' ? 'express' : (document.getElementById('bookingStallInput')?.value || 'stall1');
+      const siteId = document.getElementById('bookingSiteInput')?.value || currentSiteId;
+      const siteObj = SITES.find(s => s.id === siteId || isSameSite(s.id, siteId)) || SITES[0];
+      const targetCode = siteObj ? (siteObj.code || getSiteCode(siteObj.id)) : '';
+      const allBookings = loadBookings();
+      const activeBookings = allBookings.filter(b => 
+        isSameDate(b.date, bookingDate) && 
+        (isSameSite(b.siteId, siteId) || (b.siteCode && targetCode && b.siteCode === targetCode)) && 
+        b.status !== 'Batal'
+      );
+
+      let primaryConflict = null;
+      if (selectedBookingService === 'express') {
+        const timeRange = EXPRESS_SLOTS[parseInt(selectedBookingSlot, 10)] || selectedBookingSlot;
+        primaryConflict = activeBookings.find(b => 
+          isSameStall(b.stall, 'express') && 
+          (String(b.slot) === String(selectedBookingSlot) || isSameSlot(b.slot, timeRange.split(' - ')[0]))
         );
+      } else {
+        primaryConflict = activeBookings.find(b => 
+          isSameStall(b.stall, stall) && 
+          isBookingInSlot(b, selectedBookingSlot)
+        );
+      }
+
+      if (primaryConflict) {
+        showPopup(
+          `Mohon maaf, slot jam <b>${selectedBookingService === 'express' ? (EXPRESS_SLOTS[parseInt(selectedBookingSlot, 10)] || selectedBookingSlot) : selectedBookingSlot} WIB</b> sudah dipesan oleh antrian lain (${primaryConflict.queueNumber}). Silakan pilih slot jam yang masih tersedia!`,
+          'Slot Sudah Terisi',
+          'warning'
+        );
+        selectedBookingSlot = null;
+        selectedBookingSecondarySlot = null;
+        selectedBookingTertiarySlot = null;
+        const badge = document.getElementById('selectedSlotBadge');
+        if (badge) badge.innerText = 'Belum dipilih';
+        renderBookingSlotPicker();
+        return;
+      }
+
+      if (reqHours >= 2) {
 
         // Lewati jam istirahat teknisi secara otomatis
         const nextTime = getNextWorkingSlot(selectedBookingSlot, stall);
@@ -6057,9 +6109,11 @@
 
       // Ambil seluruh booking aktif (status BUKAN Batal) untuk cabang dan tanggal ini
       const allBookings = loadBookings();
+      const siteObj = SITES.find(s => s.id === siteId || isSameSite(s.id, siteId)) || SITES[0];
+      const targetCode = siteObj ? (siteObj.code || getSiteCode(siteObj.id)) : '';
       const activeBookings = allBookings.filter(b => 
         isSameDate(b.date, bookingDate) && 
-        isSameSite(b.siteId, siteId) && 
+        (isSameSite(b.siteId, siteId) || (b.siteCode && targetCode && b.siteCode === targetCode)) && 
         b.status !== 'Batal'
       );
 
@@ -6456,8 +6510,8 @@
       }
 
       const siteId = document.getElementById('bookingSiteInput').value;
-      const siteObj = SITES.find(s => s.id === siteId) || SITES[0];
-      const siteCode = getSiteCode(siteObj.id);
+      const siteObj = SITES.find(s => s.id === siteId || isSameSite(s.id, siteId)) || SITES[0];
+      const siteCode = siteObj.code || getSiteCode(siteObj.id);
       const plate = document.getElementById('inputPlateNumber').value.trim();
       const name = document.getElementById('inputOwnerName').value.trim();
       const phone = document.getElementById('inputPhone').value.trim();
@@ -6483,12 +6537,82 @@
       }
 
       const bookings = loadBookings();
+
+      // ==============================================================
+      // VALIDASI ANTI DOUBLE-BOOKING: PASTIKAN SLOT BELUM DIAMBIL
+      // ==============================================================
+      let slotConflict = null;
+      if (chosenService === 'express') {
+        const expTime = EXPRESS_SLOTS[parseInt(chosenSlot, 10)] || chosenSlot;
+        slotConflict = bookings.find(b => 
+          isSameDate(b.date, bookingDate) && 
+          (isSameSite(b.siteId, siteObj.id) || (b.siteCode && b.siteCode === siteCode)) && 
+          b.status !== 'Batal' && 
+          isSameStall(b.stall, 'express') && 
+          (String(b.slot) === String(chosenSlot) || isSameSlot(b.slot, expTime.split(' - ')[0]))
+        );
+      } else {
+        slotConflict = bookings.find(b => 
+          isSameDate(b.date, bookingDate) && 
+          (isSameSite(b.siteId, siteObj.id) || (b.siteCode && b.siteCode === siteCode)) && 
+          b.status !== 'Batal' && 
+          isSameStall(b.stall, stall) && 
+          (isBookingInSlot(b, chosenSlot) || 
+           (secondarySlot && isBookingInSlot(b, secondarySlot)) || 
+           (tertiarySlot && isBookingInSlot(b, tertiarySlot)))
+        );
+      }
+
+      if (slotConflict) {
+        showPopup(
+          `Mohon maaf, slot jam <b>${chosenService === 'express' ? (EXPRESS_SLOTS[parseInt(chosenSlot, 10)] || chosenSlot) : chosenSlot} WIB</b> pada tanggal <b>${bookingDate}</b> baru saja terisi oleh antrian <b>${slotConflict.queueNumber}</b> (${slotConflict.plate || slotConflict.name || 'Pelanggan lain'}).<br><br>Silakan pilih jam slot lain yang masih tersedia!`,
+          'Slot Waktu Sudah Terisi',
+          'warning'
+        );
+        selectedBookingSlot = null;
+        selectedBookingSecondarySlot = null;
+        selectedBookingTertiarySlot = null;
+        const badge = document.getElementById('selectedSlotBadge');
+        if (badge) badge.innerText = 'Belum dipilih';
+        goToBookingStep(3, false);
+        renderBookingSlotPicker();
+        return;
+      }
+
+      // ==============================================================
+      // GENERATE NOMOR ANTRIAN & KODE BOOKING UNIK TANPA BENTROK
+      // ==============================================================
       const prefix = chosenService === 'express' ? 'EXP' : 'REG';
-      const siteBookings = bookings.filter(b => isSameSite(b.siteId, siteObj.id) && isSameDate(b.date, bookingDate));
-      const seqStr = String(siteBookings.length + 1).padStart(3, '0');
-      // FORMAT BARU: 3 KODE SITE (misal REGTSM001 / EXPTSM001)
-      const queueNumber = `${prefix}${siteCode}${seqStr}`;
-      const bookingCode = `PLY-${siteCode}-${bookingDate.replace(/-/g, '')}-${seqStr}`;
+      let maxSeq = 0;
+      bookings.forEach(b => {
+        if ((isSameSite(b.siteId, siteObj.id) || (b.siteCode && b.siteCode === siteCode)) && isSameDate(b.date, bookingDate)) {
+          const qMatch = String(b.queueNumber || '').match(/(\d+)$/);
+          if (qMatch) {
+            const num = parseInt(qMatch[1], 10);
+            if (!isNaN(num) && num > maxSeq) maxSeq = num;
+          }
+          const idMatch = String(b.id || '').match(/(\d+)$/);
+          if (idMatch) {
+            const num = parseInt(idMatch[1], 10);
+            if (!isNaN(num) && num > maxSeq) maxSeq = num;
+          }
+        }
+      });
+
+      const siteBookingsCount = bookings.filter(b => 
+        (isSameSite(b.siteId, siteObj.id) || (b.siteCode && b.siteCode === siteCode)) && 
+        isSameDate(b.date, bookingDate)
+      ).length;
+
+      let nextSeq = Math.max(siteBookingsCount + 1, maxSeq + 1);
+      let queueNumber = `${prefix}${siteCode}${String(nextSeq).padStart(3, '0')}`;
+      let bookingCode = `PLY-${siteCode}-${bookingDate.replace(/-/g, '')}-${String(nextSeq).padStart(3, '0')}`;
+
+      while (bookings.some(b => b.id === bookingCode || (isSameDate(b.date, bookingDate) && b.queueNumber === queueNumber))) {
+        nextSeq++;
+        queueNumber = `${prefix}${siteCode}${String(nextSeq).padStart(3, '0')}`;
+        bookingCode = `PLY-${siteCode}-${bookingDate.replace(/-/g, '')}-${String(nextSeq).padStart(3, '0')}`;
+      }
 
       const damageId = document.getElementById('stage2DamageMaster')?.value || document.getElementById('inputDamageMaster')?.value || 'KEL-001';
       let damageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
@@ -7098,15 +7222,41 @@
         };
       }
 
-      const currentSite = SITES.find(s => s.id === currentSiteId) || SITES[0];
-      const siteCode = getSiteCode(currentSite.id);
+      const currentSite = SITES.find(s => s.id === currentSiteId || isSameSite(s.id, currentSiteId)) || SITES[0];
+      const siteCode = currentSite.code || getSiteCode(currentSite.id);
       const bookings = loadBookings();
       const prefix = currentModalTarget.stall === 'express' ? 'EXP' : 'REG';
-      const siteBookings = bookings.filter(b => isSameSite(b.siteId, currentSite.id) && isSameDate(b.date, currentDate));
-      const seqStr = String(siteBookings.length + 1).padStart(3, '0');
-      // Format baru: 3 Kode Site (e.g. REGTSM001 / EXPTSM001)
-      const queueNumber = `${prefix}${siteCode}${seqStr}`;
-      const id = `PLY-${siteCode}-${currentDate.replace(/-/g, '')}-${seqStr}`;
+
+      let maxSeq = 0;
+      bookings.forEach(b => {
+        if ((isSameSite(b.siteId, currentSite.id) || (b.siteCode && b.siteCode === siteCode)) && isSameDate(b.date, currentDate)) {
+          const qMatch = String(b.queueNumber || '').match(/(\d+)$/);
+          if (qMatch) {
+            const num = parseInt(qMatch[1], 10);
+            if (!isNaN(num) && num > maxSeq) maxSeq = num;
+          }
+          const idMatch = String(b.id || '').match(/(\d+)$/);
+          if (idMatch) {
+            const num = parseInt(idMatch[1], 10);
+            if (!isNaN(num) && num > maxSeq) maxSeq = num;
+          }
+        }
+      });
+
+      const siteBookingsCount = bookings.filter(b => 
+        (isSameSite(b.siteId, currentSite.id) || (b.siteCode && b.siteCode === siteCode)) && 
+        isSameDate(b.date, currentDate)
+      ).length;
+
+      let nextSeq = Math.max(siteBookingsCount + 1, maxSeq + 1);
+      let queueNumber = `${prefix}${siteCode}${String(nextSeq).padStart(3, '0')}`;
+      let id = `PLY-${siteCode}-${currentDate.replace(/-/g, '')}-${String(nextSeq).padStart(3, '0')}`;
+
+      while (bookings.some(b => b.id === id || (isSameDate(b.date, currentDate) && b.queueNumber === queueNumber))) {
+        nextSeq++;
+        queueNumber = `${prefix}${siteCode}${String(nextSeq).padStart(3, '0')}`;
+        id = `PLY-${siteCode}-${currentDate.replace(/-/g, '')}-${String(nextSeq).padStart(3, '0')}`;
+      }
 
       const damageId = document.getElementById('modalInputDamageMaster')?.value || 'KEL-001';
       let damageItem = MASTER_KERUSAKAN.find(d => d.id === damageId);
@@ -7254,6 +7404,8 @@
 
       renderBookingSlotPicker();
       updateBookingSummary();
+      // Tarik data booking terbaru untuk tanggal baru ini dari Google Sheet
+      fetchBookingsFromSheet(true);
     }
 
     function handleBookingStallChange(newStall) {
@@ -7262,6 +7414,7 @@
       if (badge) badge.innerText = 'Belum dipilih';
       renderBookingSlotPicker();
       updateBookingSummary();
+      fetchBookingsFromSheet(true);
     }
 
     function selectStall(stallId) {
@@ -7451,16 +7604,18 @@
         status = 'Batal';
       }
 
-      // 6. Site ID
+      // 6. Site ID & Site Code (Dinamis Sesuai Master_Sites)
       let siteRaw = String(raw.siteId || '').toLowerCase().trim();
-      let siteId = 'tasikmalaya';
-      if (siteRaw.includes('bandung')) siteId = 'bandung';
-      else if (siteRaw.includes('cirebon')) siteId = 'cirebon';
-      else if (siteRaw.includes('jakarta')) siteId = 'jakarta';
-      else if (siteRaw.includes('semarang')) siteId = 'semarang';
-      else if (siteRaw.includes('kudus')) siteId = 'kudus';
-      else if (siteRaw.includes('surabaya')) siteId = 'surabaya';
-      else siteId = 'tasikmalaya';
+      let matchedSite = null;
+      if (siteRaw) {
+        matchedSite = SITES.find(s => 
+          s.id.toLowerCase() === siteRaw || 
+          isSameSite(s.id, siteRaw) || 
+          (s.code && s.code.toLowerCase() === siteRaw)
+        );
+      }
+      let siteId = matchedSite ? matchedSite.id : (siteRaw || (SITES[0] ? SITES[0].id : 'tasik'));
+      let siteCode = matchedSite ? (matchedSite.code || getSiteCode(matchedSite.id)) : (raw.siteCode || getSiteCode(siteId));
 
       // 7. No Antrian
       let queueNumber = String(raw.queueNumber || '').trim();
@@ -7491,12 +7646,25 @@
       // 10. Keluhan & Catatan
       let complaint = String(raw.complaint || raw.notes || 'Servis EV').trim();
 
+      // 11. Secondary & Tertiary Slot (Level 2 & Level 3)
+      let secondarySlot = raw.secondarySlot || null;
+      let tertiarySlot = raw.tertiarySlot || null;
+      if (!secondarySlot && stall !== 'express' && estimatedHours >= 2) {
+        secondarySlot = getNextWorkingSlot(slot, stall);
+      }
+      if (!tertiarySlot && stall !== 'express' && estimatedHours >= 3) {
+        tertiarySlot = secondarySlot ? getNextWorkingSlot(secondarySlot, stall) : null;
+      }
+
       return {
         id,
         queueNumber,
         siteId,
+        siteCode,
         date,
         slot,
+        secondarySlot,
+        tertiarySlot,
         stall,
         level,
         estimatedHours,
@@ -7589,22 +7757,17 @@
       });
     }
 
-    async function fetchDataFromGoogleSheet() {
+    async function fetchBookingsFromSheet(forceRender = false) {
       const syncIcon = document.getElementById('syncIcon');
       const headerRefreshIcon = document.getElementById('headerRefreshIcon');
-      const btnSyncText = document.getElementById('btnSyncText');
       if (syncIcon) syncIcon.classList.add('animate-spin');
       if (headerRefreshIcon) headerRefreshIcon.classList.add('animate-spin');
-      if (btnSyncText) btnSyncText.innerText = 'Memuat data...';
 
-      let success = false;
-      let remoteBookings = [];
-
-      // 1. Ambil data Bookings menggunakan GViz JSONP (Anti-CORS, Berjalan di file:// dan http://)
       try {
-        const table = await fetchGvizJsonp('Bookings');
-        if (table) {
+        const table = await fetchGvizJsonp('Bookings', 8000);
+        if (table && table.rows) {
           const rows = extractRowsFromGvizTable(table);
+          const remoteBookings = [];
           rows.forEach((row, rIdx) => {
             let bId = String(row[1] || '').trim();
             const qNum = String(row[2] || '').trim();
@@ -7649,10 +7812,74 @@
               }
             }
           });
-          success = true;
+
+          if (remoteBookings.length > 0) {
+            const currentLocal = loadBookings();
+            const mergedMap = new Map();
+
+            // 1. Masukkan seluruh booking dari Google Sheet
+            remoteBookings.forEach(rb => {
+              const key = rb.id || rb.queueNumber;
+              if (key) mergedMap.set(key, rb);
+            });
+
+            // 2. Pertahankan booking lokal yang belum masuk ke sheet (mencegah wipeout karena jeda propagasi GViz)
+            currentLocal.forEach(lb => {
+              const key = lb.id || lb.queueNumber;
+              if (key && !mergedMap.has(key)) {
+                mergedMap.set(key, lb);
+              } else if (key && mergedMap.has(key)) {
+                const remote = mergedMap.get(key);
+                mergedMap.set(key, {
+                  ...remote,
+                  secondarySlot: remote.secondarySlot || lb.secondarySlot || null,
+                  tertiarySlot: remote.tertiarySlot || lb.tertiarySlot || null,
+                  notes: remote.notes || lb.notes || '',
+                  siteCode: remote.siteCode || lb.siteCode || getSiteCode(remote.siteId)
+                });
+              }
+            });
+
+            const mergedList = Array.from(mergedMap.values());
+            const currentLocalJson = localStorage.getItem(STORAGE_KEY) || '[]';
+            const newMergedJson = JSON.stringify(mergedList);
+            if (currentLocalJson !== newMergedJson || forceRender) {
+              saveBookings(mergedList);
+              localStorage.setItem('POLYTRON_SYNCED_FROM_SHEET', 'true');
+              refreshAllBoards();
+            }
+            if (currentRole === 'konsumen') {
+              renderBookingSlotPicker();
+            }
+            console.log(`[Google Sheet Bookings] Berhasil menyinkronkan ${mergedList.length} booking (Sheet: ${remoteBookings.length}).`);
+            return mergedList;
+          }
         }
       } catch (errGviz) {
         console.warn('GViz JSONP Bookings terkendala:', errGviz);
+      } finally {
+        if (syncIcon) syncIcon.classList.remove('animate-spin');
+        if (headerRefreshIcon) headerRefreshIcon.classList.remove('animate-spin');
+      }
+      return null;
+    }
+
+    async function fetchDataFromGoogleSheet() {
+      const syncIcon = document.getElementById('syncIcon');
+      const headerRefreshIcon = document.getElementById('headerRefreshIcon');
+      const btnSyncText = document.getElementById('btnSyncText');
+      if (syncIcon) syncIcon.classList.add('animate-spin');
+      if (headerRefreshIcon) headerRefreshIcon.classList.add('animate-spin');
+      if (btnSyncText) btnSyncText.innerText = 'Memuat data...';
+
+      let success = false;
+      let remoteBookings = [];
+
+      // 1. Ambil data Bookings menggunakan GViz JSONP (Anti-CORS, Berjalan di file:// dan http://)
+      const bList = await fetchBookingsFromSheet();
+      if (bList && bList.length > 0) {
+        remoteBookings = bList;
+        success = true;
       }
 
       // 2. Ambil & Perbarui Master_Kerusakan dari Google Sheet via JSONP
