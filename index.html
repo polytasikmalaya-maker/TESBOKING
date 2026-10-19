@@ -948,221 +948,221 @@
       <section id="role-section-portal" class="w-full min-h-screen flex flex-col justify-start">
         
         <!-- Welcome Hero Banner (Diam / Fixed Tidak Ikut Terskrol & Tanpa Cabang Aktif) -->
-        <div class="sticky top-0 z-30 bg-gradient-to-r from-[#380202] via-[#8c0c0c] to-[#ef4444] text-white p-4 sm:p-5 shadow-md border-b border-white/10">
-          <div class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="sticky top-0 z-30 bg-gradient-to-r from-[#380202] via-[#8c0c0c] to-[#ef4444] text-white py-2 px-3 sm:px-6 shadow-md border-b border-white/10 flex-shrink-0">
+          <div class="w-full flex items-center justify-between gap-3">
             <div>
-              <div class="inline-flex items-center gap-2 px-2.5 py-0.5 bg-black/30 border border-white/20 text-white text-[11px] font-bold rounded-[2px] mb-1.5 uppercase tracking-wider">
+              <div class="inline-flex items-center gap-2 px-2 py-0.5 bg-black/30 border border-white/20 text-white text-[10px] font-bold rounded-[2px] mb-0.5 uppercase tracking-wider">
                 <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                 <span>Polytron Service Center</span>
               </div>
-              <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+              <h1 class="text-base sm:text-lg lg:text-xl font-black text-white tracking-tight">
                 Sistem Booking dan Monitoring EV
               </h1>
             </div>
           </div>
         </div>
 
-        <!-- Grid 4 Menu Pilihan Utama (1 Kolom di HP, 2 atau 4 Kolom di Laptop) -->
-        <div class="p-3 sm:p-6 lg:p-8 flex-1">
-          <div class="w-full">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
+        <!-- Grid 5 Menu Pilihan Utama (1 Kolom di HP, 2 di Tablet, 5 di Laptop) -->
+        <div class="p-2 sm:p-3.5 lg:p-4 flex-1 flex flex-col justify-center pb-20 sm:pb-10">
+          <div class="w-full max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
               
               <!-- MENU 1: KONSUMEN -->
-              <div onclick="switchRole('konsumen')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-4 sm:p-5 flex flex-col justify-between border-2 border-transparent hover:border-red-500 transition-all duration-200 shadow-md group">
+              <div onclick="switchRole('konsumen')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-3 sm:p-3.5 flex flex-col justify-between border-2 border-transparent hover:border-red-500 transition-all duration-200 shadow-md group">
                 <div>
-                  <div class="flex items-center justify-between mb-3">
-                    <span class="p-2.5 bg-red-50 text-red-600 rounded-[3px] group-hover:bg-red-600 group-hover:text-white transition">
-                      <i data-lucide="smartphone" class="w-6 h-6"></i>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="p-2 bg-red-50 text-red-600 rounded-[3px] group-hover:bg-red-600 group-hover:text-white transition">
+                      <i data-lucide="smartphone" class="w-5 h-5"></i>
                     </span>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 bg-red-100 text-red-700 rounded-[2px] uppercase">
+                    <span class="text-[9px] font-extrabold px-1.5 py-0.5 bg-red-100 text-red-700 rounded-[2px] uppercase">
                       Mandiri
                     </span>
                   </div>
-                  <h3 class="text-base sm:text-lg font-black text-slate-900 group-hover:text-red-600 transition">
+                  <h3 class="text-sm sm:text-base font-black text-slate-900 group-hover:text-red-600 transition">
                     1. Konsumen
                   </h3>
-                  <p class="text-xs text-slate-500 font-semibold mt-0.5">
+                  <p class="text-[11px] text-slate-500 font-semibold mt-0.5">
                     Input Booking Servis EV
                   </p>
-                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 border-t border-slate-100 pt-3 text-left">
+                  <ul class="mt-2 space-y-1 text-[11px] text-slate-600 border-t border-slate-100 pt-2 text-left">
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Pilih Cabang & Tanggal</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
-                      <span>Stall Reguler / Express Bay</span>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
+                      <span>Stall Reguler / Express</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Pilih Jam & Input Motor</span>
                     </li>
                   </ul>
                 </div>
-                <div class="mt-5 pt-3 border-t border-slate-100">
-                  <button type="button" class="w-full py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs rounded-[3px] flex items-center justify-center gap-2 shadow-sm transition">
-                    <span>Buka Booking Konsumen</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <div class="mt-3 pt-2 border-t border-slate-100">
+                  <button type="button" class="w-full py-1.5 sm:py-2 px-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
+                    <span>Buka Booking</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                   </button>
                 </div>
               </div>
 
               <!-- MENU 2: SERVICE ADVISOR (SA) -->
-              <div onclick="switchRole('sa')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-4 sm:p-5 flex flex-col justify-between border-2 border-transparent hover:border-amber-500 transition-all duration-200 shadow-md group">
+              <div onclick="switchRole('sa')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-3 sm:p-3.5 flex flex-col justify-between border-2 border-transparent hover:border-amber-500 transition-all duration-200 shadow-md group">
                 <div>
-                  <div class="flex items-center justify-between mb-3">
-                    <span class="p-2.5 bg-amber-50 text-amber-600 rounded-[3px] group-hover:bg-amber-600 group-hover:text-white transition">
-                      <i data-lucide="clipboard-check" class="w-6 h-6"></i>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="p-2 bg-amber-50 text-amber-600 rounded-[3px] group-hover:bg-amber-600 group-hover:text-white transition">
+                      <i data-lucide="clipboard-check" class="w-5 h-5"></i>
                     </span>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 bg-amber-100 text-amber-800 rounded-[2px] uppercase">
+                    <span class="text-[9px] font-extrabold px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded-[2px] uppercase">
                       Front Desk
                     </span>
                   </div>
-                  <h3 class="text-base sm:text-lg font-black text-slate-900 group-hover:text-amber-600 transition">
-                    2. Service Advisor (SA)
+                  <h3 class="text-sm sm:text-base font-black text-slate-900 group-hover:text-amber-600 transition">
+                    2. Service Advisor
                   </h3>
-                  <p class="text-xs text-slate-500 font-semibold mt-0.5">
-                    Check-In & Antrean Walk-In
+                  <p class="text-[11px] text-slate-500 font-semibold mt-0.5">
+                    Check-In & Walk-In
                   </p>
-                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 border-t border-slate-100 pt-3 text-left">
+                  <ul class="mt-2 space-y-1 text-[11px] text-slate-600 border-t border-slate-100 pt-2 text-left">
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Check-In Konsumen Tiba</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
-                      <span>Input Antrean Walk-In Cepat</span>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
+                      <span>Input Walk-In Cepat</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Panggilan Suara ke Stall</span>
                     </li>
                   </ul>
                 </div>
-                <div class="mt-5 pt-3 border-t border-slate-100">
-                  <button type="button" class="w-full py-2.5 px-3 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs rounded-[3px] flex items-center justify-center gap-2 shadow-sm transition">
+                <div class="mt-3 pt-2 border-t border-slate-100">
+                  <button type="button" class="w-full py-1.5 sm:py-2 px-2.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
                     <span>Buka Meja SA</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                   </button>
                 </div>
               </div>
 
               <!-- MENU 3: TEKNISI MEKANIK -->
-              <div onclick="switchRole('teknisi')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-4 sm:p-5 flex flex-col justify-between border-2 border-transparent hover:border-blue-500 transition-all duration-200 shadow-md group">
+              <div onclick="switchRole('teknisi')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-3 sm:p-3.5 flex flex-col justify-between border-2 border-transparent hover:border-blue-500 transition-all duration-200 shadow-md group">
                 <div>
-                  <div class="flex items-center justify-between mb-3">
-                    <span class="p-2.5 bg-blue-50 text-blue-600 rounded-[3px] group-hover:bg-blue-600 group-hover:text-white transition">
-                      <i data-lucide="wrench" class="w-6 h-6"></i>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="p-2 bg-blue-50 text-blue-600 rounded-[3px] group-hover:bg-blue-600 group-hover:text-white transition">
+                      <i data-lucide="wrench" class="w-5 h-5"></i>
                     </span>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-[2px] uppercase">
+                    <span class="text-[9px] font-extrabold px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded-[2px] uppercase">
                       Workshop
                     </span>
                   </div>
-                  <h3 class="text-base sm:text-lg font-black text-slate-900 group-hover:text-blue-600 transition">
+                  <h3 class="text-sm sm:text-base font-black text-slate-900 group-hover:text-blue-600 transition">
                     3. Teknisi Mekanik
                   </h3>
-                  <p class="text-xs text-slate-500 font-semibold mt-0.5">
+                  <p class="text-[11px] text-slate-500 font-semibold mt-0.5">
                     Dashboard Stall Servis
                   </p>
-                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 border-t border-slate-100 pt-3 text-left">
+                  <ul class="mt-2 space-y-1 text-[11px] text-slate-600 border-t border-slate-100 pt-2 text-left">
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
-                      <span>Update Status In Progress</span>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
+                      <span>Status In Progress</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Pending Part & Final Test</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Penyelesaian Unit Servis</span>
                     </li>
                   </ul>
                 </div>
-                <div class="mt-5 pt-3 border-t border-slate-100">
-                  <button type="button" class="w-full py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-[3px] flex items-center justify-center gap-2 shadow-sm transition">
-                    <span>Buka Dashboard Teknisi</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <div class="mt-3 pt-2 border-t border-slate-100">
+                  <button type="button" class="w-full py-1.5 sm:py-2 px-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
+                    <span>Buka Dashboard</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                   </button>
                 </div>
               </div>
 
               <!-- MENU 4: TV MONITOR & SUARA -->
-              <div onclick="window.location.href='index.html'" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-4 sm:p-5 flex flex-col justify-between border-2 border-transparent hover:border-emerald-500 transition-all duration-200 shadow-md group">
+              <div onclick="window.location.href='index.html'" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-3 sm:p-3.5 flex flex-col justify-between border-2 border-transparent hover:border-emerald-500 transition-all duration-200 shadow-md group">
                 <div>
-                  <div class="flex items-center justify-between mb-3">
-                    <span class="p-2.5 bg-emerald-50 text-emerald-600 rounded-[3px] group-hover:bg-emerald-600 group-hover:text-white transition">
-                      <i data-lucide="tv" class="w-6 h-6"></i>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="p-2 bg-emerald-50 text-emerald-600 rounded-[3px] group-hover:bg-emerald-600 group-hover:text-white transition">
+                      <i data-lucide="tv" class="w-5 h-5"></i>
                     </span>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-[2px] uppercase">
+                    <span class="text-[9px] font-extrabold px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-[2px] uppercase">
                       Ruang Tunggu
                     </span>
                   </div>
-                  <h3 class="text-base sm:text-lg font-black text-slate-900 group-hover:text-emerald-600 transition">
+                  <h3 class="text-sm sm:text-base font-black text-slate-900 group-hover:text-emerald-600 transition">
                     4. TV Monitor & Suara
                   </h3>
-                  <p class="text-xs text-slate-500 font-semibold mt-0.5">
-                    Display Ruang Tunggu Konsumen
+                  <p class="text-[11px] text-slate-500 font-semibold mt-0.5">
+                    Display Ruang Tunggu
                   </p>
-                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 border-t border-slate-100 pt-3 text-left">
+                  <ul class="mt-2 space-y-1 text-[11px] text-slate-600 border-t border-slate-100 pt-2 text-left">
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Matrix Timeline Slot Realtime</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Panggilan Suara Realtime</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Status Stall 1, 2, Express</span>
                     </li>
                   </ul>
                 </div>
-                <div class="mt-5 pt-3 border-t border-slate-100">
-                  <button type="button" class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-[3px] flex items-center justify-center gap-2 shadow-sm transition">
-                    <span>Buka Layar Monitor TV</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <div class="mt-3 pt-2 border-t border-slate-100">
+                  <button type="button" class="w-full py-1.5 sm:py-2 px-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
+                    <span>Buka Monitor TV</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                   </button>
                 </div>
               </div>
 
               <!-- MENU 5: CEK KETERSEDIAAN PART -->
-              <div onclick="openPartStockView('portal')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-4 sm:p-5 flex flex-col justify-between border-2 border-transparent hover:border-purple-500 transition-all duration-200 shadow-md group">
+              <div onclick="openPartStockView('portal')" class="portal-menu-card bg-white hover:bg-slate-50 cursor-pointer p-3 sm:p-3.5 flex flex-col justify-between border-2 border-transparent hover:border-purple-500 transition-all duration-200 shadow-md group">
                 <div>
-                  <div class="flex items-center justify-between mb-3">
-                    <span class="p-2.5 bg-purple-50 text-purple-600 rounded-[3px] group-hover:bg-purple-600 group-hover:text-white transition">
-                      <i data-lucide="package-search" class="w-6 h-6"></i>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="p-2 bg-purple-50 text-purple-600 rounded-[3px] group-hover:bg-purple-600 group-hover:text-white transition">
+                      <i data-lucide="package-search" class="w-5 h-5"></i>
                     </span>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 bg-purple-100 text-purple-800 rounded-[2px] uppercase">
+                    <span class="text-[9px] font-extrabold px-1.5 py-0.5 bg-purple-100 text-purple-800 rounded-[2px] uppercase">
                       Sparepart
                     </span>
                   </div>
-                  <h3 class="text-base sm:text-lg font-black text-slate-900 group-hover:text-purple-600 transition">
+                  <h3 class="text-sm sm:text-base font-black text-slate-900 group-hover:text-purple-600 transition">
                     5. Ketersediaan Part
                   </h3>
-                  <p class="text-xs text-slate-500 font-semibold mt-0.5">
-                    Cek Stok Suku Cadang Realtime
+                  <p class="text-[11px] text-slate-500 font-semibold mt-0.5">
+                    Stok Suku Cadang Realtime
                   </p>
-                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 border-t border-slate-100 pt-3 text-left">
+                  <ul class="mt-2 space-y-1 text-[11px] text-slate-600 border-t border-slate-100 pt-2 text-left">
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Stok Live per Cabang / Site</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
-                      <span>Kolom A (KODE), B (Part), C (Qty)</span>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
+                      <span>KODE, Nama Part, Qty</span>
                     </li>
                     <li class="flex items-center gap-1.5">
-                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                      <i data-lucide="check" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
                       <span>Pencarian Cepat Sparepart</span>
                     </li>
                   </ul>
                 </div>
-                <div class="mt-5 pt-3 border-t border-slate-100">
-                  <button type="button" class="w-full py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs rounded-[3px] flex items-center justify-center gap-2 shadow-sm transition">
-                    <span>Cek Ketersediaan Part</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <div class="mt-3 pt-2 border-t border-slate-100">
+                  <button type="button" class="w-full py-1.5 sm:py-2 px-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
+                    <span>Cek Part</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                   </button>
                 </div>
               </div>
@@ -2073,73 +2073,73 @@
   </main>
 
   <!-- ============================================================== -->
-  <!-- MODAL DETAIL / INPUT BOOKING MANUAL (UNTUK ADMIN)              -->
+  <!-- MODAL DETAIL / INPUT BOOKING MANUAL (UNTUK ADMIN / SA)          -->
   <!-- ============================================================== -->
-  <div id="slotActionModal" onclick="if(event.target === this) closeSlotModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-2 hidden">
-    <div class="bg-white border border-slate-200 w-full max-w-md p-5 shadow-2xl relative">
+  <div id="slotActionModal" onclick="if(event.target === this) closeSlotModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-2 sm:p-4 hidden">
+    <div class="bg-white border border-slate-200 w-full max-w-lg p-4 sm:p-5 shadow-2xl relative max-h-[90vh] overflow-y-auto rounded-[3px]">
       <button onclick="closeSlotModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 p-1">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <div class="flex items-center gap-2.5 mb-3">
-        <div id="modalSlotIcon" class="w-9 h-9 bg-red-600/20 text-red-500 flex items-center justify-center">
+        <div id="modalSlotIcon" class="w-9 h-9 bg-red-50 text-red-600 border border-red-200 rounded-[3px] flex items-center justify-center flex-shrink-0">
           <i data-lucide="wrench" class="w-4 h-4"></i>
         </div>
         <div>
-          <h3 id="modalSlotTitle" class="text-base font-bold text-white">Detail Slot Stall</h3>
-          <p id="modalSlotSubtitle" class="text-[11px] text-slate-400">Stall EV 1 &bull; 08.30 - 09.30</p>
+          <h3 id="modalSlotTitle" class="text-base font-black text-slate-900">Detail Slot Stall</h3>
+          <p id="modalSlotSubtitle" class="text-[11px] text-slate-500 font-semibold">Stall EV 1 &bull; 08.30 - 09.30</p>
         </div>
       </div>
 
       <!-- Mode 1: Jika slot sudah terisi (View & Update Status) -->
       <div id="modalViewBooked" class="space-y-3">
-        <div class="bg-slate-50 border border-slate-200 p-3 space-y-1.5 text-xs">
-          <div class="flex justify-between">
-            <span class="text-slate-400">Kode Booking:</span>
-            <span id="viewBookingCode" class="font-mono font-bold text-red-400">PLY-123456</span>
+        <div class="bg-slate-50 border border-slate-200 rounded-[3px] p-3 space-y-1.5 text-xs">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500 font-bold text-[11px]">Kode Booking:</span>
+            <span id="viewBookingCode" class="font-mono font-black text-red-600">PLY-123456</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">Pelanggan:</span>
-            <span id="viewCustomerName" class="font-bold text-white">Budi Santoso</span>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500 font-bold text-[11px]">Pelanggan:</span>
+            <span id="viewCustomerName" class="font-bold text-slate-900">Budi Santoso</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">WhatsApp:</span>
-            <span id="viewCustomerPhone" class="text-slate-300">08123456789</span>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500 font-bold text-[11px]">WhatsApp:</span>
+            <span id="viewCustomerPhone" class="text-slate-700 font-mono">08123456789</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">Kendaraan:</span>
-            <span id="viewVehicleInfo" class="text-slate-200 font-semibold">Polytron Fox-R (D 1234 ABC)</span>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500 font-bold text-[11px]">Kendaraan:</span>
+            <span id="viewVehicleInfo" class="text-slate-800 font-semibold">Polytron Fox-R (D 1234 ABC)</span>
           </div>
           <div class="pt-1.5 border-t border-slate-200">
-            <span class="text-slate-400 block mb-0.5">Keluhan:</span>
-            <p id="viewNotes" class="text-slate-600 italic bg-white border border-slate-200 p-2">Servis berkala 1.000 km dan cek rem depan.</p>
+            <span class="text-slate-500 font-bold text-[11px] block mb-0.5">Keluhan:</span>
+            <p id="viewNotes" class="text-slate-700 italic bg-white border border-slate-200 p-2 rounded-[2px] whitespace-normal break-words">Servis berkala 1.000 km dan cek rem depan.</p>
           </div>
         </div>
 
         <div>
-          <label class="text-xs text-slate-400 block mb-1">Ubah Status Servis:</label>
+          <label class="text-xs text-slate-700 font-bold block mb-1">Ubah Status Servis:</label>
           <div class="grid grid-cols-4 gap-1 text-[11px]">
-            <button onclick="updateBookingStatus('Booked')" class="py-1.5 text-center bg-indigo-950 text-indigo-400 border border-indigo-700 font-bold hover:bg-indigo-900">
+            <button onclick="updateBookingStatus('Booked')" class="py-1.5 text-center bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold rounded-[2px] hover:bg-indigo-100">
               Booked
             </button>
-            <button onclick="updateBookingStatus('Checked In')" class="py-1.5 text-center bg-amber-950 text-amber-400 border border-amber-700 font-bold hover:bg-amber-900">
+            <button onclick="updateBookingStatus('Checked In')" class="py-1.5 text-center bg-amber-50 text-amber-800 border border-amber-300 font-bold rounded-[2px] hover:bg-amber-100">
               Tiba (SA)
             </button>
-            <button onclick="updateBookingStatus('In Progress')" class="py-1.5 text-center bg-cyan-950 text-cyan-400 border border-cyan-700 font-bold hover:bg-cyan-900">
+            <button onclick="updateBookingStatus('In Progress')" class="py-1.5 text-center bg-cyan-50 text-cyan-800 border border-cyan-300 font-bold rounded-[2px] hover:bg-cyan-100">
               Dikerjakan
             </button>
-            <button onclick="updateBookingStatus('Done')" class="py-1.5 text-center bg-emerald-950 text-emerald-400 border border-emerald-700 font-bold hover:bg-emerald-900">
+            <button onclick="updateBookingStatus('Done')" class="py-1.5 text-center bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold rounded-[2px] hover:bg-emerald-100">
               Selesai
             </button>
           </div>
         </div>
 
         <div class="flex gap-2 pt-1">
-          <button onclick="sendWhatsappToCustomer()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5">
+          <button onclick="sendWhatsappToCustomer()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 rounded-[3px]">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
             <span>Chat WhatsApp</span>
           </button>
-          <button onclick="cancelActiveBooking()" class="py-2 px-3 bg-rose-950 hover:bg-rose-900 text-rose-400 border border-rose-800 text-xs font-bold">
+          <button onclick="cancelActiveBooking()" class="py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 text-xs font-bold rounded-[3px]">
             Batalkan
           </button>
         </div>
@@ -2147,13 +2147,31 @@
 
       <!-- Mode 2: Jika slot kosong (Tambah Walk-in Manual) -->
       <div id="modalViewAvailable" class="space-y-2.5 hidden">
-        <p class="text-xs text-slate-300">
-          Slot ini saat ini kosong. Anda dapat menambahkan booking antrian langsung (Walk-in) untuk slot ini.
+        <p class="text-xs text-slate-600 mb-1">
+          Form pendaftaran walk-in langsung oleh Service Advisor (SA). Tentukan stall dan jam kedatangan:
         </p>
 
+        <!-- Pilihan Stall & Jam (Disesuaikan oleh SA untuk walk-in: Senin-Jumat s.d. 15.30, Sabtu s.d. 13.30) -->
+        <div id="modalWalkinTargetGroup" class="grid grid-cols-2 gap-2 bg-slate-50 border border-slate-200 p-2 rounded-[3px]">
+          <div>
+            <label class="text-[11px] text-slate-700 font-bold block mb-1">Pilihan Stall</label>
+            <select id="modalInputStall" onchange="syncModalWalkinSlotOptions()" class="w-full bg-white border border-slate-300 p-1.5 text-xs text-slate-900 rounded-[2px] font-bold outline-none cursor-pointer">
+              <option value="stall1">Stall EV 1</option>
+              <option value="stall2">Stall EV 2</option>
+              <option value="express">Express Bay</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-700 font-bold block mb-1">Jam Kedatangan</label>
+            <select id="modalInputSlot" class="w-full bg-white border border-slate-300 p-1.5 text-xs text-slate-900 rounded-[2px] font-bold outline-none cursor-pointer">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+        </div>
+
         <div>
-          <label class="text-xs text-slate-400 block mb-1">Model / Type</label>
-          <select id="modalInputModel" class="w-full bg-slate-800 border border-slate-200 p-2 text-xs text-white">
+          <label class="text-xs text-slate-700 font-bold block mb-1">Model / Type</label>
+          <select id="modalInputModel" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] font-semibold outline-none cursor-pointer">
             <option value="Polytron Fox-R">Polytron Fox-R</option>
             <option value="Polytron Fox-S">Polytron Fox-S</option>
             <option value="Polytron Fox-500">Polytron Fox-500</option>
@@ -2163,26 +2181,26 @@
         </div>
 
         <div>
-          <label class="text-xs text-slate-400 block mb-1">Nomor Polisi / Plat</label>
-          <input type="text" id="modalInputPlate" placeholder="Contoh: D 9999 EV" class="w-full uppercase bg-slate-800 border border-slate-200 p-2 text-xs text-white">
+          <label class="text-xs text-slate-700 font-bold block mb-1">Nomor Polisi / Plat</label>
+          <input type="text" id="modalInputPlate" placeholder="Contoh: D 9999 EV" class="w-full uppercase bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 font-black rounded-[2px] outline-none">
         </div>
 
         <div>
-          <label class="text-xs text-slate-400 block mb-1">Nama Pemilik</label>
-          <input type="text" id="modalInputName" placeholder="Nama Pelanggan" class="w-full bg-slate-800 border border-slate-200 p-2 text-xs text-white">
+          <label class="text-xs text-slate-700 font-bold block mb-1">Nama Pemilik</label>
+          <input type="text" id="modalInputName" placeholder="Nama Pelanggan" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 font-semibold rounded-[2px] outline-none">
         </div>
 
         <div>
-          <label class="text-xs text-slate-400 block mb-1">No. WhatsApp</label>
-          <input type="tel" id="modalInputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-slate-800 border border-slate-200 p-2 text-xs text-white">
+          <label class="text-xs text-slate-700 font-bold block mb-1">No. WhatsApp</label>
+          <input type="tel" id="modalInputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none font-mono">
         </div>
 
         <div>
-          <label class="text-xs text-slate-400 block mb-1">Keluhan / Kendala Servis</label>
-          <select id="modalInputDamageMaster" onchange="handleModalDamageChange(this.value)" class="w-full bg-slate-800 border border-slate-200 p-2 text-xs text-white outline-none cursor-pointer">
+          <label class="text-xs text-slate-700 font-bold block mb-1">Keluhan / Kendala Servis</label>
+          <select id="modalInputDamageMaster" onchange="handleModalDamageChange(this.value)" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none cursor-pointer font-semibold">
             <!-- Populated via JS -->
           </select>
-          <p id="modalTextDamageDesc" class="text-[10px] text-slate-400 italic mt-1"></p>
+          <p id="modalTextDamageDesc" class="text-[10px] text-slate-500 italic mt-1"></p>
         </div>
 
         <div id="modalDamageInfoCard" class="hidden">
@@ -2191,11 +2209,11 @@
         </div>
 
         <div>
-          <label class="text-xs text-slate-400 block mb-1">Catatan Tambahan (Opsional)</label>
-          <input type="text" id="modalInputNotes" placeholder="Pekerjaan atau rincian tambahan..." class="w-full bg-slate-800 border border-slate-200 p-2 text-xs text-white">
+          <label class="text-xs text-slate-700 font-bold block mb-1">Catatan Tambahan (Opsional)</label>
+          <input type="text" id="modalInputNotes" placeholder="Pekerjaan atau rincian tambahan..." class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none">
         </div>
 
-        <button onclick="saveManualBooking()" class="w-full py-2 bg-red-600 hover:bg-red-500 text-white font-bold text-xs mt-1 flex items-center justify-center gap-1.5">
+        <button onclick="saveManualBooking()" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs mt-2 flex items-center justify-center gap-1.5 rounded-[3px] shadow-sm transition cursor-pointer">
           <i data-lucide="plus-circle" class="w-4 h-4"></i>
           <span>Simpan Booking Walk-in</span>
         </button>
@@ -2273,29 +2291,29 @@
       </p>
 
       <div class="bg-slate-50 border border-slate-200 rounded-[3px] p-3 text-left space-y-1.5 text-xs mb-4">
-        <div class="flex justify-between items-start pb-1.5 border-b border-slate-200">
-          <span class="text-slate-500 font-bold uppercase text-[10px]">Cabang Bengkel:</span>
-          <span id="confirmSiteName" class="font-bold text-slate-900 text-right truncate max-w-[210px]">-</span>
+        <div class="flex justify-between items-start gap-2 pb-1.5 border-b border-slate-200">
+          <span class="text-slate-500 font-bold uppercase text-[10px] shrink-0">Cabang Bengkel:</span>
+          <span id="confirmSiteName" class="font-bold text-slate-900 text-right whitespace-normal break-words max-w-[240px]">-</span>
         </div>
-        <div class="flex justify-between items-start pb-1.5 border-b border-slate-200">
-          <span class="text-slate-500 font-bold uppercase text-[10px]">Layanan & Stall:</span>
-          <span id="confirmService" class="font-bold text-slate-900 text-right">-</span>
+        <div class="flex justify-between items-start gap-2 pb-1.5 border-b border-slate-200">
+          <span class="text-slate-500 font-bold uppercase text-[10px] shrink-0">Layanan & Stall:</span>
+          <span id="confirmService" class="font-bold text-slate-900 text-right whitespace-normal break-words">-</span>
         </div>
-        <div class="flex justify-between items-start pb-1.5 border-b border-slate-200">
-          <span class="text-slate-500 font-bold uppercase text-[10px]">Jadwal Kedatangan:</span>
-          <span id="confirmDateTime" class="font-black text-red-600 text-right">-</span>
+        <div class="flex justify-between items-start gap-2 pb-1.5 border-b border-slate-200">
+          <span class="text-slate-500 font-bold uppercase text-[10px] shrink-0">Jadwal Kedatangan:</span>
+          <span id="confirmDateTime" class="font-black text-red-600 text-right whitespace-normal break-words">-</span>
         </div>
-        <div class="flex justify-between items-start pb-1.5 border-b border-slate-200">
-          <span class="text-slate-500 font-bold uppercase text-[10px]">Model & Plat:</span>
-          <span id="confirmVehicle" class="font-bold text-slate-900 text-right">-</span>
+        <div class="flex justify-between items-start gap-2 pb-1.5 border-b border-slate-200">
+          <span class="text-slate-500 font-bold uppercase text-[10px] shrink-0">Model & Plat:</span>
+          <span id="confirmVehicle" class="font-bold text-slate-900 text-right whitespace-normal break-words">-</span>
         </div>
-        <div class="flex justify-between items-start pb-1.5 border-b border-slate-200">
-          <span class="text-slate-500 font-bold uppercase text-[10px]">Pemilik & WA:</span>
-          <span id="confirmOwner" class="font-bold text-slate-900 text-right">-</span>
+        <div class="flex justify-between items-start gap-2 pb-1.5 border-b border-slate-200">
+          <span class="text-slate-500 font-bold uppercase text-[10px] shrink-0">Pemilik & WA:</span>
+          <span id="confirmOwner" class="font-bold text-slate-900 text-right whitespace-normal break-words">-</span>
         </div>
-        <div class="flex justify-between items-start">
-          <span class="text-slate-500 font-bold uppercase text-[10px]">Keluhan Servis:</span>
-          <span id="confirmComplaint" class="font-medium text-slate-700 text-right truncate max-w-[210px]">-</span>
+        <div class="flex justify-between items-start gap-2">
+          <span class="text-slate-500 font-bold uppercase text-[10px] shrink-0">Keluhan Servis:</span>
+          <span id="confirmComplaint" class="font-medium text-slate-800 text-right whitespace-normal break-words max-w-[240px]">-</span>
         </div>
       </div>
 
@@ -2905,25 +2923,8 @@
       renderBookingSlotPicker();
       refreshAllBoards();
 
-      if (!isRemote) {
-        const payload = {
-          type: 'SITE_CHANGED',
-          siteId: siteObj.id,
-          siteCode: getSiteCode(siteObj.id),
-          siteName: siteObj.name,
-          deviceId: LOCAL_DEVICE_ID,
-          timestamp: Date.now()
-        };
-        if (localBroadcastChannel) {
-          try { localBroadcastChannel.postMessage(payload); } catch (e) {}
-        }
-        if (mqttClient && mqttClient.connected) {
-          try {
-            mqttClient.publish('polytron/ev_service/data_sync', JSON.stringify(payload), { qos: 0 });
-            mqttClient.publish('polytron/ev/global/site_sync', JSON.stringify(payload), { qos: 0 });
-          } catch (e) {}
-        }
-      }
+      // Perubahan cabang aktif bersifat independen untuk masing-masing perangkat / tab
+      // Tidak menyiarkan SITE_CHANGED agar tidak meng-override layar Monitor TV atau perangkat lain
     }
 
     function loadBookings() {
@@ -3044,31 +3045,32 @@
       // Jangan proses pesan yang berasal dari tab / perangkat ini sendiri
       if (payload.deviceId === LOCAL_DEVICE_ID) return;
 
-      // 1. SINKRONISASI PEMILIHAN SITE/CABANG ANTAR PERANGKAT (TEKNISI <-> SA <-> MONITOR TV)
+      // 1. Abaikan SITE_CHANGED agar pilihan cabang masing-masing layar tetap independen
       if (payload.type === 'SITE_CHANGED') {
-        if (payload.siteId && !isSameSite(payload.siteId, currentSiteId)) {
-          console.log(`[SYNC SITE] Sinkronisasi cabang dari perangkat lain ke: ${payload.siteId} (${payload.siteCode || ''})`);
-          changeGlobalActiveSite(payload.siteId, true /* isRemote */);
-        }
         return;
       }
 
       // 2. FILTER KETAT CABANG: JIKA BUKAN CABANG YANG AKTIF DI PERANGKAT INI, JANGAN TERIMA/PROSES
-      if (payload.siteId && !isSameSite(payload.siteId, currentSiteId)) {
+      const incomingSite = payload.siteId || payload.siteCode || (payload.booking && (payload.booking.siteId || payload.booking.siteCode));
+      if (incomingSite && !isSameSite(incomingSite, currentSiteId)) {
         return;
       }
 
       if (payload.type === 'voice_call') {
         const { text, booking } = payload;
         if (text) {
-          // Bunyikan suara di perangkat penerima (TV Monitor)
+          // Bunyikan suara di perangkat penerima hanya jika berada di cabang yang sama
           announceVoice(text, booking, true /* isRemote */);
         }
       } else if (payload.type === 'data_sync') {
         if (payload.bookings && Array.isArray(payload.bookings)) {
-          // Simpan data tanpa memancarkan broadcast balik (mencegah echo loop)
-          saveBookings(payload.bookings, true /* skipBroadcast */);
-          refreshAllBoards();
+          const oldJson = localStorage.getItem(STORAGE_KEY) || '[]';
+          const newJson = JSON.stringify(payload.bookings);
+          if (oldJson !== newJson) {
+            // Simpan data tanpa memancarkan broadcast balik (mencegah echo loop)
+            saveBookings(payload.bookings, true /* skipBroadcast */);
+            refreshAllBoards();
+          }
         }
       }
     }
@@ -4567,7 +4569,7 @@
         return (a.slot || '').localeCompare(b.slot || '');
       });
 
-      container.innerHTML = '';
+      let newHtml = '';
 
       if (bookings.length === 0) {
         let emptyMsg = 'Tidak ada unit antrian untuk filter stall / tanggal ini.';
@@ -4582,192 +4584,191 @@
           `;
         }
 
-        container.innerHTML = `
+        newHtml = `
           <div class="col-span-full py-10 text-center text-slate-500 bg-white border border-slate-200 shadow-sm rounded-[3px] p-4">
             <i data-lucide="wrench" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
             <p class="font-bold text-slate-700 text-xs sm:text-sm">${emptyMsg}</p>
             ${hintBtn}
           </div>
         `;
-        lucide.createIcons();
-        return;
+      } else {
+        bookings.forEach(b => {
+          let stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
+          let statusBadge = 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold';
+          if (b.status === 'Checked In') statusBadge = 'bg-amber-50 text-amber-800 border border-amber-300 font-bold animate-pulse';
+          if (b.status === 'In Progress') statusBadge = 'bg-sky-50 text-sky-700 border border-sky-300 font-bold';
+          if (b.status === 'Done') statusBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold';
+
+          let dateBadge = '';
+          if (isSameDate(b.date, todayIso)) {
+            dateBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Hari Ini</span>`;
+          } else if (isSameDate(b.date, tomorrowIso)) {
+            dateBadge = `<span class="bg-blue-50 text-blue-700 border border-blue-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Besok (${formatDateIndo(b.date, true)})</span>`;
+          } else {
+            dateBadge = `<span class="bg-purple-50 text-purple-700 border border-purple-200 font-bold px-1.5 py-0.5 rounded text-[10px]">${formatDateIndo(b.date, true)}</span>`;
+          }
+
+          const isBookingToday = isSameDate(b.date, todayIso);
+          let actionButtonsHtml = '';
+          let statusNoticeHtml = '';
+
+          if (!isBookingToday) {
+            statusNoticeHtml = `
+              <div class="text-[11px] text-slate-600 bg-slate-50 border border-slate-200 p-2 font-medium flex items-center gap-1.5 rounded-[2px]">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
+                <span>Jadwal Booking: <strong>${formatDateIndo(b.date, true)}</strong> &bull; Belum Hari H</span>
+              </div>
+            `;
+            actionButtonsHtml = `
+              <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-40">
+                <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Tombol dinonaktifkan: Bukan jadwal hari ini (${formatDateIndo(b.date, true)})">
+                  <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                  <span>Mulai Servis</span>
+                </button>
+                <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Tombol dinonaktifkan: Bukan jadwal hari ini (${formatDateIndo(b.date, true)})">
+                  <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                  <span>Selesai</span>
+                </button>
+              </div>
+            `;
+          } else if (b.status === 'Booked') {
+            statusNoticeHtml = `
+              <div class="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 p-2 font-medium flex items-center gap-1.5 rounded-[2px]">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i>
+                <span>Menunggu konsumen check-in di Meja SA</span>
+              </div>
+            `;
+            actionButtonsHtml = `
+              <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-50">
+                <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Menunggu Check-In oleh SA">
+                  <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                  <span>Mulai Servis</span>
+                </button>
+                <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Menunggu Check-In oleh SA">
+                  <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                  <span>Selesai</span>
+                </button>
+              </div>
+            `;
+          } else if (b.status === 'Checked In') {
+            statusNoticeHtml = `
+              <div class="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 p-2 font-semibold flex items-center gap-1.5 rounded-[2px]">
+                <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                <span>Konsumen telah tiba di bengkel &bull; Siap dikerjakan</span>
+              </div>
+            `;
+            actionButtonsHtml = `
+              <div class="grid grid-cols-2 gap-1.5 text-xs font-bold">
+                <button onclick="technicianUpdateStatus('${b.id}', 'In Progress')" class="py-1.5 px-2 bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center gap-1 shadow-xs cursor-pointer transition rounded-[2px]">
+                  <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                  <span>Mulai Servis</span>
+                </button>
+                <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 opacity-50 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Mulai pengerjaan servis terlebih dahulu">
+                  <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                  <span>Selesai</span>
+                </button>
+              </div>
+            `;
+          } else if (b.status === 'In Progress') {
+            statusNoticeHtml = `
+              <div class="text-[11px] text-cyan-900 bg-cyan-50 border border-cyan-200 p-2 font-semibold flex items-center gap-1.5 rounded-[2px]">
+                <i data-lucide="wrench" class="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-cyan-600"></i>
+                <span>Sedang dalam proses pengerjaan di stall</span>
+              </div>
+            `;
+            actionButtonsHtml = `
+              <div class="grid grid-cols-2 gap-1.5 text-xs font-bold">
+                <button disabled class="py-1.5 px-2 bg-cyan-50 text-cyan-800 border border-cyan-300 opacity-90 cursor-default flex items-center justify-center gap-1 rounded-[2px]">
+                  <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-cyan-600"></i>
+                  <span>Dikerjakan</span>
+                </button>
+                <button onclick="technicianUpdateStatus('${b.id}', 'Done')" class="py-1.5 px-2 bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1 shadow-xs cursor-pointer transition animate-pulse rounded-[2px]">
+                  <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                  <span>Selesai Servis</span>
+                </button>
+              </div>
+            `;
+          } else if (b.status === 'Done') {
+            statusNoticeHtml = `
+              <div class="text-[11px] text-emerald-900 bg-emerald-50 border border-emerald-300 p-2 font-bold flex items-center justify-center gap-1.5 rounded-[2px]">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                <span>Servis Selesai &bull; Siap Diserahkan</span>
+              </div>
+            `;
+            actionButtonsHtml = `
+              <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-50">
+                <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Servis sudah selesai">
+                  <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                  <span>Mulai Servis</span>
+                </button>
+                <button disabled class="py-1.5 px-2 bg-emerald-50 text-emerald-700 border border-emerald-300 cursor-default flex items-center justify-center gap-1 rounded-[2px]">
+                  <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                  <span>Selesai</span>
+                </button>
+              </div>
+            `;
+          }
+
+          const siteObj = SITES.find(s => isSameSite(s.id, b.siteId));
+          const siteBadge = siteObj ? `<span class="bg-slate-100 text-slate-700 border border-slate-300 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider">${siteObj.city}</span>` : '';
+
+          newHtml += `
+            <div class="bg-white border-2 border-slate-300 border-t-4 border-t-red-600 py-2.5 px-[2mm] space-y-2 shadow-xs rounded-[3px] teknisi-card transition hover:shadow-md">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <div>
+                  <div class="flex items-center gap-1.5 mb-0.5 flex-wrap">
+                    ${siteBadge}
+                    ${dateBadge}
+                    <span class="text-[10px] text-slate-500 uppercase font-bold">No. Antrian</span>
+                  </div>
+                  <div class="text-base font-mono font-black text-slate-900">${b.queueNumber}</div>
+                </div>
+                <div class="text-right">
+                  <span class="text-[11px] font-bold text-slate-800 block">${stallLabel}</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold ${statusBadge}">${b.status}</span>
+                </div>
+              </div>
+
+              <div class="space-y-1.5 text-xs">
+                <div class="flex justify-between items-start gap-2">
+                  <span class="text-slate-500 font-medium shrink-0">Kendaraan:</span>
+                  <span class="font-extrabold text-slate-900 text-right whitespace-normal break-words">${b.model} (${b.plate})</span>
+                </div>
+                <div class="flex justify-between items-center gap-2">
+                  <span class="text-slate-500 font-medium shrink-0">Jam Slot:</span>
+                  <span class="font-bold text-red-600 text-right whitespace-normal break-words">${b.slot} WIB</span>
+                </div>
+                <div class="flex justify-between items-start gap-2">
+                  <span class="text-slate-500 font-medium shrink-0">Pelanggan:</span>
+                  <span class="font-semibold text-slate-800 text-right whitespace-normal break-words">${b.name} ${b.phone ? `(${b.phone})` : ''}</span>
+                </div>
+                <div class="pt-1 text-slate-700">
+                  <div class="flex items-center justify-between mb-1 gap-1">
+                    <span class="text-[11px] font-bold text-slate-600 shrink-0">Pekerjaan & Level:</span>
+                    ${b.level ? `<span class="px-1.5 py-0.2 text-[10px] font-bold ${b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold')}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + ' Jam' : '< 30m') : '1 Jam'})</span>` : ''}
+                  </div>
+                  <div class="font-semibold text-slate-900 text-xs bg-slate-50 p-2 border border-slate-200 rounded-[2px] whitespace-normal break-words">${b.complaint || b.notes || 'Servis berkala standar'}</div>
+                  ${b.notes && b.notes !== b.complaint ? `<p class="italic bg-slate-50 border border-slate-200 p-1.5 text-slate-600 text-[11px] mt-1 whitespace-normal break-words">${b.notes}</p>` : ''}
+                </div>
+              </div>
+
+              ${statusNoticeHtml}
+
+              <!-- Tombol Aksi Teknisi Sesuai Tahapan & State Lock -->
+              <div class="pt-2 border-t border-slate-200 space-y-1.5">
+                <span class="text-[10px] text-slate-500 font-bold uppercase block">Ubah Status Servis:</span>
+                ${actionButtonsHtml}
+              </div>
+            </div>
+          `;
+        });
       }
 
-      bookings.forEach(b => {
-        const card = document.createElement('div');
-        card.className = 'bg-white border-2 border-slate-300 border-t-4 border-t-red-600 py-2.5 px-[2mm] space-y-2 shadow-xs rounded-[3px] teknisi-card transition hover:shadow-md';
-
-        let stallLabel = b.stall === 'express' ? 'Express Bay' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
-        let statusBadge = 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold';
-        if (b.status === 'Checked In') statusBadge = 'bg-amber-50 text-amber-800 border border-amber-300 font-bold animate-pulse';
-        if (b.status === 'In Progress') statusBadge = 'bg-sky-50 text-sky-700 border border-sky-300 font-bold';
-        if (b.status === 'Done') statusBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold';
-
-        let dateBadge = '';
-        if (isSameDate(b.date, todayIso)) {
-          dateBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Hari Ini</span>`;
-        } else if (isSameDate(b.date, tomorrowIso)) {
-          dateBadge = `<span class="bg-blue-50 text-blue-700 border border-blue-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Besok (${formatDateIndo(b.date, true)})</span>`;
-        } else {
-          dateBadge = `<span class="bg-purple-50 text-purple-700 border border-purple-200 font-bold px-1.5 py-0.5 rounded text-[10px]">${formatDateIndo(b.date, true)}</span>`;
-        }
-
-        const isBookingToday = isSameDate(b.date, todayIso);
-        let actionButtonsHtml = '';
-        let statusNoticeHtml = '';
-
-        if (!isBookingToday) {
-          statusNoticeHtml = `
-            <div class="text-[11px] text-slate-600 bg-slate-50 border border-slate-200 p-2 font-medium flex items-center gap-1.5 rounded-[2px]">
-              <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
-              <span>Jadwal Booking: <strong>${formatDateIndo(b.date, true)}</strong> &bull; Belum Hari H</span>
-            </div>
-          `;
-          actionButtonsHtml = `
-            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-40">
-              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Tombol dinonaktifkan: Bukan jadwal hari ini (${formatDateIndo(b.date, true)})">
-                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Mulai Servis</span>
-              </button>
-              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Tombol dinonaktifkan: Bukan jadwal hari ini (${formatDateIndo(b.date, true)})">
-                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Selesai</span>
-              </button>
-            </div>
-          `;
-        } else if (b.status === 'Booked') {
-          statusNoticeHtml = `
-            <div class="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 p-2 font-medium flex items-center gap-1.5 rounded-[2px]">
-              <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i>
-              <span>Menunggu konsumen check-in di Meja SA</span>
-            </div>
-          `;
-          actionButtonsHtml = `
-            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-50">
-              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Menunggu Check-In oleh SA">
-                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Mulai Servis</span>
-              </button>
-              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Menunggu Check-In oleh SA">
-                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Selesai</span>
-              </button>
-            </div>
-          `;
-        } else if (b.status === 'Checked In') {
-          statusNoticeHtml = `
-            <div class="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 p-2 font-semibold flex items-center gap-1.5 rounded-[2px]">
-              <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
-              <span>Konsumen telah tiba di bengkel &bull; Siap dikerjakan</span>
-            </div>
-          `;
-          actionButtonsHtml = `
-            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold">
-              <button onclick="technicianUpdateStatus('${b.id}', 'In Progress')" class="py-1.5 px-2 bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center gap-1 shadow-xs cursor-pointer transition rounded-[2px]">
-                <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                <span>Mulai Servis</span>
-              </button>
-              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 opacity-50 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Mulai pengerjaan servis terlebih dahulu">
-                <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-                <span>Selesai</span>
-              </button>
-            </div>
-          `;
-        } else if (b.status === 'In Progress') {
-          statusNoticeHtml = `
-            <div class="text-[11px] text-cyan-900 bg-cyan-50 border border-cyan-200 p-2 font-semibold flex items-center gap-1.5 rounded-[2px]">
-              <i data-lucide="wrench" class="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-cyan-600"></i>
-              <span>Sedang dalam proses pengerjaan di stall</span>
-            </div>
-          `;
-          actionButtonsHtml = `
-            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold">
-              <button disabled class="py-1.5 px-2 bg-cyan-50 text-cyan-800 border border-cyan-300 opacity-90 cursor-default flex items-center justify-center gap-1 rounded-[2px]">
-                <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-cyan-600"></i>
-                <span>Dikerjakan</span>
-              </button>
-              <button onclick="technicianUpdateStatus('${b.id}', 'Done')" class="py-1.5 px-2 bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1 shadow-xs cursor-pointer transition animate-pulse rounded-[2px]">
-                <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-                <span>Selesai Servis</span>
-              </button>
-            </div>
-          `;
-        } else if (b.status === 'Done') {
-          statusNoticeHtml = `
-            <div class="text-[11px] text-emerald-900 bg-emerald-50 border border-emerald-300 p-2 font-bold flex items-center justify-center gap-1.5 rounded-[2px]">
-              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
-              <span>Servis Selesai &bull; Siap Diserahkan</span>
-            </div>
-          `;
-          actionButtonsHtml = `
-            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold opacity-50">
-              <button disabled class="py-1.5 px-2 bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center gap-1 border border-slate-200 rounded-[2px]" title="Terkunci: Servis sudah selesai">
-                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Mulai Servis</span>
-              </button>
-              <button disabled class="py-1.5 px-2 bg-emerald-50 text-emerald-700 border border-emerald-300 cursor-default flex items-center justify-center gap-1 rounded-[2px]">
-                <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-                <span>Selesai</span>
-              </button>
-            </div>
-          `;
-        }
-
-        const siteObj = SITES.find(s => isSameSite(s.id, b.siteId));
-        const siteBadge = siteObj ? `<span class="bg-slate-100 text-slate-700 border border-slate-300 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider">${siteObj.city}</span>` : '';
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-            <div>
-              <div class="flex items-center gap-1.5 mb-0.5 flex-wrap">
-                ${siteBadge}
-                ${dateBadge}
-                <span class="text-[10px] text-slate-500 uppercase font-bold">No. Antrian</span>
-              </div>
-              <div class="text-base font-mono font-black text-slate-900">${b.queueNumber}</div>
-            </div>
-            <div class="text-right">
-              <span class="text-[11px] font-bold text-slate-800 block">${stallLabel}</span>
-              <span class="px-2 py-0.5 text-[10px] font-bold ${statusBadge}">${b.status}</span>
-            </div>
-          </div>
-
-          <div class="space-y-1.5 text-xs">
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500 font-medium">Kendaraan:</span>
-              <span class="font-extrabold text-slate-900">${b.model} (${b.plate})</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500 font-medium">Jam Slot:</span>
-              <span class="font-bold text-red-600">${b.slot} WIB</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500 font-medium">Pelanggan:</span>
-              <span class="font-semibold text-slate-800">${b.name} ${b.phone ? `(${b.phone})` : ''}</span>
-            </div>
-            <div class="pt-1 text-slate-700">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-[11px] font-bold text-slate-600">Pekerjaan & Level:</span>
-                ${b.level ? `<span class="px-1.5 py-0.2 text-[10px] font-bold ${b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold')}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + ' Jam' : '< 30m') : '1 Jam'})</span>` : ''}
-              </div>
-              <div class="font-semibold text-slate-900 text-xs bg-slate-50 p-2 border border-slate-200 rounded-[2px]">${b.complaint || b.notes || 'Servis berkala standar'}</div>
-              ${b.notes && b.notes !== b.complaint ? `<p class="italic bg-slate-50 border border-slate-200 p-1.5 text-slate-600 text-[11px] mt-1">${b.notes}</p>` : ''}
-            </div>
-          </div>
-
-          ${statusNoticeHtml}
-
-          <!-- Tombol Aksi Teknisi Sesuai Tahapan & State Lock -->
-          <div class="pt-2 border-t border-slate-200 space-y-1.5">
-            <span class="text-[10px] text-slate-500 font-bold uppercase block">Ubah Status Servis:</span>
-            ${actionButtonsHtml}
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-
-      lucide.createIcons();
+      if (container.dataset.renderedHtml !== newHtml) {
+        container.dataset.renderedHtml = newHtml;
+        container.innerHTML = newHtml;
+        lucide.createIcons();
+      }
     }
 
     function technicianUpdateStatus(bookingId, newStatus) {
@@ -4891,8 +4892,8 @@
         return (a.slot || '').localeCompare(b.slot || '');
       });
 
-      if (tbody) tbody.innerHTML = '';
-      if (mobileList) mobileList.innerHTML = '';
+      let rowsHtml = '';
+      let cardsHtml = '';
 
       if (bookings.length === 0) {
         let emptyMsg = 'Tidak ada data antrian untuk pilihan filter ini.';
@@ -4907,32 +4908,36 @@
           `;
         }
 
-        if (tbody) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="7" class="text-center py-8 text-slate-500 italic bg-slate-50/50">
-                <div class="font-bold text-slate-700 text-xs sm:text-sm">${emptyMsg}</div>
-                ${hintBtn}
-              </td>
-            </tr>
-          `;
-        }
-        if (mobileList) {
-          mobileList.innerHTML = `
-            <div class="text-center py-6 text-slate-500 text-xs bg-slate-50 border border-slate-200 p-4 rounded-[3px]">
+        const emptyTbodyHtml = `
+          <tr>
+            <td colspan="7" class="text-center py-8 text-slate-500 italic bg-slate-50/50">
               <div class="font-bold text-slate-700 text-xs sm:text-sm">${emptyMsg}</div>
               ${hintBtn}
-            </div>
-          `;
+            </td>
+          </tr>
+        `;
+        const emptyMobileHtml = `
+          <div class="text-center py-6 text-slate-500 text-xs bg-slate-50 border border-slate-200 p-4 rounded-[3px]">
+            <div class="font-bold text-slate-700 text-xs sm:text-sm">${emptyMsg}</div>
+            ${hintBtn}
+          </div>
+        `;
+
+        if (tbody && tbody.dataset.renderedHtml !== emptyTbodyHtml) {
+          tbody.dataset.renderedHtml = emptyTbodyHtml;
+          tbody.innerHTML = emptyTbodyHtml;
+        }
+        if (mobileList && mobileList.dataset.renderedHtml !== emptyMobileHtml) {
+          mobileList.dataset.renderedHtml = emptyMobileHtml;
+          mobileList.innerHTML = emptyMobileHtml;
         }
         lucide.createIcons();
         return;
       }
 
       bookings.forEach(b => {
-        const tr = document.createElement('tr');
         const isBatal = b.status === 'Batal';
-        tr.className = isBatal 
+        const trClass = isBatal 
           ? 'bg-rose-50/40 hover:bg-rose-50/60 border-b-2 border-slate-300 border-l-4 border-l-rose-500 transition' 
           : 'border-b-2 border-slate-300 hover:bg-slate-50 transition';
 
@@ -5055,83 +5060,89 @@
           actionButtonsHtml = `<div class="flex items-center justify-end gap-1 flex-wrap">${hadirBtn}${prosesBtn}${selesaiBtn}</div>`;
         }
 
-        // 1. Tampilan Laptop (Row Tabel dengan Teks Gelap Kontras Tinggi)
-        if (tbody) {
-          tr.innerHTML = `
-            <td class="py-1.5 px-2.5 font-mono font-black text-sm ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</td>
+        // 1. Tampilan Laptop (Row Tabel dengan Teks Gelap Kontras Tinggi & Wrap Teks ke Bawah)
+        rowsHtml += `
+          <tr class="${trClass}">
+            <td class="py-1.5 px-2.5 font-mono font-black text-sm whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</td>
             <td class="py-1.5 px-2.5">
-              <span class="px-2 py-0.5 text-[10px] font-bold ${statusBadge}">
+              <span class="px-2 py-0.5 text-[10px] font-bold inline-block ${statusBadge}">
                 ${b.status}
               </span>
               ${isBatal ? `<div class="text-[9px] text-rose-600 font-semibold mt-0.5">&gt;15 Mnt Tidak Hadir</div>` : ''}
             </td>
             <td class="py-1.5 px-2.5">
               <div class="flex items-center gap-1 mb-0.5 flex-wrap">${siteBadge}${dateBadge}</div>
-              <div class="font-bold text-xs ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${stallLabel}</div>
-              <div class="text-[11px] ${isBatal ? 'text-slate-400' : 'text-red-600 font-extrabold'}">${b.slot} WIB</div>
+              <div class="font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${stallLabel}</div>
+              <div class="text-[11px] whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-red-600 font-extrabold'}">${b.slot} WIB</div>
             </td>
             <td class="py-1.5 px-2.5">
-              <div class="font-black text-xs ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.plate}</div>
-              <div class="text-[11px] text-slate-500 font-medium">${b.model}</div>
+              <div class="font-black text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.plate}</div>
+              <div class="text-[11px] text-slate-500 font-medium whitespace-normal break-words">${b.model}</div>
             </td>
             <td class="py-1.5 px-2.5">
-              <div class="font-bold text-xs ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${b.name}</div>
-              <div class="text-[10px] text-slate-500 font-mono">${b.phone || '-'}</div>
+              <div class="font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${b.name}</div>
+              <div class="text-[10px] text-slate-500 font-mono whitespace-normal break-words">${b.phone || '-'}</div>
             </td>
-            <td class="py-1.5 px-2.5 max-w-[220px]">
-              <div class="flex items-center gap-1 flex-wrap">
-                ${b.level ? `<span class="px-1.5 py-0.2 text-[9px] font-bold ${isBatal ? 'bg-slate-100 text-slate-500 border border-slate-200' : (b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold'))}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + 'J' : '<30m') : '1J'})</span>` : ''}
-                <span class="font-semibold ${isBatal ? 'text-slate-400' : 'text-slate-800'} text-xs truncate max-w-[150px]">${b.complaint || b.notes || '-'}</span>
+            <td class="py-1.5 px-2.5 min-w-[200px]">
+              <div class="flex items-start gap-1 flex-wrap">
+                ${b.level ? `<span class="shrink-0 px-1.5 py-0.2 text-[9px] font-bold ${isBatal ? 'bg-slate-100 text-slate-500 border border-slate-200' : (b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold'))}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + 'J' : '<30m') : '1J'})</span>` : ''}
+                <span class="font-semibold ${isBatal ? 'text-slate-400' : 'text-slate-800'} text-xs whitespace-normal break-words leading-tight">${b.complaint || b.notes || '-'}</span>
               </div>
-              ${b.notes && b.notes !== b.complaint ? `<div class="text-[10px] text-slate-500 italic truncate max-w-[200px] mt-0.5">${b.notes}</div>` : ''}
+              ${b.notes && b.notes !== b.complaint ? `<div class="text-[10px] text-slate-500 italic whitespace-normal break-words mt-1">${b.notes}</div>` : ''}
             </td>
             <td class="py-1.5 px-2.5 text-right">
               ${actionButtonsHtml}
             </td>
-          `;
-          tbody.appendChild(tr);
-        }
+          </tr>
+        `;
 
-        // 2. Tampilan HP (Daftar Kartu Antrian Rapi Vertikal)
-        if (mobileList) {
-          const card = document.createElement('div');
-          card.className = `py-2 px-[2mm] bg-white border-2 border-slate-300 border-t-4 border-t-red-600 rounded-[3px] shadow-xs space-y-1.5 transition sa-card ${isBatal ? 'opacity-60 bg-rose-50/40 border-rose-300' : ''}`;
-          card.innerHTML = `
+        // 2. Tampilan HP (Daftar Kartu Antrian Rapi Vertikal & Wrap Teks)
+        cardsHtml += `
+          <div class="py-2 px-[2mm] bg-white border-2 border-slate-300 border-t-4 border-t-red-600 rounded-[3px] shadow-xs space-y-1.5 transition sa-card ${isBatal ? 'opacity-60 bg-rose-50/40 border-rose-300' : ''}">
             <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
               <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="font-mono font-black text-sm ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</span>
-                <span class="px-2 py-0.5 text-[10px] font-bold ${statusBadge}">${b.status}</span>
+                <span class="font-mono font-black text-sm whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</span>
+                <span class="px-2 py-0.5 text-[10px] font-bold inline-block ${statusBadge}">${b.status}</span>
                 ${siteBadge}
                 ${dateBadge}
               </div>
-              <div class="text-[11px] font-extrabold ${isBatal ? 'text-slate-400' : 'text-red-600'}">${stallLabel} &bull; ${b.slot} WIB</div>
+              <div class="text-[11px] font-extrabold whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-red-600'}">${stallLabel} &bull; ${b.slot} WIB</div>
             </div>
             
             <div class="flex items-start justify-between gap-2 text-xs">
               <div>
-                <div class="font-black text-sm ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.plate}</div>
-                <div class="text-slate-500 text-[11px] font-medium">${b.model}</div>
+                <div class="font-black text-sm whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.plate}</div>
+                <div class="text-slate-500 text-[11px] font-medium whitespace-normal break-words">${b.model}</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-slate-900">${b.name}</div>
-                <div class="text-slate-500 text-[11px] font-mono">${b.phone || '-'}</div>
+                <div class="font-bold text-slate-900 whitespace-normal break-words">${b.name}</div>
+                <div class="text-slate-500 text-[11px] font-mono whitespace-normal break-words">${b.phone || '-'}</div>
               </div>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 p-2 rounded-[2px] text-[11px] text-slate-700">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                ${b.level ? `<span class="px-1.5 py-0.5 text-[9px] font-bold bg-white border border-slate-300 text-slate-700 rounded-[2px]">${b.level}</span>` : ''}
-                <span class="font-semibold text-slate-800">${b.complaint || b.notes || '-'}</span>
+              <div class="flex items-start gap-1.5 flex-wrap">
+                ${b.level ? `<span class="shrink-0 px-1.5 py-0.5 text-[9px] font-bold bg-white border border-slate-300 text-slate-700 rounded-[2px]">${b.level}</span>` : ''}
+                <span class="font-semibold text-slate-800 whitespace-normal break-words leading-tight">${b.complaint || b.notes || '-'}</span>
               </div>
+              ${b.notes && b.notes !== b.complaint ? `<div class="text-[10px] text-slate-500 italic whitespace-normal break-words mt-1">${b.notes}</div>` : ''}
             </div>
 
             <div class="pt-1 flex items-center justify-end gap-1.5 flex-wrap">
               ${actionButtonsHtml}
             </div>
-          `;
-          mobileList.appendChild(card);
-        }
+          </div>
+        `;
       });
+
+      if (tbody && tbody.dataset.renderedHtml !== rowsHtml) {
+        tbody.dataset.renderedHtml = rowsHtml;
+        tbody.innerHTML = rowsHtml;
+      }
+      if (mobileList && mobileList.dataset.renderedHtml !== cardsHtml) {
+        mobileList.dataset.renderedHtml = cardsHtml;
+        mobileList.innerHTML = cardsHtml;
+      }
 
       lucide.createIcons();
     }
@@ -5198,18 +5209,64 @@
       saCallVoice(bookingId, 'hadir');
     }
 
+    function syncModalWalkinSlotOptions(defaultSelected) {
+      const stallSelect = document.getElementById('modalInputStall');
+      const slotSelect = document.getElementById('modalInputSlot');
+      if (!stallSelect || !slotSelect) return;
+      const stall = stallSelect.value;
+      const isSat = isSaturday(currentDate);
+
+      slotSelect.innerHTML = '';
+      if (stall === 'express') {
+        // Express: Sabtu s.d. 13.30 (index 0..10), Senin-Jumat s.d. 15.30 (index 0..14)
+        const maxExpIdx = isSat ? 10 : 14;
+        EXPRESS_SLOTS.slice(0, maxExpIdx + 1).forEach((slotText, idx) => {
+          const opt = document.createElement('option');
+          opt.value = String(idx);
+          opt.innerText = slotText;
+          if (defaultSelected && (String(defaultSelected) === String(idx) || defaultSelected.startsWith(slotText.split(' - ')[0]))) {
+            opt.selected = true;
+          }
+          slotSelect.appendChild(opt);
+        });
+      } else {
+        // Regular: Sabtu s.d. 13.30, Senin-Jumat s.d. 15.30
+        const regHours = isSat 
+          ? ['08.30', '09.30', '10.30', '11.30', '12.30', '13.30']
+          : ['08.30', '09.30', '10.30', '11.30', '12.30', '13.30', '14.30', '15.30'];
+        regHours.forEach(time => {
+          const opt = document.createElement('option');
+          opt.value = time;
+          const isBreak = (!isSat && ((stall === 'stall1' && time === '12.30') || (stall === 'stall2' && time === '13.30')));
+          opt.innerText = isBreak ? `${time} (Istirahat)` : `${time} WIB`;
+          if (defaultSelected && defaultSelected === time) {
+            opt.selected = true;
+          }
+          slotSelect.appendChild(opt);
+        });
+      }
+    }
+
     function openWalkinModalFromSA() {
-      currentModalTarget = { stall: 'stall1', slot: '08.30' };
+      const isSat = isSaturday(currentDate);
+      const defSlot = '08.30';
+      currentModalTarget = { stall: 'stall1', slot: defSlot };
       const modal = document.getElementById('slotActionModal');
       const title = document.getElementById('modalSlotTitle');
       const subtitle = document.getElementById('modalSlotSubtitle');
       const viewBooked = document.getElementById('modalViewBooked');
       const viewAvail = document.getElementById('modalViewAvailable');
 
-      title.innerText = 'Input Booking Walk-In Baru';
-      subtitle.innerText = 'Service Advisor Registration';
+      title.innerText = 'Input Booking Walk-In Baru (Meja SA)';
+      subtitle.innerText = isSat 
+        ? 'Service Advisor Registration • Sabtu / Minggu (Batas s.d. 13.30 WIB)' 
+        : 'Service Advisor Registration • Senin - Jumat (Batas s.d. 15.30 WIB)';
       viewBooked.classList.add('hidden');
       viewAvail.classList.remove('hidden');
+
+      const stallSel = document.getElementById('modalInputStall');
+      if (stallSel) stallSel.value = 'stall1';
+      syncModalWalkinSlotOptions(defSlot);
 
       document.getElementById('modalInputPlate').value = '';
       document.getElementById('modalInputName').value = '';
@@ -6798,12 +6855,12 @@
     // ==============================================================
     function handleSlotClick(stall, time) {
       if (currentRole === 'tv') return; // Slot TV Monitor tidak dapat diklik
-      if (isSaturday(currentDate) && time >= '11.30') {
-        showPopup(`Slot jam ${time} WIB tidak beroperasi pada hari Sabtu karena jam operasional servis hanya sampai 11.30 WIB.`, 'Jam Operasional Sabtu', 'warning');
+      if (isSaturday(currentDate) && time > '13.30') {
+        showPopup(`Slot jam ${time} WIB melebihi batas operasional walk-in SA pada hari Sabtu (maksimal 13.30 WIB).`, 'Jam Operasional Sabtu', 'warning');
         return;
       }
-      if (!isSaturday(currentDate) && time >= '14.30') {
-        showPopup(`Slot jam ${time} WIB tidak beroperasi karena jam operasional servis hanya sampai 14.30 WIB.`, 'Slot Tidak Tersedia', 'warning');
+      if (!isSaturday(currentDate) && time > '15.30') {
+        showPopup(`Slot jam ${time} WIB melebihi batas operasional walk-in SA (maksimal 15.30 WIB).`, 'Slot Tidak Tersedia', 'warning');
         return;
       }
       currentModalTarget = { stall, slot: time };
@@ -6835,6 +6892,10 @@
         viewBooked.classList.add('hidden');
         viewAvail.classList.remove('hidden');
 
+        const stallSel = document.getElementById('modalInputStall');
+        if (stallSel) stallSel.value = stall;
+        syncModalWalkinSlotOptions(time);
+
         document.getElementById('modalInputPlate').value = '';
         document.getElementById('modalInputName').value = '';
         document.getElementById('modalInputPhone').value = '';
@@ -6848,12 +6909,12 @@
 
     function handleExpressSlotClick(index, timeRange) {
       if (currentRole === 'tv') return; // Slot TV Monitor tidak dapat diklik
-      if (isSaturday(currentDate) && index >= 6) {
-        showPopup(`Slot Express ${timeRange} WIB tidak beroperasi pada hari Sabtu karena jam operasional servis hanya sampai 11.30 WIB.`, 'Jam Operasional Sabtu', 'warning');
+      if (isSaturday(currentDate) && index > 10) {
+        showPopup(`Slot Express ${timeRange} WIB melebihi batas operasional walk-in SA hari Sabtu (maksimal 13.30 WIB).`, 'Jam Operasional Sabtu', 'warning');
         return;
       }
-      if (!isSaturday(currentDate) && index >= 12) {
-        showPopup(`Slot Express ${timeRange} WIB tidak beroperasi karena jam operasional servis selesai pukul 14.30 WIB.`, 'Jam Operasional', 'warning');
+      if (!isSaturday(currentDate) && index > 14) {
+        showPopup(`Slot Express ${timeRange} WIB melebihi batas operasional walk-in SA (maksimal 15.30 WIB).`, 'Jam Operasional', 'warning');
         return;
       }
       currentModalTarget = { stall: 'express', slot: String(index) };
@@ -6883,6 +6944,10 @@
         title.innerText = 'Slot Express Tersedia';
         viewBooked.classList.add('hidden');
         viewAvail.classList.remove('hidden');
+
+        const stallSel = document.getElementById('modalInputStall');
+        if (stallSel) stallSel.value = 'express';
+        syncModalWalkinSlotOptions(String(index));
 
         document.getElementById('modalInputPlate').value = '';
         document.getElementById('modalInputName').value = '';
@@ -7024,6 +7089,15 @@
         return;
       }
 
+      const modalStallEl = document.getElementById('modalInputStall');
+      const modalSlotEl = document.getElementById('modalInputSlot');
+      if (modalStallEl && modalSlotEl && modalStallEl.value) {
+        currentModalTarget = {
+          stall: modalStallEl.value,
+          slot: modalSlotEl.value
+        };
+      }
+
       const currentSite = SITES.find(s => s.id === currentSiteId) || SITES[0];
       const siteCode = getSiteCode(currentSite.id);
       const bookings = loadBookings();
@@ -7050,13 +7124,13 @@
       let tertiarySlot = null;
       if (currentModalTarget.stall !== 'express') {
         const isSat = isSaturday(currentDate);
-        const maxLimit = isSat ? '11.30' : '14.30';
+        const maxLimit = isSat ? '13.30' : '15.30';
 
         if (estimatedHours >= 2) {
           secondarySlot = getNextWorkingSlot(currentModalTarget.slot, currentModalTarget.stall);
           if (!secondarySlot || secondarySlot > maxLimit) {
             showPopup(
-              `Kerusakan ini membutuhkan durasi ${estimatedHours} jam, namun slot berikutnya melebihi batas jam operasional servis (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki durasi berurutan cukup!`,
+              `Kerusakan ini membutuhkan durasi ${estimatedHours} jam, namun slot berikutnya melebihi batas jam operasional walk-in SA (${isSat ? 'Sabtu maks 13.30' : 'Senin-Jumat maks 15.30'}).\n\nSilakan pilih waktu lain yang memiliki durasi berurutan cukup!`,
               'Waktu Tidak Cukup',
               'warning'
             );
@@ -7084,7 +7158,7 @@
           tertiarySlot = secondarySlot ? getNextWorkingSlot(secondarySlot, currentModalTarget.stall) : null;
           if (!tertiarySlot || tertiarySlot > maxLimit) {
             showPopup(
-              `Kerusakan ini membutuhkan durasi 3 jam, namun slot ke-3 melebihi batas jam operasional servis (${isSat ? 'Sabtu maks 11.30' : 'Senin-Jumat maks 14.30'}).\n\nSilakan pilih waktu lain yang memiliki 3 jam berurutan!`,
+              `Kerusakan ini membutuhkan durasi 3 jam, namun slot ke-3 melebihi batas jam operasional walk-in SA (${isSat ? 'Sabtu maks 13.30' : 'Senin-Jumat maks 15.30'}).\n\nSilakan pilih waktu lain yang memiliki 3 jam berurutan!`,
               'Waktu Tidak Cukup',
               'warning'
             );
@@ -7844,12 +7918,18 @@
         lastGoogleSheetSyncTime = new Date();
         updateSyncTimestampUI();
 
-        // Simpan langsung ke cache lokal browser
-        saveBookings(remoteBookings);
-        localStorage.setItem('POLYTRON_SYNCED_FROM_SHEET', 'true');
-        refreshAllBoards();
+        const currentLocalJson = localStorage.getItem(STORAGE_KEY) || '[]';
+        const newRemoteJson = JSON.stringify(remoteBookings);
 
-        console.log(`[Google Sheet Sync] Sinkronisasi berhasil (${remoteBookings.length} data antrian aktif).`);
+        if (currentLocalJson !== newRemoteJson) {
+          // Simpan langsung ke cache lokal browser hanya jika ada data baru / berubah
+          saveBookings(remoteBookings);
+          localStorage.setItem('POLYTRON_SYNCED_FROM_SHEET', 'true');
+          refreshAllBoards();
+          console.log(`[Google Sheet Sync] Data antrian diperbarui dari Google Sheet (${remoteBookings.length} data aktif).`);
+        } else {
+          console.log(`[Google Sheet Sync] Data antrian sudah sinkron dan mutakhir (tanpa flicker).`);
+        }
       } else {
         console.warn('[Google Sheet Sync] Background sync Google Sheet terkendala koneksi.');
       }
