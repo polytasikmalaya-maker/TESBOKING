@@ -1000,7 +1000,7 @@
                   </ul>
                 </div>
                 <div class="mt-3 pt-2 border-t border-slate-100">
-                  <button type="button" onclick="switchRole('konsumen')" class="w-full py-1.5 sm:py-2 px-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition">
+                  <button type="button" class="w-full py-1.5 sm:py-2 px-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] sm:text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-sm transition pointer-events-none">
                     <span>Buka Booking</span>
                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                   </button>
@@ -1232,10 +1232,11 @@
                   </div>
 
                   <!-- Iframe Live Google Maps (Full Mengisi Sisa Layar Tanpa Melebihi & Tanpa Scroll) -->
-                  <div class="relative flex-1 min-h-0 w-full bg-slate-100">
+                  <div id="stage1MapContainer" class="relative flex-1 min-h-0 w-full bg-slate-100">
                     <iframe 
                       id="stage1MapIframe" 
-                      src="https://maps.google.com/maps?q=-7.339218,108.219543&hl=id&z=15&output=embed" 
+                      src="about:blank" 
+                      data-loaded-src="" 
                       class="w-full h-full border-0 absolute inset-0" 
                       loading="lazy" 
                       allowfullscreen="" 
@@ -2395,14 +2396,15 @@
       </div>
 
       <div class="mt-4 flex gap-2">
-        <button type="button" onclick="downloadTicketScreenshot()" id="btnScreenshotTicket" class="flex-1 py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center gap-1.5">
-          <i data-lucide="camera" class="w-4 h-4 text-red-500"></i>
-          <span>Screenshot</span>
+        <button type="button" onclick="downloadTicketScreenshot(false)" id="btnScreenshotTicket" class="flex-1 py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center gap-1.5" title="Unduh gambar tiket langsung">
+          <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
+          <span>Unduh Tiket (SS)</span>
         </button>
         <button type="button" onclick="closeTicketModal();" class="flex-1 py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
           <span>Tutup</span>
         </button>
       </div>
+      <p class="text-[10px] text-emerald-600 font-bold mt-2">✓ E-Tiket otomatis terunduh & tersimpan langsung</p>
 
     </div>
   </div>
@@ -3511,8 +3513,8 @@
             if (replaceHistory) {
               window.history.replaceState(stateObj, '', stateUrl);
             } else {
-              // Pastikan entry portal selalu ada di bawah role/step pada browser history
-              if (!window.history.state || window.history.state.role !== 'portal') {
+              // Pastikan entry portal ada di dasar history HANYA jika history state benar-benar kosong
+              if (!window.history.state) {
                 window.history.replaceState({ role: 'portal' }, '', window.location.pathname);
               }
               window.history.pushState(stateObj, '', stateUrl);
@@ -3573,13 +3575,8 @@
       if (role === 'konsumen') {
         goToBookingStep(1, false);
         renderBookingSlotPicker();
-        // Otomatis tarik data sheet booking terbaru dari Google Sheet saat membuka menu booking
-        showToast('Menyinkronkan data booking terbaru dari Google Sheet...', 2000);
-        fetchBookingsFromSheet(true).then(bList => {
-          if (bList && bList.length > 0) {
-            showToast(`Data booking terbaru berhasil disinkronkan (${bList.length} data)`, 2000);
-          }
-        });
+        // Otomatis tarik data sheet booking terbaru dari Google Sheet saat membuka menu booking secara hening tanpa notifikasi
+        fetchBookingsFromSheet(true);
       }
       if (role === 'part') {
         populatePartSectionSiteDropdown();
@@ -3618,7 +3615,11 @@
 
     function handleBookingStepBack(fromStep) {
       if (fromStep <= 1) {
-        switchRole('portal');
+        if (window.history.length > 1 && window.history.state && window.history.state.role === 'konsumen') {
+          window.history.back();
+        } else {
+          switchRole('portal', true);
+        }
         return;
       }
       if (window.history && window.history.state && window.history.state.role === 'konsumen' && window.history.state.step === fromStep) {
@@ -3639,7 +3640,7 @@
         if (window.history.length > 1 && window.history.state && window.history.state.role === currentRole) {
           window.history.back();
         } else {
-          switchRole('portal');
+          switchRole('portal', true);
         }
       }
     }
@@ -3747,14 +3748,11 @@
       }
 
       // 3. Hanya jika TIDAK ADA popup apapun yang terbuka, baru jalankan navigasi back aplikasi:
-      if (currentRole === 'part') {
-        handlePartBack();
-        return;
-      }
-
-      // 4. Navigasi bertahap pada Konsumen booking & role lain
       const st = e.state;
       if (st && st.role === 'konsumen' && typeof st.step === 'number') {
+        if (currentRole !== 'konsumen') {
+          switchRole('konsumen', true);
+        }
         // Jika sedang berada di Tahap 1 (Pilih Lokasi Service) dan tombol Back HP ditekan,
         // atau state yang diterima tetap Tahap 1, larikan langsung ke Menu Utama (portal)!
         if (currentRole === 'konsumen' && currentBookingStep === 1 && st.step === 1) {
@@ -3765,6 +3763,12 @@
       } else if (st && st.role && st.role !== 'portal') {
         switchRole(st.role, true);
       } else {
+        // Jika dari modul part tanpa state konsumen spesifik, kembalikan ke tahap 2 booking
+        if (currentRole === 'part' && partReturnSource === 'konsumen-step2') {
+          switchRole('konsumen', true);
+          goToBookingStep(2, false);
+          return;
+        }
         // Jika tidak ada state atau kembali ke awal, selalu tampilkan Menu Utama (portal)
         switchRole('portal', true);
       }
@@ -3965,15 +3969,22 @@
     }
 
     function handlePartBack() {
+      if (window.history.length > 1 && window.history.state && window.history.state.role === 'part') {
+        window.history.back();
+        return;
+      }
       if (partReturnSource === 'konsumen-step2') {
-        switchRole('konsumen');
-        goToBookingStep(2);
+        switchRole('konsumen', true);
+        goToBookingStep(2, false);
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({ role: 'konsumen', step: 2 }, '', '?role=konsumen&step=2');
+        }
       } else if (partReturnSource === 'sa') {
-        switchRole('sa');
+        switchRole('sa', true);
       } else if (partReturnSource === 'teknisi') {
-        switchRole('teknisi');
+        switchRole('teknisi', true);
       } else {
-        switchRole('portal');
+        switchRole('portal', true);
       }
     }
 
@@ -4318,6 +4329,38 @@
       if (window.lucide && lucide.createIcons) lucide.createIcons();
     }
 
+    // Update Iframe Live Google Maps tanpa mencemari browser history
+    // Mengganti elemen iframe di DOM mencegah browser menambahkan entri baru ke window.history (mencegah bug Back 2-3x)
+    function updateStage1MapIframe(mapEmbedUrl) {
+      if (!mapEmbedUrl) return;
+      const s1MapIframe = document.getElementById('stage1MapIframe');
+      const container = document.getElementById('stage1MapContainer') || (s1MapIframe ? s1MapIframe.parentElement : null);
+      if (!container) return;
+
+      const currentLoaded = s1MapIframe ? s1MapIframe.getAttribute('data-loaded-src') : '';
+      if (currentLoaded === mapEmbedUrl) {
+        // URL peta sudah terpasang sama persis, jangan manipulasi DOM agar tidak memicu reload
+        return;
+      }
+
+      // Buat elemen iframe baru dan replace child
+      // Menurut standar W3C / HTML5, elemen iframe yang baru disisipkan tidak menambahkan entri session history
+      const newIframe = document.createElement('iframe');
+      newIframe.id = 'stage1MapIframe';
+      newIframe.className = 'w-full h-full border-0 absolute inset-0';
+      newIframe.loading = 'lazy';
+      newIframe.allowFullscreen = true;
+      newIframe.referrerPolicy = 'no-referrer-when-downgrade';
+      newIframe.setAttribute('data-loaded-src', mapEmbedUrl);
+      newIframe.src = mapEmbedUrl;
+
+      if (s1MapIframe) {
+        container.replaceChild(newIframe, s1MapIframe);
+      } else {
+        container.appendChild(newIframe);
+      }
+    }
+
     function updateSiteDisplay() {
       const site = SITES.find(s => s.id === currentSiteId || isSameSite(s.id, currentSiteId)) || SITES[0];
       if (!site) return;
@@ -4348,10 +4391,9 @@
 
       const s1MapSite = document.getElementById('stage1MapSiteName');
       const s1MapCoords = document.getElementById('stage1MapCoords');
-      const s1MapIframe = document.getElementById('stage1MapIframe');
       if (s1MapSite) s1MapSite.innerText = site.name;
       if (s1MapCoords && site.coords) s1MapCoords.innerText = site.coords;
-      if (s1MapIframe) s1MapIframe.src = mapEmbedUrl;
+      updateStage1MapIframe(mapEmbedUrl);
 
       const summarySite = document.getElementById('summarySiteName');
       if (summarySite) summarySite.innerText = site.name;
@@ -6267,7 +6309,7 @@
       if (window.lucide && lucide.createIcons) lucide.createIcons();
     }
 
-    function submitBooking() {
+    async function submitBooking() {
       if (!selectedBookingSlot) {
         showPopup('Silakan pilih jam kedatangan (slot) terlebih dahulu pada Tahap 3!', 'Pilih Jam Kedatangan', 'warning');
         goToBookingStep(3);
@@ -6408,12 +6450,29 @@
       }
 
       // ==============================================================
-      // VALIDASI ANTI DOUBLE-BOOKING / TABRAKAN SLOT
+      // VALIDASI ANTI DOUBLE-BOOKING / TABRAKAN SLOT KE GOOGLE SHEET
       // ==============================================================
+      const btnNext4 = document.querySelector('#booking-stage-4 button[onclick="submitBooking()"]');
+      const originalBtn4 = btnNext4 ? btnNext4.innerHTML : '';
+      if (btnNext4) {
+        btnNext4.disabled = true;
+        btnNext4.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1.5"></span><span>Mengecek Google Sheet...</span>`;
+      }
+
+      try {
+        await fetchBookingsFromSheet(true);
+      } catch (e) {}
+
+      if (btnNext4) {
+        btnNext4.disabled = false;
+        btnNext4.innerHTML = originalBtn4;
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+      }
+
       const currentBookings = loadBookings();
       const conflict = currentBookings.find(b => 
         isSameDate(b.date, bookingDate) &&
-        isSameSite(b.siteId, siteId) &&
+        (isSameSite(b.siteId, siteId) || (b.siteCode && b.siteCode === siteObj.code)) &&
         isSameStall(b.stall, stall) &&
         (
           isBookingInSlot(b, selectedBookingSlot) || 
@@ -6426,7 +6485,7 @@
       if (conflict) {
         const stallLabel = stall === 'express' ? 'Express Bay' : (stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
         const timeDisplay = selectedBookingService === 'express' ? `${EXPRESS_SLOTS[parseInt(selectedBookingSlot)] || selectedBookingSlot} WIB` : `${selectedBookingSlot} WIB`;
-        showPopup(`Slot waktu jam ${timeDisplay} pada tanggal ${bookingDate} di ${siteObj.name} (${stallLabel}) sudah terisi oleh antrian ${conflict.queueNumber} (${conflict.plate}).\n\nSilakan pilih jam kedatangan atau stall lain yang masih kosong.`, 'Slot Sudah Terisi', 'warning');
+        showPopup(`Mohon maaf, slot jam ${timeDisplay} pada tanggal ${bookingDate} di ${siteObj.name} (${stallLabel}) sudah terisi di Google Sheet.\n\nData terbaru telah dimuat, silakan pilih jam kedatangan atau stall lain yang masih kosong.`, 'Slot Sudah Terisi', 'warning');
         selectedBookingSlot = null;
         selectedBookingSecondarySlot = null;
         selectedBookingTertiarySlot = null;
@@ -6493,17 +6552,26 @@
       }
     }
 
-    function executeSubmitBooking() {
-      // Sembunyikan modal konfirmasi secara langsung tanpa history.back agar modal tiket tidak tertutup prematur
-      const confirmModal = document.getElementById('bookingConfirmModal');
-      if (confirmModal) {
-        confirmModal.classList.add('hidden');
-        confirmModal.style.setProperty('display', 'none', 'important');
+    async function executeSubmitBooking() {
+      const btnSubmit = document.querySelector('#bookingConfirmModal button[onclick="executeSubmitBooking()"]');
+      const originalSubmitText = btnSubmit ? btnSubmit.innerHTML : '';
+      if (btnSubmit) {
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1.5"></span><span>Mengecek Google Sheet...</span>`;
       }
-      const cIdx = openModalStack.indexOf('bookingConfirmModal');
-      if (cIdx !== -1) openModalStack.splice(cIdx, 1);
+
+      // Validasi sekali lagi langsung ke Google Sheet secara realtime
+      try {
+        await fetchBookingsFromSheet(true);
+      } catch (e) {}
+
+      if (btnSubmit) {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = originalSubmitText;
+      }
 
       if (!selectedBookingSlot) {
+        closeBookingConfirmModal();
         showPopup('Silakan pilih jam kedatangan (slot) terlebih dahulu pada Tahap 3!', 'Pilih Jam Kedatangan', 'warning');
         goToBookingStep(3);
         return;
@@ -6564,11 +6632,7 @@
       }
 
       if (slotConflict) {
-        showPopup(
-          `Mohon maaf, slot jam <b>${chosenService === 'express' ? (EXPRESS_SLOTS[parseInt(chosenSlot, 10)] || chosenSlot) : chosenSlot} WIB</b> pada tanggal <b>${bookingDate}</b> baru saja terisi oleh antrian <b>${slotConflict.queueNumber}</b> (${slotConflict.plate || slotConflict.name || 'Pelanggan lain'}).<br><br>Silakan pilih jam slot lain yang masih tersedia!`,
-          'Slot Waktu Sudah Terisi',
-          'warning'
-        );
+        closeBookingConfirmModal();
         selectedBookingSlot = null;
         selectedBookingSecondarySlot = null;
         selectedBookingTertiarySlot = null;
@@ -6576,8 +6640,22 @@
         if (badge) badge.innerText = 'Belum dipilih';
         goToBookingStep(3, false);
         renderBookingSlotPicker();
+        showPopup(
+          `Mohon maaf, slot jam <b>${chosenService === 'express' ? (EXPRESS_SLOTS[parseInt(chosenSlot, 10)] || chosenSlot) : chosenSlot} WIB</b> pada tanggal <b>${bookingDate}</b> baru saja terisi di Google Sheet.<br><br>Data terbaru telah dimuat, silakan pilih tanggal atau jam slot yang masih tersedia!`,
+          'Slot Waktu Sudah Terisi',
+          'warning'
+        );
         return;
       }
+
+      // Sembunyikan modal konfirmasi secara langsung tanpa history.back agar modal tiket tidak tertutup prematur
+      const confirmModal = document.getElementById('bookingConfirmModal');
+      if (confirmModal) {
+        confirmModal.classList.add('hidden');
+        confirmModal.style.setProperty('display', 'none', 'important');
+      }
+      const cIdx = openModalStack.indexOf('bookingConfirmModal');
+      if (cIdx !== -1) openModalStack.splice(cIdx, 1);
 
       // ==============================================================
       // GENERATE NOMOR ANTRIAN & KODE BOOKING UNIK TANPA BENTROK
@@ -6675,6 +6753,11 @@
         try {
           window.history.replaceState({ modalOpen: true, modalId: 'ticketSuccessModal', stackLen: openModalStack.length }, '');
         } catch(e) {}
+
+        // Otomatis download screenshot e-tiket langsung tersimpan ke perangkat
+        setTimeout(function() {
+          downloadTicketScreenshot(true);
+        }, 600);
       }
 
       // Bersihkan formulir input
@@ -6705,12 +6788,12 @@
     }
 
     // ==============================================================
-    // SCREENSHOT E-TIKET DIGITAL BOOKING
+    // SCREENSHOT E-TIKET DIGITAL BOOKING (AUTO SIMPAN & LANGSUNG TERUNDUH)
     // ==============================================================
-    function downloadTicketScreenshot() {
+    function downloadTicketScreenshot(isAuto = false) {
       const btn = document.getElementById('btnScreenshotTicket');
       const originalHtml = btn ? btn.innerHTML : '';
-      if (btn) {
+      if (btn && !isAuto) {
         btn.disabled = true;
         btn.innerHTML = `<span class="inline-block animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1"></span><span>Menyimpan...</span>`;
       }
@@ -6720,13 +6803,15 @@
       const filename = `Tiket_${queueNumber}_${bookingCode}.png`;
 
       function finish(msg) {
-        if (btn) {
+        if (btn && !isAuto) {
           btn.disabled = false;
           btn.innerHTML = originalHtml;
           if (window.lucide && lucide.createIcons) lucide.createIcons();
         }
-        if (msg) {
-          showPopup(msg, 'Screenshot Berhasil', 'success');
+        if (isAuto) {
+          showToast('E-Tiket booking otomatis tersimpan & terunduh!', 3500);
+        } else if (msg) {
+          showToast('E-Tiket booking berhasil diunduh & tersimpan!', 3000);
         }
       }
 
@@ -6735,21 +6820,7 @@
           fallbackCanvasScreenshot(bookingCode, queueNumber, finish);
           return;
         }
-        try {
-          if (navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: 'image/png' })] })) {
-            navigator.share({
-              files: [new File([blob], filename, { type: 'image/png' })],
-              title: `Tiket Servis Polytron EV - ${queueNumber}`,
-              text: `E-Tiket Booking Servis Polytron EV (${queueNumber} - ${bookingCode})`
-            }).then(function() {
-              finish();
-            }).catch(function() {
-              saveBlobAsFile(blob, filename);
-              finish('E-tiket berhasil disimpan ke perangkat Anda.');
-            });
-            return;
-          }
-        } catch(e) {}
+        // Selalu unduh file secara langsung ke perangkat (kompatibel desktop & mobile)
         saveBlobAsFile(blob, filename);
         finish('E-tiket berhasil disimpan ke perangkat Anda.');
       }
@@ -6787,7 +6858,7 @@
       setTimeout(function() {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-      }, 500);
+      }, 1000);
     }
 
     function fallbackCanvasScreenshot(bookingCode, queueNumber, finish) {
@@ -6906,6 +6977,37 @@
         if (finish) finish();
       }
     }
+
+    // Dengarkan shortcut tombol screenshot / simpan saat modal tiket aktif (Win+Shift+S / PrintScreen / Ctrl+S)
+    window.addEventListener('keydown', function(e) {
+      const ticketModal = document.getElementById('ticketSuccessModal');
+      const isTicketOpen = ticketModal && !ticketModal.classList.contains('hidden') && ticketModal.style.display !== 'none';
+      if (isTicketOpen) {
+        if (e.key === 'PrintScreen' || (e.ctrlKey && e.key.toLowerCase() === 's') || (e.shiftKey && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's')) {
+          e.preventDefault();
+          downloadTicketScreenshot(false);
+        }
+      }
+    });
+
+    // Tangani paste gambar dari clipboard (misal setelah pengguna tekan Win + Shift + S lalu Ctrl + V)
+    window.addEventListener('paste', function(e) {
+      if (e.clipboardData && e.clipboardData.items) {
+        for (let i = 0; i < e.clipboardData.items.length; i++) {
+          const item = e.clipboardData.items[i];
+          if (item.type.indexOf('image') !== -1) {
+            const blob = item.getAsFile();
+            if (blob) {
+              const code = document.getElementById('ticketCode')?.innerText || 'POLYTRON';
+              const filename = `Screenshot_Booking_${code}_${Date.now()}.png`;
+              saveBlobAsFile(blob, filename);
+              showToast('Hasil screenshot langsung disimpan & terunduh!', 3500);
+              break;
+            }
+          }
+        }
+      }
+    });
 
     // ==============================================================
     // POPUP DIALOG IN-APP (PENGGANTI NATIVE ALERT BROWSER)
