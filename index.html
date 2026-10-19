@@ -3134,7 +3134,12 @@
     }
 
     function saveBookings(bookings, skipBroadcast = false) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings || []));
+      const oldStr = localStorage.getItem(STORAGE_KEY) || '[]';
+      const newStr = JSON.stringify(bookings || []);
+      if (oldStr === newStr) {
+        return; // Data sama persis, jangan re-render atau broadcast agar tidak berkedip
+      }
+      localStorage.setItem(STORAGE_KEY, newStr);
       // Dispatch storage event locally for the same window
       window.dispatchEvent(new Event('storage-local-updated'));
       if (!skipBroadcast) {
@@ -4407,9 +4412,6 @@
         items.forEach(item => {
           html += `<option value="${item.id}">${item.name}</option>`;
         });
-        if (!q) {
-          html += `<option value="CUSTOM">Kendala / Kerusakan Lainnya</option>`;
-        }
       }
 
       const prevVal = selectStage2.value;
@@ -4451,7 +4453,6 @@
         MASTER_KERUSAKAN.forEach(item => {
           modalHtml += `<option value="${item.id}">${item.name}</option>`;
         });
-        modalHtml += `<option value="CUSTOM">Kendala / Kerusakan Lainnya</option>`;
         selectModal.innerHTML = modalHtml;
         if (!selectModal.value) selectModal.value = MASTER_KERUSAKAN[0].id;
         handleModalDamageChange(selectModal.value);
@@ -8719,6 +8720,15 @@
       });
     }
 
+    function getStatusRank(statusStr) {
+      const s = String(statusStr || '').toLowerCase().trim();
+      if (s.includes('selesai') || s.includes('done') || s.includes('finish')) return 4;
+      if (s.includes('proses') || s.includes('progres') || s.includes('kerja') || s.includes('qc')) return 3;
+      if (s.includes('hadir') || s.includes('check') || s.includes('menunggu') || s.includes('tunggu')) return 2;
+      if (s.includes('batal') || s.includes('cancel')) return 5;
+      return 1; // Booked / Terjadwal
+    }
+
     async function fetchBookingsFromSheet(forceRender = false) {
       const syncIcon = document.getElementById('syncIcon');
       const headerRefreshIcon = document.getElementById('headerRefreshIcon');
@@ -8792,8 +8802,15 @@
                 mergedMap.set(key, lb);
               } else if (key && mergedMap.has(key)) {
                 const remote = mergedMap.get(key);
+                const localRank = getStatusRank(lb.status);
+                const remoteRank = getStatusRank(remote.status);
+                // Jika status lokal lebih baru (misal baru di-check-in atau in progress di bengkel),
+                // pertahankan status lokal agar tidak mundur/berubah sejenak karena jeda propagasi GViz
+                const finalStatus = (localRank > remoteRank) ? lb.status : remote.status;
+
                 mergedMap.set(key, {
                   ...remote,
+                  status: finalStatus,
                   secondarySlot: remote.secondarySlot || lb.secondarySlot || null,
                   tertiarySlot: remote.tertiarySlot || lb.tertiarySlot || null,
                   notes: remote.notes || lb.notes || '',
@@ -8873,9 +8890,15 @@
             }
           });
           if (newMaster.length > 0) {
-            MASTER_KERUSAKAN.length = 0;
-            MASTER_KERUSAKAN.push(...newMaster);
-            populateDamageDropdowns();
+            const newMJson = JSON.stringify(newMaster);
+            const oldMJson = localStorage.getItem('POLYTRON_MASTER_KERUSAKAN_CACHE');
+            if (newMJson !== oldMJson) {
+              MASTER_KERUSAKAN = newMaster;
+              try {
+                localStorage.setItem('POLYTRON_MASTER_KERUSAKAN_CACHE', newMJson);
+              } catch(e) {}
+              populateDamageDropdowns();
+            }
           }
         }
       } catch (errM) {
@@ -8918,23 +8941,26 @@
           });
 
           if (parsedSites.length > 0) {
-            SITES.length = 0;
-            SITES.push(...parsedSites);
-            try {
-              localStorage.setItem(MASTER_SITES_STORAGE_KEY, JSON.stringify(SITES));
-            } catch(e) {}
+            const newSitesJson = JSON.stringify(parsedSites);
+            const oldSitesJson = localStorage.getItem(MASTER_SITES_STORAGE_KEY);
+            if (newSitesJson !== oldSitesJson) {
+              SITES = parsedSites;
+              try {
+                localStorage.setItem(MASTER_SITES_STORAGE_KEY, newSitesJson);
+              } catch(e) {}
 
-            // Pastikan currentSiteId sinkron dan valid di daftar cabang aktif
-            const savedSite = localStorage.getItem('POLYTRON_ACTIVE_SITE') || localStorage.getItem('POLYTRON_ACTIVE_SITE_ID');
-            if (savedSite && SITES.find(s => s.id === savedSite || isSameSite(s.id, savedSite))) {
-              const match = SITES.find(s => s.id === savedSite || isSameSite(s.id, savedSite));
-              currentSiteId = match.id;
-            } else if (!currentSiteId || !SITES.find(s => s.id === currentSiteId || isSameSite(s.id, currentSiteId))) {
-              const def = SITES.find(s => s.id.includes('tasik')) || SITES[0];
-              currentSiteId = def ? def.id : '';
+              // Pastikan currentSiteId sinkron dan valid di daftar cabang aktif
+              const savedSite = localStorage.getItem('POLYTRON_ACTIVE_SITE') || localStorage.getItem('POLYTRON_ACTIVE_SITE_ID');
+              if (savedSite && SITES.find(s => s.id === savedSite || isSameSite(s.id, savedSite))) {
+                const match = SITES.find(s => s.id === savedSite || isSameSite(s.id, savedSite));
+                currentSiteId = match.id;
+              } else if (!currentSiteId || !SITES.find(s => s.id === currentSiteId || isSameSite(s.id, currentSiteId))) {
+                const def = SITES.find(s => s.id.includes('tasik')) || SITES[0];
+                currentSiteId = def ? def.id : '';
+              }
+              initSiteDropdowns();
+              updateSiteDisplay();
             }
-            initSiteDropdowns();
-            updateSiteDisplay();
           }
         }
       } catch (errSites) {
@@ -8992,13 +9018,16 @@
           });
 
           if (newParts.length > 0) {
-            MASTER_PARTS.length = 0;
-            MASTER_PARTS.push(...newParts);
-            try {
-              localStorage.setItem(MASTER_PARTS_STORAGE_KEY, JSON.stringify(MASTER_PARTS));
-            } catch(e) {}
-            renderDedicatedPartsTable(document.getElementById('partSectionSearchInput')?.value || '');
-            renderBookingPartsList();
+            const newPJson = JSON.stringify(newParts);
+            const oldPJson = localStorage.getItem(MASTER_PARTS_STORAGE_KEY);
+            if (newPJson !== oldPJson) {
+              MASTER_PARTS = newParts;
+              try {
+                localStorage.setItem(MASTER_PARTS_STORAGE_KEY, newPJson);
+              } catch(e) {}
+              renderDedicatedPartsTable(document.getElementById('partSectionSearchInput')?.value || '');
+              renderBookingPartsList();
+            }
           }
         }
       } catch (errParts) {
@@ -9030,12 +9059,15 @@
           });
 
           if (newModels.length > 0) {
-            MASTER_MODELS.length = 0;
-            MASTER_MODELS.push(...newModels);
-            try {
-              localStorage.setItem(MASTER_MODELS_STORAGE_KEY, JSON.stringify(MASTER_MODELS));
-            } catch(e) {}
-            populateModelDropdowns();
+            const newModJson = JSON.stringify(newModels);
+            const oldModJson = localStorage.getItem(MASTER_MODELS_STORAGE_KEY);
+            if (newModJson !== oldModJson) {
+              MASTER_MODELS = newModels;
+              try {
+                localStorage.setItem(MASTER_MODELS_STORAGE_KEY, newModJson);
+              } catch(e) {}
+              populateModelDropdowns();
+            }
           }
         }
       } catch (errTypes) {

@@ -1,5 +1,5 @@
 {
-  "version": "20261020_v84",
-  "updatedAt": "2026-10-20T01:57:00+07:00",
-  "description": "Pengaturan interval penarikan data Google Sheet tepat 1 menit sekali (60 detik) dan penyesuaian latar belakang (background) layar Monitor TV menjadi putih bersih."
+  "version": "20261020_v86",
+  "updatedAt": "2026-10-20T02:15:00+07:00",
+  "description": "Menghapus opsi 'Kendala / Kerusakan Lainnya' pada seluruh dropdown pilihan keluhan motor agar seluruh booking terstandardisasi sesuai Master Kerusakan."
 }
