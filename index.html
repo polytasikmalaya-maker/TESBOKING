@@ -120,6 +120,15 @@
       border-radius: 9999px !important;
     }
 
+    .polytron-n {
+      display: inline-block;
+      text-transform: lowercase !important;
+      font-size: 1.4em;
+      line-height: 0.72;
+      vertical-align: -0.04em;
+      font-weight: 900;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #f8fafc;
@@ -979,7 +988,7 @@
       <section id="role-section-portal" class="w-full min-h-screen flex flex-col justify-start">
         
         <!-- Welcome Hero Banner (Diam / Fixed Tidak Ikut Terskrol & Tanpa Cabang Aktif) -->
-        <div class="sticky top-0 z-30 bg-gradient-to-r from-[#380202] via-[#8c0c0c] to-[#ef4444] text-white py-2 px-3 sm:px-6 shadow-md border-b border-white/10 flex-shrink-0">
+        <div class="sticky top-0 z-30 bg-gradient-to-r from-[#270505] via-[#5e0e0e] to-[#991b1b] text-white py-2 px-3 sm:px-6 shadow-md border-b border-white/10 flex-shrink-0">
           <div class="w-full flex items-center justify-between gap-3">
             <div>
               <div class="inline-flex items-center gap-2 px-2 py-0.5 bg-black/30 border border-white/20 text-white text-[10px] font-bold rounded-[2px] mb-0.5 uppercase tracking-wider">
@@ -1833,7 +1842,7 @@
             <div>
               <div class="flex flex-wrap items-center gap-2">
                 <span class="w-3 h-3 bg-red-600 rounded-[2px]"></span>
-                <h1 class="text-base sm:text-lg md:text-xl font-black text-slate-900 tracking-wider uppercase">POLYTRON EV SERVICE</h1>
+                <h1 class="text-base sm:text-lg md:text-xl font-black text-slate-900 tracking-wider">POLYTRO<span class="polytron-n">n</span> EV SERVICE</h1>
                 <button onclick="switchRole('portal')" class="ml-2 px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1 shadow-xs transition rounded-[2px]">
                   <i data-lucide="home" class="w-3 h-3 text-red-600"></i>
                   <span>Menu Utama</span>
@@ -2373,74 +2382,66 @@
   <!-- MODAL TIKET DIGITAL (POPUP E-TICKET SETELAH BOOKING)            -->
   <!-- ============================================================== -->
   <div id="ticketSuccessModal" onclick="if(event.target === this) closeTicketModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-2 hidden" style="z-index: 99999 !important;">
-    <div id="ticketModalCard" class="bg-white border border-slate-200 w-full max-w-sm p-5 shadow-2xl text-center relative rounded-[3px]">
+    <div id="ticketModalCard" class="bg-white border border-slate-200 w-full max-w-[340px] p-3 sm:p-3.5 shadow-2xl text-center relative rounded-[3px]" style="box-sizing: border-box; overflow: visible;">
       
-      <div class="w-12 h-1 bg-red-600 mx-auto mb-3 rounded-full"></div>
+      <div class="w-10 h-1 bg-red-700 mx-auto mb-1 rounded-full"></div>
 
-      <h3 class="text-lg font-black text-slate-900 uppercase tracking-wide">BOOKING BERHASIL!</h3>
-      <p class="text-xs text-slate-600 font-medium mt-0.5">Tunjukkan e-tiket ini kepada Service Advisor saat tiba.</p>
+      <h3 class="text-base font-black text-slate-900 uppercase tracking-wide leading-tight">BOOKING BERHASIL!</h3>
+      <p class="text-[11px] text-slate-500 font-medium mt-0.5">Tunjukkan e-tiket ini kepada Service Advisor saat tiba.</p>
 
-      <div id="ticketCardToCapture" class="bg-slate-50 border border-slate-200 rounded-[3px] p-3.5 my-3 text-left space-y-1.5 relative text-xs">
-        <div class="flex items-center justify-between pb-2 border-b border-dashed border-slate-200">
+      <div id="ticketCardToCapture" class="bg-slate-50 border border-slate-200 rounded-[3px] p-2.5 my-2 text-left relative text-xs" style="overflow: visible; box-sizing: border-box;">
+        <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-dashed border-slate-300">
           <div>
-            <span class="text-[9px] text-slate-500 uppercase font-bold">KODE BOOKING</span>
-            <div id="ticketCode" class="text-xs font-mono font-black text-red-600">PLY-TSM-20261016-01</div>
+            <span class="text-[9px] text-slate-500 uppercase font-bold tracking-wider">KODE BOOKING</span>
+            <div id="ticketCode" class="text-xs font-mono font-black text-red-700">PLY-TSM-20261016-01</div>
           </div>
           <div class="text-right">
-            <span class="text-[9px] text-slate-500 uppercase font-bold">NO. ANTRIAN</span>
-            <div id="ticketQueueNumber" class="text-base font-mono font-black text-slate-900">REG-01</div>
+            <span class="text-[9px] text-slate-500 uppercase font-bold tracking-wider">NO. ANTRIAN</span>
+            <div id="ticketQueueNumber" class="text-base font-mono font-black text-slate-900 leading-none">REG-01</div>
           </div>
         </div>
 
-        <div class="space-y-1.5 text-xs">
-          <div class="flex justify-between items-center">
-            <span class="text-slate-700">Lokasi Cabang:</span>
-            <span id="ticketSite" class="font-bold text-red-600 truncate max-w-[190px]">-</span>
+        <div class="ticket-details-list" style="overflow: visible;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; padding-top: 3px; padding-bottom: 3px; line-height: 1.35; overflow: visible; border-bottom: 1px dashed #e2e8f0; box-sizing: border-box;">
+            <span style="color: #475569; font-size: 11.5px; flex-shrink: 0; line-height: 1.35; overflow: visible;">Lokasi Cabang:</span>
+            <span id="ticketSite" style="color: #b91c1c; font-weight: 700; font-size: 11.5px; text-align: right; line-height: 1.35; max-width: 190px; word-break: break-word; display: inline-block; overflow: visible;">-</span>
           </div>
-          <div class="flex justify-between items-center">
-            <span class="text-slate-700">Petunjuk Arah:</span>
-            <a id="ticketMapsLink" href="https://maps.google.com/?q=-7.339218,108.219543" target="_blank" rel="noopener noreferrer" class="text-red-600 hover:text-red-700 font-bold inline-flex items-center gap-1 text-[11px] underline">
-              <i data-lucide="map-pin" class="w-3 h-3"></i>
-              <span>Buka Google Maps</span>
-              <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
-            </a>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 3px; padding-bottom: 3px; line-height: 1.35; overflow: visible; border-bottom: 1px dashed #e2e8f0; box-sizing: border-box;">
+            <span style="color: #475569; font-size: 11.5px; flex-shrink: 0; line-height: 1.35; overflow: visible;">Kendaraan:</span>
+            <span id="ticketVehicle" style="color: #0f172a; font-weight: 700; font-size: 11.5px; text-align: right; line-height: 1.35; overflow: visible;">Polytron Fox-R</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-700">Kendaraan:</span>
-            <span id="ticketVehicle" class="font-bold text-slate-900">Polytron Fox-R</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 3px; padding-bottom: 3px; line-height: 1.35; overflow: visible; border-bottom: 1px dashed #e2e8f0; box-sizing: border-box;">
+            <span style="color: #475569; font-size: 11.5px; flex-shrink: 0; line-height: 1.35; overflow: visible;">Plat Nomor:</span>
+            <span id="ticketPlate" style="color: #0f172a; font-weight: 700; font-size: 11.5px; text-align: right; line-height: 1.35; overflow: visible;">D 1234 ABC</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-700">Plat Nomor:</span>
-            <span id="ticketPlate" class="font-bold text-slate-900">D 1234 ABC</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 3px; padding-bottom: 3px; line-height: 1.35; overflow: visible; border-bottom: 1px dashed #e2e8f0; box-sizing: border-box;">
+            <span style="color: #475569; font-size: 11.5px; flex-shrink: 0; line-height: 1.35; overflow: visible;">Nama Pemilik:</span>
+            <span id="ticketOwnerName" style="color: #0f172a; font-weight: 700; font-size: 11.5px; text-align: right; line-height: 1.35; overflow: visible;">-</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-700">Nama Pemilik:</span>
-            <span id="ticketOwnerName" class="font-bold text-slate-900">-</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 3px; padding-bottom: 3px; line-height: 1.35; overflow: visible; border-bottom: 1px dashed #e2e8f0; box-sizing: border-box;">
+            <span style="color: #475569; font-size: 11.5px; flex-shrink: 0; line-height: 1.35; overflow: visible;">Alokasi Stall:</span>
+            <span id="ticketStall" style="color: #0f172a; font-weight: 700; font-size: 11.5px; text-align: right; line-height: 1.35; overflow: visible;">Stall EV 1</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-700">Alokasi Stall:</span>
-            <span id="ticketStall" class="font-bold text-slate-900">Stall EV 1</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-700">Waktu Kedatangan:</span>
-            <span id="ticketTime" class="font-bold text-emerald-700">08.30 - 09.30 WIB</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 3px; padding-bottom: 3px; line-height: 1.35; overflow: visible; box-sizing: border-box;">
+            <span style="color: #475569; font-size: 11.5px; flex-shrink: 0; line-height: 1.35; overflow: visible;">Waktu Kedatangan:</span>
+            <span id="ticketTime" style="color: #047857; font-weight: 700; font-size: 11.5px; text-align: right; line-height: 1.35; overflow: visible;">08.30 - 09.30 WIB</span>
           </div>
         </div>
 
-        <div class="pt-2 border-t border-dashed border-slate-200 flex flex-col items-center justify-center">
-          <div id="ticketQrWrapper" class="bg-white p-2 shadow border border-slate-200 rounded-[2px] flex items-center justify-center min-w-[124px] min-h-[124px]">
+        <div class="pt-1.5 mt-1 border-t border-dashed border-slate-300 flex flex-col items-center justify-center">
+          <div id="ticketQrWrapper" class="bg-white p-1.5 shadow-sm border border-slate-200 rounded-[2px] flex items-center justify-center min-w-[95px] min-h-[95px]">
             <div id="ticketQrCode" class="flex items-center justify-center"></div>
           </div>
           <span class="text-[9px] text-slate-500 mt-1">Scan / Verifikasi di Meja Service Advisor (SA)</span>
         </div>
       </div>
 
-      <div class="mt-4 flex gap-2">
-        <button type="button" onclick="downloadTicketScreenshot(false)" id="btnScreenshotTicket" class="flex-1 py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center gap-1.5" title="Unduh gambar tiket langsung">
-          <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
+      <div class="mt-2.5 flex gap-2">
+        <button type="button" onclick="downloadTicketScreenshot(false)" id="btnScreenshotTicket" class="flex-1 py-2 px-3 bg-slate-900 hover:bg-black text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center gap-1.5" title="Unduh gambar tiket langsung">
+          <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
           <span>Unduh Tiket</span>
         </button>
-        <button type="button" onclick="closeTicketModal();" class="flex-1 py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
+        <button type="button" onclick="closeTicketModal();" class="flex-1 py-2 px-3 bg-red-700 hover:bg-red-800 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
           <span>Tutup</span>
         </button>
       </div>
@@ -2492,28 +2493,41 @@
         </div>
       </div>
 
-      <!-- Input Manual / Barcode Scanner Gun -->
-      <div class="mt-3 bg-slate-50 border border-slate-200 p-2.5 rounded-[3px]">
-        <label class="block text-[10px] font-black text-slate-700 uppercase mb-1 flex items-center justify-between">
-          <span>Barcode Scanner Gun / Input Manual</span>
-          <span class="text-[9px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">Tekan Enter</span>
-        </label>
-        <div class="flex gap-1.5">
-          <input type="text" id="barcodeManualInput" placeholder="Scan Barcode / ketik Kode Booking / No. Plat..." class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold border border-slate-300 rounded-[2px] outline-none focus:border-red-600 bg-white" onkeydown="if(event.key==='Enter'){event.preventDefault();submitManualBarcodeScan();}">
-          <button type="button" onclick="submitManualBarcodeScan()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-[2px] shadow-xs transition flex items-center gap-1">
-            <i data-lucide="check" class="w-3.5 h-3.5"></i>
-            <span>Verifikasi</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Area Feedback Hasil Scan -->
-      <div id="barcodeScanResultArea" class="hidden mt-3"></div>
-
       <!-- Modal Footer -->
       <div class="mt-4 pt-2.5 border-t border-slate-200 flex justify-end gap-2">
         <button type="button" onclick="closeBarcodeScannerModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-[2px] transition border border-slate-300">
           Tutup Scanner
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL POPUP HASIL SCAN BARCODE / QR TIKET (OVERLAY MENIMPA SCANNER) -->
+  <!-- ============================================================== -->
+  <div id="barcodeScanResultModal" onclick="if(event.target === this) closeBarcodeScanResultModal()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 hidden" style="z-index: 100000 !important;">
+    <div class="bg-white border border-slate-200 w-full max-w-sm p-5 shadow-2xl relative rounded-[4px] text-center">
+      
+      <!-- Icon Status Dinamis -->
+      <div id="scanResultIconWrapper" class="w-14 h-14 mx-auto rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center text-emerald-600 mb-3 shadow-xs">
+        <i data-lucide="check-circle-2" class="w-8 h-8 text-emerald-600"></i>
+      </div>
+
+      <!-- Judul Status -->
+      <h3 id="scanResultTitle" class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wide">CHECK-IN BERHASIL!</h3>
+      <p id="scanResultSub" class="text-xs text-slate-500 font-medium mt-0.5">Kehadiran konsumen berhasil diverifikasi sistem.</p>
+
+      <!-- Kartu Detail Tiket -->
+      <div id="scanResultCardBody" class="mt-3.5 bg-slate-50 border border-slate-200 rounded-[3px] p-3 text-left text-xs space-y-2">
+        <!-- Diisi oleh JS -->
+      </div>
+
+      <!-- Tombol OK: Menutup Popup Hasil & Memunculkan / Melanjutkan Scanner -->
+      <div class="mt-4 pt-1">
+        <button type="button" id="btnScanResultOk" onclick="closeBarcodeScanResultModal()" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs sm:text-sm rounded-[3px] shadow transition flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>OK</span>
         </button>
       </div>
 
@@ -2952,7 +2966,10 @@
       // Normalisasi teks (menghapus polytron, sc, spasi, tanda strip)
       const cleanA = sA.replace(/polytron/g, '').replace(/sc/g, '').replace(/[^a-z0-9]/g, '');
       const cleanB = sB.replace(/polytron/g, '').replace(/sc/g, '').replace(/[^a-z0-9]/g, '');
-      if (cleanA && cleanB && (cleanA === cleanB || cleanA.includes(cleanB) || cleanB.includes(cleanA))) return true;
+      if (cleanA && cleanB && cleanA === cleanB) return true;
+
+      // Alias khusus tasikmalaya / tasik
+      if ((cleanA === 'tasik' || cleanA === 'tasikmalaya') && (cleanB === 'tasik' || cleanB === 'tasikmalaya')) return true;
 
       return false;
     }
@@ -3175,7 +3192,7 @@
 
       // 2. FILTER KETAT CABANG: JIKA BUKAN CABANG YANG AKTIF DI PERANGKAT INI, JANGAN TERIMA/PROSES
       const incomingSite = payload.siteId || payload.siteCode || (payload.booking && (payload.booking.siteId || payload.booking.siteCode));
-      if (incomingSite && !isSameSite(incomingSite, currentSiteId)) {
+      if (!incomingSite || !isSameSite(incomingSite, currentSiteId)) {
         return;
       }
 
@@ -3199,11 +3216,13 @@
     }
 
     function broadcastVoiceCall(text, booking) {
+      const targetSiteId = (booking && (booking.siteId || booking.siteCode)) || currentSiteId;
       const payload = {
         type: 'voice_call',
         text: text,
         booking: booking || null,
-        siteId: currentSiteId,
+        siteId: targetSiteId,
+        siteCode: getSiteCode(targetSiteId),
         deviceId: LOCAL_DEVICE_ID,
         timestamp: Date.now()
       };
@@ -3790,35 +3809,27 @@
       }
     }
 
-    function closeAnyOpenModal() {
-      let closed = false;
-
-      const lvl2Modal = document.getElementById('level2AlertModal');
-      if (lvl2Modal && (!lvl2Modal.classList.contains('hidden') || lvl2Modal.style.display === 'flex')) {
-        lvl2Modal.classList.add('hidden');
-        lvl2Modal.style.setProperty('display', 'none', 'important');
-        closed = true;
+    function closeTopmostModal() {
+      // 1. Popup Hasil Scan Barcode (level teratas, menimpa scanner)
+      const scanResultModal = document.getElementById('barcodeScanResultModal');
+      if (scanResultModal && (!scanResultModal.classList.contains('hidden') || scanResultModal.style.display === 'flex')) {
+        closeBarcodeScanResultModal(true);
+        return true;
       }
 
-      const confirmModal = document.getElementById('bookingConfirmModal');
-      if (confirmModal && (!confirmModal.classList.contains('hidden') || confirmModal.style.display === 'flex')) {
-        confirmModal.classList.add('hidden');
-        confirmModal.style.setProperty('display', 'none', 'important');
-        closed = true;
+      // 2. Scanner Barcode Modal (Service Advisor)
+      const scannerModal = document.getElementById('barcodeScannerModal');
+      if (scannerModal && (!scannerModal.classList.contains('hidden') || scannerModal.style.display === 'flex')) {
+        closeBarcodeScannerModal(true);
+        return true;
       }
 
-      const ticketModal = document.getElementById('ticketSuccessModal');
-      if (ticketModal && (!ticketModal.classList.contains('hidden') || ticketModal.style.display === 'flex')) {
-        ticketModal.classList.add('hidden');
-        ticketModal.style.setProperty('display', 'none', 'important');
-        closed = true;
-      }
-
-      const popupModal = document.getElementById('appPopupModal');
-      if (popupModal && (!popupModal.classList.contains('hidden') || popupModal.style.display === 'flex')) {
-        popupModal.classList.add('hidden');
-        popupModal.style.setProperty('display', 'none', 'important');
-        closed = true;
+      // 3. Modal-modal lain secara bertingkat
+      const gsModal = document.getElementById('googleSheetModal');
+      if (gsModal && !gsModal.classList.contains('hidden')) {
+        gsModal.classList.add('hidden');
+        popModalHistoryState('googleSheetModal');
+        return true;
       }
 
       const slotModal = document.getElementById('slotActionModal');
@@ -3826,41 +3837,63 @@
         slotModal.classList.add('hidden');
         slotModal.style.setProperty('display', 'none', 'important');
         currentModalTarget = null;
-        closed = true;
+        popModalHistoryState('slotActionModal');
+        return true;
       }
 
-      const gsModal = document.getElementById('googleSheetModal');
-      if (gsModal && !gsModal.classList.contains('hidden')) {
-        gsModal.classList.add('hidden');
-        closed = true;
+      const popupModal = document.getElementById('appPopupModal');
+      if (popupModal && (!popupModal.classList.contains('hidden') || popupModal.style.display === 'flex')) {
+        popupModal.classList.add('hidden');
+        popupModal.style.setProperty('display', 'none', 'important');
+        popModalHistoryState('appPopupModal');
+        return true;
       }
 
-      const scannerModal = document.getElementById('barcodeScannerModal');
-      if (scannerModal && (!scannerModal.classList.contains('hidden') || scannerModal.style.display === 'flex')) {
-        closeBarcodeScannerModal();
-        closed = true;
+      const ticketModal = document.getElementById('ticketSuccessModal');
+      if (ticketModal && (!ticketModal.classList.contains('hidden') || ticketModal.style.display === 'flex')) {
+        ticketModal.classList.add('hidden');
+        ticketModal.style.setProperty('display', 'none', 'important');
+        popModalHistoryState('ticketSuccessModal');
+        return true;
       }
 
-      openModalStack = [];
-      return closed;
+      const confirmModal = document.getElementById('bookingConfirmModal');
+      if (confirmModal && (!confirmModal.classList.contains('hidden') || confirmModal.style.display === 'flex')) {
+        confirmModal.classList.add('hidden');
+        confirmModal.style.setProperty('display', 'none', 'important');
+        popModalHistoryState('bookingConfirmModal');
+        return true;
+      }
+
+      const lvl2Modal = document.getElementById('level2AlertModal');
+      if (lvl2Modal && (!lvl2Modal.classList.contains('hidden') || lvl2Modal.style.display === 'flex')) {
+        lvl2Modal.classList.add('hidden');
+        lvl2Modal.style.setProperty('display', 'none', 'important');
+        popModalHistoryState('level2AlertModal');
+        return true;
+      }
+
+      return false;
+    }
+
+    function closeAnyOpenModal() {
+      return closeTopmostModal();
     }
 
     window.addEventListener('popstate', function(e) {
       // 1. Jika popstate dipicu oleh klik tombol OK / Tutup / Batal pada modal
       if (modalJustClosedViaButton) {
         modalJustClosedViaButton = false;
-        closeAnyOpenModal();
         return;
       }
 
       // 2. Jika popstate dipicu oleh tombol Back HP fisik / gesture swipe back
       isHandlingPopstate = true;
-      const modalClosed = closeAnyOpenModal();
+      const modalClosed = closeTopmostModal();
       isHandlingPopstate = false;
 
       // Jika ada modal yang aktif saat tombol back HP ditekan, CUKUP TUTUP MODAL ITU SAJA!
-      if (modalClosed || openModalStack.length > 0) {
-        openModalStack = [];
+      if (modalClosed) {
         return;
       }
 
@@ -5336,6 +5369,15 @@
 
       const b = bookings[idx];
       const stallLabel = b.stall === 'express' ? 'Stall Express' : (b.stall === 'stall1' ? 'Stall EV 1' : 'Stall EV 2');
+
+      // Validasi Area: Jangan bunyikan suara jika antrian terdaftar di area/cabang lain
+      const bSite = b.siteId || b.siteCode;
+      if (bSite && !isSameSite(bSite, currentSiteId)) {
+        const targetSiteName = (SITES.find(s => isSameSite(s.id, bSite))?.name || bSite);
+        const mySiteName = (SITES.find(s => isSameSite(s.id, currentSiteId))?.name || currentSiteId);
+        alert(`Peringatan: Antrian ${b.queueNumber} (${b.name}) terdaftar di area lain (${targetSiteName}), sedangkan area kerja aktif Anda saat ini adalah ${mySiteName}.\n\nPanggilan suara dinonaktifkan untuk antrian di luar area aktif.`);
+        return;
+      }
 
       // Validasi Hari H: Tombol SA hanya aktif untuk antrian Hari Ini
       const todayIso = getLocalDateIso();
@@ -6949,10 +6991,58 @@
 
       const ticketCard = document.getElementById('ticketModalCard');
       if (typeof html2canvas !== 'undefined' && ticketCard) {
+        const targetHeight = Math.max(720, (ticketCard.scrollHeight || 0) + 150);
+
         html2canvas(ticketCard, {
           scale: 2,
           useCORS: true,
           backgroundColor: '#ffffff',
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: 800,
+          windowHeight: targetHeight,
+          onclone: function(clonedDoc) {
+            const card = clonedDoc.getElementById('ticketModalCard');
+            if (card) {
+              card.style.transform = 'none';
+              card.style.overflow = 'visible';
+              card.style.height = 'auto';
+              card.style.maxHeight = 'none';
+              card.style.boxSizing = 'border-box';
+              // Padding atas 6mm & bawah 8mm agar gambar tiket hasil unduh lega dan tidak terpotong sama sekali
+              card.style.paddingTop = '6mm';
+              card.style.paddingBottom = '8mm';
+
+              // Hapus kontainer tombol sepenuhnya dari kartu klon
+              const btnGroup = card.querySelector('#btnScreenshotTicket')?.parentElement || card.querySelector('.mt-3\\.5.flex.gap-2') || card.querySelector('.flex.gap-2');
+              if (btnGroup) {
+                btnGroup.style.display = 'none';
+                btnGroup.remove();
+              }
+            }
+            const innerCard = clonedDoc.getElementById('ticketCardToCapture');
+            if (innerCard) {
+              innerCard.style.overflow = 'visible';
+              innerCard.style.height = 'auto';
+              innerCard.style.maxHeight = 'none';
+              innerCard.style.paddingTop = '3mm';
+              innerCard.style.paddingBottom = '3mm';
+            }
+            // Pastikan semua baris rincian di dalam tiket klon tidak ada yang terpotong teksnya
+            const detailRows = clonedDoc.querySelectorAll('.ticket-details-list > div');
+            detailRows.forEach(function(row) {
+              row.style.overflow = 'visible';
+              row.style.height = 'auto';
+              row.style.minHeight = 'auto';
+            });
+            const textSpans = clonedDoc.querySelectorAll('.ticket-details-list span, .ticket-details-list a');
+            textSpans.forEach(function(sp) {
+              sp.style.overflow = 'visible';
+              sp.style.lineHeight = '1.6';
+              sp.style.display = 'inline-block';
+              sp.style.paddingBottom = '2px';
+            });
+          },
           ignoreElements: function(el) {
             // Abaikan tombol saat screenshot
             return el.id === 'btnScreenshotTicket' || el.tagName === 'BUTTON';
@@ -6986,19 +7076,21 @@
     function fallbackCanvasScreenshot(bookingCode, queueNumber, finish) {
       try {
         const site = document.getElementById('ticketSite')?.innerText || '-';
+        const mapsLink = document.getElementById('ticketMapsLink')?.innerText || 'Buka Google Maps';
         const vehicle = document.getElementById('ticketVehicle')?.innerText || 'Polytron Fox-R';
         const plate = document.getElementById('ticketPlate')?.innerText || '-';
+        const owner = document.getElementById('ticketOwnerName')?.innerText || '-';
         const stall = document.getElementById('ticketStall')?.innerText || 'Stall EV';
         const time = document.getElementById('ticketTime')?.innerText || '-';
 
         const canvas = document.createElement('canvas');
         canvas.width = 600;
-        canvas.height = 760;
+        canvas.height = 840;
         const ctx = canvas.getContext('2d');
 
         // Background
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, 600, 760);
+        ctx.fillRect(0, 0, 600, 840);
 
         // Red top accent
         ctx.fillStyle = '#dc2626';
@@ -7018,58 +7110,59 @@
         ctx.fillStyle = '#f8fafc';
         ctx.strokeStyle = '#e2e8f0';
         ctx.lineWidth = 2;
-        ctx.strokeRect(30, 110, 540, 580);
-        ctx.fillRect(30, 110, 540, 580);
+        ctx.strokeRect(30, 105, 540, 640);
+        ctx.fillRect(30, 105, 540, 640);
 
         // Queue Number & Code
         ctx.fillStyle = '#64748b';
         ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('KODE BOOKING', 50, 145);
+        ctx.fillText('KODE BOOKING', 50, 138);
         ctx.textAlign = 'right';
-        ctx.fillText('NO. ANTRIAN', 550, 145);
+        ctx.fillText('NO. ANTRIAN', 550, 138);
 
         ctx.fillStyle = '#dc2626';
         ctx.font = 'bold 18px monospace';
         ctx.textAlign = 'left';
-        ctx.fillText(bookingCode, 50, 172);
+        ctx.fillText(bookingCode, 50, 165);
 
         ctx.fillStyle = '#0f172a';
         ctx.font = '900 32px monospace';
         ctx.textAlign = 'right';
-        ctx.fillText(queueNumber, 550, 175);
+        ctx.fillText(queueNumber, 550, 168);
 
         // Dashed line
         ctx.strokeStyle = '#cbd5e1';
         ctx.setLineDash([6, 6]);
         ctx.beginPath();
-        ctx.moveTo(50, 195);
-        ctx.lineTo(550, 195);
+        ctx.moveTo(50, 188);
+        ctx.lineTo(550, 188);
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Details List
+        // Details List (Setiap baris diberi jarak vertikal lega agar tidak mepet / terpotong)
         const items = [
           ['Lokasi Cabang', site],
           ['Kendaraan', vehicle],
           ['Plat Nomor', plate],
+          ['Nama Pemilik', owner],
           ['Alokasi Stall', stall],
           ['Waktu Servis', time]
         ];
 
-        let startY = 240;
+        let startY = 225;
         ctx.font = '14px "Plus Jakarta Sans", sans-serif';
         items.forEach(([lbl, val]) => {
           ctx.fillStyle = '#475569';
           ctx.textAlign = 'left';
           ctx.fillText(lbl + ':', 50, startY);
 
-          ctx.fillStyle = lbl === 'Waktu Servis' ? '#047857' : '#0f172a';
+          ctx.fillStyle = lbl === 'Lokasi Cabang' ? '#b91c1c' : (lbl === 'Waktu Servis' ? '#047857' : '#0f172a');
           ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
           ctx.textAlign = 'right';
           ctx.fillText(val, 550, startY);
           ctx.font = '14px "Plus Jakarta Sans", sans-serif';
-          startY += 42;
+          startY += 40;
         });
 
         // Verification Footer
@@ -7089,6 +7182,11 @@
         ctx.fillStyle = '#64748b';
         ctx.font = 'bold 11px monospace';
         ctx.fillText(bookingCode, 300, 660);
+
+        // QR Code subtext
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('Scan / Verifikasi di Meja Service Advisor (SA)', 300, 710);
 
         canvas.toBlob(function(blob) {
           saveBlobAsFile(blob, `Tiket_${queueNumber}_${bookingCode}.png`);
@@ -7120,8 +7218,8 @@
         if (typeof QRCode !== 'undefined') {
           new QRCode(container, {
             text: qrText,
-            width: 110,
-            height: 110,
+            width: 95,
+            height: 95,
             colorDark: "#0f172a",
             colorLight: "#ffffff",
             correctLevel: (typeof QRCode.CorrectLevel !== 'undefined') ? QRCode.CorrectLevel.M : 0
@@ -7129,17 +7227,17 @@
         } else {
           // Fallback image jika CDN QRCode.js belum termuat
           const img = document.createElement('img');
-          img.src = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(qrText)}`;
+          img.src = `https://api.qrserver.com/v1/create-qr-code/?size=95x95&data=${encodeURIComponent(qrText)}`;
           img.alt = "QR Code Tiket";
-          img.className = "w-[110px] h-[110px] object-contain";
+          img.className = "w-[95px] h-[95px] object-contain";
           container.appendChild(img);
         }
       } catch (err) {
         console.warn('QRCode generation fallback triggered:', err);
         const img = document.createElement('img');
-        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(qrText)}`;
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=95x95&data=${encodeURIComponent(qrText)}`;
         img.alt = "QR Code Tiket";
-        img.className = "w-[110px] h-[110px] object-contain";
+        img.className = "w-[95px] h-[95px] object-contain";
         container.appendChild(img);
       }
     }
@@ -7195,20 +7293,6 @@
       modal.style.setProperty('display', 'flex', 'important');
       pushModalHistoryState('barcodeScannerModal');
 
-      // Reset feedback hasil scan
-      const resArea = document.getElementById('barcodeScanResultArea');
-      if (resArea) {
-        resArea.innerHTML = '';
-        resArea.classList.add('hidden');
-      }
-
-      // Reset & auto-fokus input manual / scanner gun
-      const inputManual = document.getElementById('barcodeManualInput');
-      if (inputManual) {
-        inputManual.value = '';
-        setTimeout(() => inputManual.focus(), 350);
-      }
-
       isScanProcessing = false;
       if (window.lucide && lucide.createIcons) lucide.createIcons();
 
@@ -7216,20 +7300,23 @@
       startBarcodeCameraScanner();
     }
 
-    async function closeBarcodeScannerModal() {
+    async function closeBarcodeScannerModal(fromPopstate = false) {
       await stopBarcodeCameraScanner();
 
       const modal = document.getElementById('barcodeScannerModal');
       if (modal) {
         modal.classList.add('hidden');
         modal.style.setProperty('display', 'none', 'important');
-        popModalHistoryState('barcodeScannerModal');
+        if (!fromPopstate) {
+          popModalHistoryState('barcodeScannerModal');
+        }
       }
+      isScanProcessing = false;
     }
 
     async function startBarcodeCameraScanner() {
       if (typeof Html5Qrcode === 'undefined') {
-        updateScannerStatus('Library scanner belum siap. Silakan gunakan scanner gun / input manual.');
+        updateScannerStatus('Library scanner kamera belum siap.');
         return;
       }
 
@@ -7288,7 +7375,7 @@
         updateScannerStatus('Kamera aktif. Arahkan ke QR Code Tiket Konsumen.', true);
       } catch (err) {
         console.warn("Gagal membuka kamera scanner:", err);
-        updateScannerStatus('Kamera tidak aktif (' + (err.message || 'Izin kamera ditolak') + '). Gunakan input manual/scanner gun.');
+        updateScannerStatus('Kamera tidak aktif (' + (err.message || 'Izin kamera ditolak') + ').');
       }
     }
 
@@ -7319,15 +7406,121 @@
         : `<span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span><span class="text-slate-600 truncate">${text}</span>`;
     }
 
-    function submitManualBarcodeScan() {
-      const input = document.getElementById('barcodeManualInput');
-      if (!input) return;
-      const val = input.value.trim();
-      if (!val) {
-        showToast('Ketik atau scan barcode tiket terlebih dahulu.', 2000);
-        return;
+    // Tangkap input dari barcode scanner gun otomatis (tanpa perlu kolom input)
+    let scannerGunBuffer = '';
+    let scannerGunTimeout = null;
+    document.addEventListener('keydown', function(e) {
+      const modal = document.getElementById('barcodeScannerModal');
+      const isScannerOpen = modal && (!modal.classList.contains('hidden') || modal.style.display === 'flex');
+      const resModal = document.getElementById('barcodeScanResultModal');
+      const isResOpen = resModal && (!resModal.classList.contains('hidden') || resModal.style.display === 'flex');
+      
+      if (!isScannerOpen || isResOpen) return;
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+      if (e.key === 'Enter') {
+        if (scannerGunBuffer.length >= 3) {
+          e.preventDefault();
+          const codeToScan = scannerGunBuffer.trim();
+          scannerGunBuffer = '';
+          handleBarcodeScanResult(codeToScan);
+        }
+        scannerGunBuffer = '';
+      } else if (e.key && e.key.length === 1) {
+        scannerGunBuffer += e.key;
+        clearTimeout(scannerGunTimeout);
+        scannerGunTimeout = setTimeout(() => { scannerGunBuffer = ''; }, 500);
       }
-      handleBarcodeScanResult(val);
+    });
+
+    // ==============================================================
+    // POPUP HASIL SCAN BARCODE (MENIMPA MODAL SCANNER)
+    // ==============================================================
+    function showBarcodeScanResultModal(config) {
+      const modal = document.getElementById('barcodeScanResultModal');
+      if (!modal) return;
+
+      // Hentikan sejenak kamera scanner saat popup hasil tampil menindih
+      stopBarcodeCameraScanner();
+
+      const iconWrap = document.getElementById('scanResultIconWrapper');
+      const titleEl = document.getElementById('scanResultTitle');
+      const subEl = document.getElementById('scanResultSub');
+      const cardEl = document.getElementById('scanResultCardBody');
+      const btnOk = document.getElementById('btnScanResultOk');
+
+      if (config.type === 'success') {
+        if (iconWrap) {
+          iconWrap.className = 'w-14 h-14 mx-auto rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center text-emerald-600 mb-3 shadow-xs';
+          iconWrap.innerHTML = '<i data-lucide="check-circle-2" class="w-8 h-8 text-emerald-600"></i>';
+        }
+        if (titleEl) {
+          titleEl.innerText = config.title || 'CHECK-IN BERHASIL!';
+          titleEl.className = 'text-base sm:text-lg font-black text-emerald-800 uppercase tracking-wide';
+        }
+        if (subEl) subEl.innerText = config.sub || 'Kehadiran konsumen berhasil diverifikasi sistem.';
+        if (btnOk) btnOk.className = 'w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs sm:text-sm rounded-[3px] shadow transition flex items-center justify-center gap-2 cursor-pointer';
+      } else if (config.type === 'already') {
+        if (iconWrap) {
+          iconWrap.className = 'w-14 h-14 mx-auto rounded-full bg-sky-100 border-2 border-sky-300 flex items-center justify-center text-sky-600 mb-3 shadow-xs';
+          iconWrap.innerHTML = '<i data-lucide="info" class="w-8 h-8 text-sky-600"></i>';
+        }
+        if (titleEl) {
+          titleEl.innerText = config.title || 'SUDAH CHECK-IN';
+          titleEl.className = 'text-base sm:text-lg font-black text-sky-900 uppercase tracking-wide';
+        }
+        if (subEl) subEl.innerText = config.sub || 'Antrian ini sudah pernah check-in sebelumnya.';
+        if (btnOk) btnOk.className = 'w-full py-2.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-black text-xs sm:text-sm rounded-[3px] shadow transition flex items-center justify-center gap-2 cursor-pointer';
+      } else if (config.type === 'cancelled') {
+        if (iconWrap) {
+          iconWrap.className = 'w-14 h-14 mx-auto rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-amber-600 mb-3 shadow-xs';
+          iconWrap.innerHTML = '<i data-lucide="alert-triangle" class="w-8 h-8 text-amber-600"></i>';
+        }
+        if (titleEl) {
+          titleEl.innerText = config.title || 'STATUS: BATAL';
+          titleEl.className = 'text-base sm:text-lg font-black text-amber-900 uppercase tracking-wide';
+        }
+        if (subEl) subEl.innerText = config.sub || 'Booking dibatalkan melewati batas toleransi.';
+        if (btnOk) btnOk.className = 'w-full py-2.5 px-4 bg-amber-600 hover:bg-amber-700 text-white font-black text-xs sm:text-sm rounded-[3px] shadow transition flex items-center justify-center gap-2 cursor-pointer';
+      } else {
+        if (iconWrap) {
+          iconWrap.className = 'w-14 h-14 mx-auto rounded-full bg-rose-100 border-2 border-rose-300 flex items-center justify-center text-rose-600 mb-3 shadow-xs';
+          iconWrap.innerHTML = '<i data-lucide="x-circle" class="w-8 h-8 text-rose-600"></i>';
+        }
+        if (titleEl) {
+          titleEl.innerText = config.title || 'TIKET TIDAK DITEMUKAN';
+          titleEl.className = 'text-base sm:text-lg font-black text-rose-900 uppercase tracking-wide';
+        }
+        if (subEl) subEl.innerText = config.sub || 'Data tiket tidak cocok dengan daftar booking sistem.';
+        if (btnOk) btnOk.className = 'w-full py-2.5 px-4 bg-slate-900 hover:bg-black text-white font-black text-xs sm:text-sm rounded-[3px] shadow transition flex items-center justify-center gap-2 cursor-pointer';
+      }
+
+      if (cardEl) cardEl.innerHTML = config.bodyHtml || '';
+      modal.classList.remove('hidden');
+      modal.style.setProperty('display', 'flex', 'important');
+      pushModalHistoryState('barcodeScanResultModal');
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    }
+
+    function closeBarcodeScanResultModal(fromPopstate = false) {
+      const modal = document.getElementById('barcodeScanResultModal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.style.setProperty('display', 'none', 'important');
+
+      if (!fromPopstate) {
+        popModalHistoryState('barcodeScanResultModal');
+      }
+
+      isScanProcessing = false;
+
+      // Saat popup hasil ditutup (OK / Back HP), popup scanner yang ada di bawahnya muncul lagi dan kamera kembali aktif
+      const scannerModal = document.getElementById('barcodeScannerModal');
+      if (scannerModal && (!scannerModal.classList.contains('hidden') || scannerModal.style.display === 'flex')) {
+        setTimeout(() => {
+          startBarcodeCameraScanner();
+        }, 150);
+      }
     }
 
     function handleBarcodeScanResult(rawText) {
@@ -7407,26 +7600,19 @@
         );
       }
 
-      const resArea = document.getElementById('barcodeScanResultArea');
-      if (!resArea) return;
-      resArea.classList.remove('hidden');
-
       if (idx === -1) {
         playScanBeep(false);
-        resArea.innerHTML = `
-          <div class="bg-rose-50 border border-rose-300 p-3 rounded-[3px] text-rose-800 text-xs flex items-start gap-2.5">
-            <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600 shrink-0 mt-0.5"></i>
-            <div class="flex-1">
-              <div class="font-black uppercase text-[11px] text-rose-900">Tiket Tidak Ditemukan!</div>
-              <p class="mt-0.5 text-rose-700">Data barcode <b>${cleanText}</b> tidak cocok dengan daftar booking sistem.</p>
-              <button type="button" onclick="resumeScannerCapture()" class="mt-2 px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-[2px] font-bold text-[10px] cursor-pointer">
-                Scan Lagi
-              </button>
+        showBarcodeScanResultModal({
+          type: 'error',
+          title: 'TIKET TIDAK DITEMUKAN',
+          sub: 'Barcode atau QR Code tiket tidak terdaftar di sistem.',
+          bodyHtml: `
+            <div class="text-center py-2">
+              <span class="text-slate-500 text-[11px]">Data yang terbaca:</span>
+              <div class="mt-1 font-mono font-bold text-slate-800 text-xs bg-white p-2 border border-slate-200 rounded break-words">${cleanText}</div>
             </div>
-          </div>
-        `;
-        if (window.lucide && lucide.createIcons) lucide.createIcons();
-        setTimeout(() => { isScanProcessing = false; }, 2500);
+          `
+        });
         return;
       }
 
@@ -7436,20 +7622,25 @@
       // Periksa jika status Batal
       if (b.status === 'Batal') {
         playScanBeep(false);
-        resArea.innerHTML = `
-          <div class="bg-amber-50 border border-amber-300 p-3 rounded-[3px] text-amber-900 text-xs flex items-start gap-2.5">
-            <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
-            <div class="flex-1">
-              <div class="font-black uppercase text-[11px] text-amber-900">Status Booking: BATAL</div>
-              <p class="mt-0.5 text-amber-800">Antrian <b>${b.queueNumber}</b> (${b.name} - ${b.plate}) telah dibatalkan karena tidak hadir melewati batas toleransi.</p>
-              <button type="button" onclick="resumeScannerCapture()" class="mt-2 px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-[2px] font-bold text-[10px] cursor-pointer">
-                Scan Tiket Lain
-              </button>
+        showBarcodeScanResultModal({
+          type: 'cancelled',
+          title: 'STATUS BOOKING: BATAL',
+          sub: 'Booking antrian ini telah dibatalkan.',
+          bodyHtml: `
+            <div class="flex justify-between items-center pb-2 border-b border-dashed border-slate-300">
+              <span class="text-slate-500 text-[11px] uppercase font-bold tracking-wider">No. Antrian</span>
+              <span class="text-xl font-mono font-black text-amber-900">${b.queueNumber}</span>
             </div>
-          </div>
-        `;
-        if (window.lucide && lucide.createIcons) lucide.createIcons();
-        setTimeout(() => { isScanProcessing = false; }, 3000);
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Pemilik & Plat:</span>
+              <span class="font-bold text-slate-900">${b.name} (${b.plate})</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Alokasi:</span>
+              <span class="font-bold text-slate-800">${stallLabel} (${b.timeDisplay || b.slot})</span>
+            </div>
+          `
+        });
         return;
       }
 
@@ -7457,28 +7648,29 @@
       if (b.status === 'Checked In') {
         playScanBeep(true);
         saCallVoice(b.id, 'hadir');
-        resArea.innerHTML = `
-          <div class="bg-sky-50 border border-sky-300 p-3 rounded-[3px] text-sky-900 text-xs space-y-2">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
-              <span class="font-black uppercase text-xs text-sky-900">SUDAH CHECK-IN SEBELUMNYA</span>
+        showBarcodeScanResultModal({
+          type: 'already',
+          title: 'SUDAH CHECK-IN SEBELUMNYA',
+          sub: 'Konsumen ini sudah tercatat check-in kehadiran.',
+          bodyHtml: `
+            <div class="flex justify-between items-center pb-2 border-b border-dashed border-slate-300">
+              <span class="text-slate-500 text-[11px] uppercase font-bold tracking-wider">No. Antrian</span>
+              <span class="text-xl font-mono font-black text-sky-900">${b.queueNumber}</span>
             </div>
-            <div class="bg-white p-2.5 rounded border border-sky-200 text-xs space-y-1">
-              <div class="flex justify-between"><span class="text-slate-500">No. Antrian:</span><b class="text-base text-slate-900 font-mono">${b.queueNumber}</b></div>
-              <div class="flex justify-between"><span class="text-slate-500">Pemilik & Plat:</span><b class="text-slate-900">${b.name} (${b.plate})</b></div>
-              <div class="flex justify-between"><span class="text-slate-500">Alokasi:</span><b class="text-emerald-700">${stallLabel} (${b.timeDisplay || b.slot})</b></div>
-              <div class="flex justify-between"><span class="text-slate-500">Waktu Tiba:</span><span class="text-slate-700 font-bold">${b.checkInTime || 'Tercatat Hadir'}</span></div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Pemilik & Plat:</span>
+              <span class="font-bold text-slate-900">${b.name} (${b.plate})</span>
             </div>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-sky-700 font-medium italic">Panggilan suara kedatangan telah diputar ulang.</span>
-              <button type="button" onclick="resumeScannerCapture()" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-[2px] font-bold text-[11px] cursor-pointer">
-                Scan Berikutnya
-              </button>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Alokasi:</span>
+              <span class="font-bold text-sky-800">${stallLabel} (${b.timeDisplay || b.slot})</span>
             </div>
-          </div>
-        `;
-        if (window.lucide && lucide.createIcons) lucide.createIcons();
-        setTimeout(() => { isScanProcessing = false; }, 3000);
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Waktu Check-In:</span>
+              <span class="font-bold text-slate-900">${b.checkInTime || 'Tercatat Hadir'}</span>
+            </div>
+          `
+        });
         return;
       }
 
@@ -7486,26 +7678,25 @@
       if (b.status === 'In Progress' || b.status === 'Done') {
         playScanBeep(true);
         const labelStatus = b.status === 'In Progress' ? 'SEDANG DIKERJAKAN TEKNISI' : 'SERVIS SELESAI';
-        resArea.innerHTML = `
-          <div class="bg-slate-50 border border-slate-300 p-3 rounded-[3px] text-slate-800 text-xs space-y-2">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full ${b.status === 'In Progress' ? 'bg-cyan-500' : 'bg-emerald-500'}"></span>
-              <span class="font-black uppercase text-xs text-slate-900">STATUS: ${labelStatus}</span>
+        showBarcodeScanResultModal({
+          type: 'already',
+          title: `STATUS: ${labelStatus}`,
+          sub: 'Unit motor saat ini sedang dalam penanganan bengkel.',
+          bodyHtml: `
+            <div class="flex justify-between items-center pb-2 border-b border-dashed border-slate-300">
+              <span class="text-slate-500 text-[11px] uppercase font-bold tracking-wider">No. Antrian</span>
+              <span class="text-xl font-mono font-black text-slate-900">${b.queueNumber}</span>
             </div>
-            <div class="bg-white p-2.5 rounded border border-slate-200 text-xs space-y-1">
-              <div class="flex justify-between"><span class="text-slate-500">No. Antrian:</span><b class="text-base text-slate-900 font-mono">${b.queueNumber}</b></div>
-              <div class="flex justify-between"><span class="text-slate-500">Pemilik & Plat:</span><b class="text-slate-900">${b.name} (${b.plate})</b></div>
-              <div class="flex justify-between"><span class="text-slate-500">Stall:</span><b class="text-slate-900">${stallLabel}</b></div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Pemilik & Plat:</span>
+              <span class="font-bold text-slate-900">${b.name} (${b.plate})</span>
             </div>
-            <div class="flex justify-end pt-1">
-              <button type="button" onclick="resumeScannerCapture()" class="px-3 py-1 bg-slate-800 hover:bg-black text-white rounded-[2px] font-bold text-[11px] cursor-pointer">
-                Scan Tiket Lain
-              </button>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Alokasi Stall:</span>
+              <span class="font-bold text-slate-900">${stallLabel}</span>
             </div>
-          </div>
-        `;
-        if (window.lucide && lucide.createIcons) lucide.createIcons();
-        setTimeout(() => { isScanProcessing = false; }, 3000);
+          `
+        });
         return;
       }
 
@@ -7523,76 +7714,41 @@
       // Putar Panggilan Suara Kedatangan
       announceVoice(`Nomor antrian ${b.queueNumber}, dengan plat ${b.plate}, telah tiba di service center. Alokasi ${stallLabel}.`, b);
 
-      resArea.innerHTML = `
-        <div class="bg-emerald-50 border-2 border-emerald-500 p-3.5 rounded-[3px] text-emerald-950 text-xs space-y-2.5">
-          <div class="flex items-center justify-between pb-1.5 border-b border-emerald-200">
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
-              <span class="font-black text-sm uppercase text-emerald-800">CHECK-IN BERHASIL!</span>
-            </div>
-            <span class="px-2 py-0.5 bg-emerald-600 text-white font-mono font-black text-[11px] rounded-[2px]">CHECKED IN</span>
+      showBarcodeScanResultModal({
+        type: 'success',
+        title: 'CHECK-IN BERHASIL!',
+        sub: 'Kehadiran konsumen berhasil diverifikasi & tercatat di sistem.',
+        bodyHtml: `
+          <div class="flex justify-between items-center pb-2 border-b border-dashed border-slate-300">
+            <span class="text-slate-500 text-[11px] uppercase font-bold tracking-wider">No. Antrian</span>
+            <span class="text-2xl font-mono font-black text-emerald-800">${b.queueNumber}</span>
           </div>
-
-          <div class="bg-white p-2.5 rounded border border-emerald-200 text-xs space-y-1.5 shadow-xs">
-            <div class="flex justify-between items-center pb-1 border-b border-dashed border-slate-200">
-              <span class="text-slate-500">No. Antrian:</span>
-              <span class="text-lg font-mono font-black text-slate-900">${b.queueNumber}</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500">Nama Konsumen:</span>
-              <span class="font-black text-slate-900">${b.name}</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500">Plat Motor:</span>
-              <span class="font-mono font-black text-slate-900">${b.plate}</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500">Alokasi Stall:</span>
-              <span class="font-bold text-emerald-700">${stallLabel}</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500">Jadwal Booking:</span>
-              <span class="font-medium text-slate-800">${formatDateIndo(b.date, true)} (${b.timeDisplay || b.slot})</span>
-            </div>
-            <div class="flex justify-between items-center pt-1 border-t border-dashed border-slate-200 text-[11px]">
-              <span class="text-slate-500">Waktu Check-In:</span>
-              <span class="font-bold text-emerald-700">${nowTimeStr}</span>
-            </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-600">Nama Konsumen:</span>
+            <span class="font-bold text-slate-900">${b.name}</span>
           </div>
-
-          <div class="flex items-center justify-between pt-1">
-            <p class="text-[10px] text-emerald-700 font-medium italic">Data tersimpan & panggilan suara otomatis diputar.</p>
-            <button type="button" onclick="resumeScannerCapture()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-[2px] font-black text-xs cursor-pointer shadow-xs transition flex items-center gap-1">
-              <i data-lucide="scan" class="w-3.5 h-3.5"></i>
-              <span>Scan Tiket Berikutnya</span>
-            </button>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-600">Plat Motor:</span>
+            <span class="font-mono font-bold text-slate-900">${b.plate}</span>
           </div>
-        </div>
-      `;
-
-      if (window.lucide && lucide.createIcons) lucide.createIcons();
-
-      const manualInput = document.getElementById('barcodeManualInput');
-      if (manualInput) manualInput.value = '';
-
-      setTimeout(() => {
-        isScanProcessing = false;
-      }, 3000);
-    }
-
-    function resumeScannerCapture() {
-      const resArea = document.getElementById('barcodeScanResultArea');
-      if (resArea) {
-        resArea.innerHTML = '';
-        resArea.classList.add('hidden');
-      }
-      const inputManual = document.getElementById('barcodeManualInput');
-      if (inputManual) {
-        inputManual.value = '';
-        inputManual.focus();
-      }
-      isScanProcessing = false;
-      updateScannerStatus('Siap scan tiket berikutnya...', true);
+          <div class="flex justify-between items-center">
+            <span class="text-slate-600">Alokasi Stall:</span>
+            <span class="font-bold text-emerald-700">${stallLabel}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-600">Jadwal Booking:</span>
+            <span class="font-medium text-slate-800">${formatDateIndo(b.date, true)} (${b.timeDisplay || b.slot})</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-600">Waktu Check-In:</span>
+            <span class="font-bold text-emerald-700">${nowTimeStr}</span>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-dashed border-slate-200">
+            <span class="text-slate-600">Status Sistem:</span>
+            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-black text-xs rounded border border-emerald-300">CHECKED IN</span>
+          </div>
+        `
+      });
     }
 
     // Dengarkan shortcut tombol screenshot / simpan saat modal tiket aktif (Win+Shift+S / PrintScreen / Ctrl+S)

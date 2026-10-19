@@ -1,5 +1,5 @@
 {
-  "version": "20261019_v62",
-  "updatedAt": "2026-10-19T23:05:00+07:00",
-  "description": "Menambahkan Barcode/QR Code dinamis pada e-tiket berisi No Tiket, No Plat Motor, No Antrian, dan Nama Pemilik; serta menambahkan alat scan barcode/QR dengan kamera dan scanner gun pada menu Service Advisor (SA) yang secara otomatis melakukan Check-In antrian saat tiket di-scan."
+  "version": "20261020_v72",
+  "updatedAt": "2026-10-20T00:44:00+07:00",
+  "description": "Menambahkan efek belang-belang (zebra striping) pada baris jadwal monitor TV dengan warna agak terang dan jelas, menghilangkan simbol icon petir pada tombol Express Bay, serta menerapkan isolasi ketat panggilan suara agar beda area tidak akan berbunyi."
 }
