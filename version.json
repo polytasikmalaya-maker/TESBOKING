@@ -1,5 +1,5 @@
 {
-  "version": "20261021_v161",
-  "updatedAt": "2026-10-21T06:21:00+07:00",
-  "description": "Pengembalian warna abu-abu elegan (#dce4ed & #cedbe6) pada kotak slot EV kosong, implementasi smart caching & delta-sync Supabase (hanya ambil data baru jika cache lokal sudah ada, simpan penuh jika cache kosong), penyesuaian warna hijau Monitor Elektronik menjadi jauh lebih pudar & lembut (dusty pale sage pastel), dan penghapusan label 'Sistem Siap' pada header Kiosk."
+  "version": "20261021_v180",
+  "updatedAt": "2026-10-21T13:48:00+07:00",
+  "description": "Pemindahan judul Kiosk 'SILAHKAN PILIH KEPERLUAN ANDA' ke bagian atas di dalam card header saja, menghilangkan judul mengambang di latar belakang merah"
 }

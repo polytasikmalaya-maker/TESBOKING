@@ -111,18 +111,73 @@
   </script>
 
   <style>
-    /* KIOSK MANDIRI FULL SCREEN 100% TANPA TERPOTONG */
-    #role-section-kiosk {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      z-index: 10 !important;
-      box-sizing: border-box !important;
-      overflow: hidden !important;
-      margin: 0 !important;
+    /* KIOSK MANDIRI FULL SCREEN 100% DI PC & RESPONSIVE TOUCH-FRIENDLY DI HP */
+    @media (min-width: 769px) {
+      #role-section-kiosk {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        z-index: 10 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #role-section-kiosk {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        height: 100% !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        z-index: 10 !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        padding: 8px 10px 24px 10px !important;
+        gap: 8px !important;
+      }
+      #role-section-kiosk .kiosk-top-header {
+        padding: 8px 10px !important;
+        gap: 8px !important;
+      }
+      #role-section-kiosk .kiosk-top-header h1 {
+        font-size: 14px !important;
+      }
+      #role-section-kiosk #kioskClockBox {
+        display: none !important;
+      }
+      #role-section-kiosk #kioskControlBox {
+        height: 40px !important;
+        padding: 4px 8px !important;
+      }
+      #role-section-kiosk .kiosk-main-title {
+        font-size: 14px !important;
+        margin: 4px 0 !important;
+      }
+      #role-section-kiosk .kiosk-action-card {
+        padding: 12px 14px !important;
+        border-radius: 4px !important;
+        margin-bottom: 2px !important;
+      }
+      #role-section-kiosk .kiosk-action-card h3 {
+        font-size: 14px !important;
+      }
+      #role-section-kiosk .kiosk-footer {
+        padding: 8px 10px !important;
+        margin-top: 8px !important;
+      }
     }
 
     /* MODAL POPUP KIOSK: SELALU PALING DEPAN DI ATAS KIOSK */
@@ -628,25 +683,25 @@
     }
     @media (min-width: 768px) {
       .model3-card {
-        max-width: 860px !important;
-        max-height: min(92vh, 850px) !important;
+        max-width: 980px !important;
+        max-height: min(94vh, 880px) !important;
         height: 100% !important;
         border-radius: 4px !important; /* Sudut 90 derajat tidak lancip (micro-fillet) */
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
       }
 
-      /* Khusus Menu Booking di Layar Laptop: Padding elemen ke card kasih 2mm saja */
+      /* Menu Booking di Layar Laptop/PC: Padding proporsional & rapi */
       #role-section-konsumen .model3-card > div[id^="booking-stage-"] > div:first-child,
       #role-section-konsumen .model3-card .stage-content-scroll,
       #role-section-part .model3-card > div:first-child,
       #role-section-part .model3-card .stage-content-scroll {
-        padding: 2mm !important;
+        padding: 14px 18px !important;
       }
 
       #role-section-konsumen .model3-card .booking-bottom-bar,
       #role-section-part .model3-card .booking-bottom-bar {
-        padding: 2mm !important;
+        padding: 10px 18px !important;
       }
 
       #role-section-konsumen .model3-card .max-w-xl,
@@ -1025,6 +1080,13 @@
     }
     #role-section-kiosk.kiosk-light-theme .kiosk-top-header h1 {
       color: #0f172a !important;
+    }
+    #role-section-kiosk.kiosk-light-theme .kiosk-top-header .kiosk-main-title {
+      color: #0f172a !important;
+      text-shadow: none !important;
+    }
+    #role-section-kiosk.kiosk-light-theme .kiosk-top-header .border-t {
+      border-color: rgba(226, 232, 240, 0.8) !important;
     }
     #role-section-kiosk.kiosk-light-theme #kioskBranchLabel {
       color: #475569 !important;
@@ -1695,31 +1757,31 @@
 
           <!-- TAHAP 2: PILIH KATEGORI SERVICE -->
           <div id="booking-stage-2" class="flex flex-col flex-1 h-full overflow-hidden hidden">
-            <div class="flex-1 min-h-0 flex flex-col justify-start px-3 sm:px-8 py-3 sm:py-4 overflow-y-auto">
-              <div class="w-full max-w-2xl mx-auto flex flex-col space-y-3 sm:space-y-4">
+            <div class="flex-1 min-h-0 flex flex-col justify-start px-3 sm:px-6 py-2.5 sm:py-3 overflow-y-auto">
+              <div class="w-full max-w-4xl mx-auto flex flex-col space-y-2.5 sm:space-y-3">
                 <div class="text-center mb-0.5 flex-shrink-0">
-                  <h2 class="text-lg sm:text-2xl font-black text-slate-900 leading-tight uppercase tracking-wider mb-0.5">
+                  <h2 class="text-base sm:text-xl font-black text-slate-900 leading-tight uppercase tracking-wider mb-0.5">
                     PILIH KATEGORI SERVICE
                   </h2>
                   <p class="text-[11px] sm:text-xs text-slate-600 font-medium">Tentukan jenis penanganan yang sesuai untuk motor listrik Anda</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
                   <!-- SERVIS REGULER -->
-                  <div id="opt-service-reguler" onclick="selectServiceType('reguler')" class="cursor-pointer border-2 border-red-500 bg-red-50/80 rounded-[3px] p-4 sm:p-5 transition flex flex-col justify-between shadow-sm hover:border-red-600">
+                  <div id="opt-service-reguler" onclick="selectServiceType('reguler')" class="cursor-pointer border-2 border-red-500 bg-red-50/80 rounded-[3px] p-3 sm:p-3.5 transition flex flex-col justify-between shadow-sm hover:border-red-600">
                     <div>
                       <div class="flex items-start justify-between gap-2">
                         <div>
                           <div class="font-black text-slate-900 text-sm sm:text-base uppercase">Servis Reguler</div>
                           <span class="text-[10px] sm:text-xs text-red-600 font-bold block mt-0.5">Perawatan Menyeluruh & ECU</span>
                         </div>
-                        <span class="text-[10px] sm:text-xs bg-red-600 text-white font-extrabold px-2.5 py-1 rounded-[2px] flex-shrink-0 shadow-xs">~1-2 Jam</span>
+                        <span class="text-[10px] sm:text-xs bg-red-600 text-white font-extrabold px-2.5 py-0.5 rounded-[2px] flex-shrink-0 shadow-xs">~1-2 Jam</span>
                       </div>
-                      <p class="text-xs text-slate-600 mt-2.5 leading-relaxed font-medium">
+                      <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                         Servis berkala, pengecekan baterai & controller, rem hidrolik, kelistrikan, overhaul, update ECU / software unit.
                       </p>
                     </div>
-                    <div class="text-xs font-bold text-red-600 mt-4 pt-2.5 border-t border-red-200/70 flex items-center justify-between">
+                    <div class="text-xs font-bold text-red-600 mt-2.5 pt-2 border-t border-red-200/70 flex items-center justify-between">
                       <span class="flex items-center gap-1.5">
                         <i data-lucide="check-circle" class="w-4 h-4"></i>
                         <span>Alokasi: Stall EV 1 / 2</span>
@@ -1729,20 +1791,20 @@
                   </div>
 
                   <!-- EXPRESS BAY -->
-                  <div id="opt-service-express" onclick="selectServiceType('express')" class="cursor-pointer border border-slate-200 bg-white hover:bg-slate-50 rounded-[3px] p-4 sm:p-5 transition flex flex-col justify-between shadow-sm hover:border-slate-300">
+                  <div id="opt-service-express" onclick="selectServiceType('express')" class="cursor-pointer border border-slate-200 bg-white hover:bg-slate-50 rounded-[3px] p-3 sm:p-3.5 transition flex flex-col justify-between shadow-sm hover:border-slate-300">
                     <div>
                       <div class="flex items-start justify-between gap-2">
                         <div>
                           <div class="font-black text-slate-900 text-sm sm:text-base uppercase">Express Bay</div>
                           <span class="text-[10px] sm:text-xs text-slate-500 font-bold block mt-0.5">Pengerjaan Ringan Cepat</span>
                         </div>
-                        <span class="text-[10px] sm:text-xs bg-slate-100 text-slate-700 border border-slate-200 font-extrabold px-2.5 py-1 rounded-[2px] flex-shrink-0">&lt; 30 Mnt</span>
+                        <span class="text-[10px] sm:text-xs bg-slate-100 text-slate-700 border border-slate-200 font-extrabold px-2.5 py-0.5 rounded-[2px] flex-shrink-0">&lt; 30 Mnt</span>
                       </div>
-                      <p class="text-xs text-slate-600 mt-2.5 leading-relaxed font-medium">
+                      <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                         Pekerjaan ringan tanpa bongkar besar: ganti kampas rem, cek ban & tekanan angin, setel baut kendor, spion/lampu.
                       </p>
                     </div>
-                    <div class="text-xs font-semibold text-slate-600 mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                    <div class="text-xs font-semibold text-slate-600 mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between">
                       <span class="flex items-center gap-1.5">
                         <i data-lucide="circle" class="w-4 h-4"></i>
                         <span>Alokasi: Express Bay</span>
@@ -1761,21 +1823,26 @@
                     <span id="stage2CategoryBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-red-100 text-red-700 uppercase">Reguler</span>
                   </div>
 
-                  <!-- Kolom Pencarian Semua Kata Kunci Kerusakan -->
-                  <div class="relative w-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none">
-                      <circle cx="11" cy="11" r="8"></circle>
-                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="text" id="stage2DamageSearchInput" oninput="handleDamageSearchInput(this.value)" placeholder="Cari kata kunci kerusakan" style="padding-left: 36px !important; padding-right: 32px !important;" class="w-full h-9 text-xs border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
-                    <button type="button" id="btnClearDamageSearch" onclick="clearDamageSearch()" title="Hapus pencarian" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-900 flex items-center justify-center text-xs font-black cursor-pointer transition">
-                      &#x2715;
-                    </button>
+                  <!-- Kolom Pencarian & Dropdown Berjajar Rapi di PC (Tinggi Proporsional Bebas Potong) -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 items-center">
+                    <!-- Kolom Pencarian Semua Kata Kunci Kerusakan -->
+                    <div class="relative w-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" id="stage2DamageSearchInput" oninput="handleDamageSearchInput(this.value)" placeholder="Cari kata kunci kerusakan..." style="padding-left: 38px !important; padding-right: 32px !important;" class="w-full h-11 text-xs sm:text-[13px] border border-slate-300 rounded-[3px] outline-none focus:border-red-500 bg-slate-50 shadow-2xs font-medium">
+                      <button type="button" id="btnClearDamageSearch" onclick="clearDamageSearch()" title="Hapus pencarian" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-900 flex items-center justify-center text-xs font-black cursor-pointer transition">
+                        &#x2715;
+                      </button>
+                    </div>
+
+                    <!-- Dropdown Pilihan Keluhan Master (Tinggi Dioptimalkan Agar Teks Tidak Terpotong) -->
+                    <select id="stage2DamageMaster" onchange="handleStage2DamageChange(this.value)" class="w-full h-11 bg-white border border-slate-300 rounded-[3px] px-3 py-1.5 sm:py-2 text-xs sm:text-[13px] text-slate-900 font-bold outline-none focus:border-red-500 cursor-pointer shadow-2xs leading-normal">
+                      <!-- Populated dynamically via JS from MASTER_KERUSAKAN -->
+                    </select>
                   </div>
 
-                  <select id="stage2DamageMaster" onchange="handleStage2DamageChange(this.value)" class="w-full bg-white border border-slate-300 rounded-[3px] px-3 py-2 text-xs sm:text-sm text-slate-900 font-bold outline-none focus:border-red-500 cursor-pointer shadow-2xs">
-                    <!-- Populated dynamically via JS from MASTER_KERUSAKAN -->
-                  </select>
                   <p id="stage2DamageDesc" class="text-[11px] text-slate-500 italic mt-0.5 font-medium"></p>
                   
                   <!-- Hidden elements for script compatibility -->
@@ -1783,19 +1850,19 @@
                   <div id="stage2Level2Notice" class="hidden"></div>
                 </div>
 
-                <!-- TOMBOL CEK KETERSEDIAAN PART -->
-                <div class="bg-white border border-slate-200 rounded-[3px] p-3 shadow-xs text-left space-y-2.5">
-                  <div class="flex items-start gap-2.5">
-                    <div class="w-8 h-8 rounded-[2px] bg-red-50 text-red-600 border border-red-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <i data-lucide="package-search" class="w-4 h-4"></i>
+                <!-- BANNER CEK KETERSEDIAAN PART (LEBIH PENDEK & RAMPING / COMPACT) -->
+                <div class="bg-white border border-slate-200 rounded-[3px] py-1.5 sm:py-2 px-2.5 sm:px-3.5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 sm:gap-2.5">
+                    <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-[2px] bg-red-50 text-red-600 border border-red-200 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="package-search" class="w-3.5 h-3.5"></i>
                     </div>
                     <div>
-                      <div class="text-xs font-black uppercase text-slate-900 tracking-wider">Ketersediaan Suku Cadang</div>
-                      <div class="text-[11px] text-slate-500 font-medium">Cek kesiapan stok sparepart di lokasi cabang terpilih</div>
+                      <div class="text-[11px] sm:text-xs font-black uppercase text-slate-900 tracking-wide leading-tight">Ketersediaan Suku Cadang</div>
+                      <div class="text-[10px] sm:text-[10.5px] text-slate-500 font-medium leading-tight">Cek kesiapan stok sparepart di lokasi cabang terpilih</div>
                     </div>
                   </div>
-                  <button type="button" onclick="openPartStockView('konsumen-step2')" class="w-full h-9 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-[3px] flex items-center justify-center gap-1.5 shadow-xs transition cursor-pointer">
-                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                  <button type="button" onclick="openPartStockView('konsumen-step2')" class="w-full sm:w-auto px-3 h-7 sm:h-7.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[11px] rounded-[2px] flex items-center justify-center gap-1.5 shadow-xs transition cursor-pointer flex-shrink-0">
+                    <i data-lucide="search" class="w-3 h-3"></i>
                     <span>Cek Ketersediaan Part</span>
                   </button>
                 </div>
@@ -1805,7 +1872,7 @@
 
             <!-- Tombol Aksi di Bawah Selalu (Sticky Bottom Bar) -->
             <div class="booking-bottom-bar flex-shrink-0 border-t border-slate-200 bg-white/98 px-3 sm:px-6 py-2.5 sm:py-3">
-              <div class="flex items-center justify-between sm:justify-end gap-3 w-full max-w-2xl mx-auto">
+              <div class="flex items-center justify-between sm:justify-end gap-3 w-full max-w-4xl mx-auto">
                 <button type="button" onclick="handleBookingStepBack(2)" class="btn-model3-secondary flex-1 sm:flex-initial sm:w-48 h-11 sm:h-12 flex items-center justify-center gap-2 rounded-[3px]">
                   <i data-lucide="arrow-left" class="w-4 h-4 flex-shrink-0"></i>
                   <span>Kembali</span>
@@ -2137,14 +2204,20 @@
               <span id="saBadgeCountDokumen" class="px-1.5 py-0.2 bg-slate-100 text-slate-800 text-[10px] font-mono rounded">0</span>
             </button>
           </div>
-          <div class="text-[11px] font-bold text-slate-500 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Sinkron TV Otomatis Aktif</span>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="switchRole('portal')" class="px-2.5 py-1 bg-white hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs flex items-center gap-1.5 shadow-xs transition rounded-[2px]" title="Kembali ke Menu Utama">
+              <i data-lucide="home" class="w-3.5 h-3.5 text-red-600"></i>
+              <span>Menu Utama</span>
+            </button>
+            <div class="text-[11px] font-bold text-slate-500 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Sinkron TV Otomatis Aktif</span>
+            </div>
           </div>
         </div>
 
         <!-- BARIS JUDUL SERVICE ADVISOR (DIAM DI ATAS, TIDAK BISA DI-SCROLL) -->
-        <div class="flex-shrink-0 bg-white border border-slate-200 p-2 sm:p-2.5 shadow-xs rounded-[3px]">
+        <div id="saHeaderActionCard" class="flex-shrink-0 bg-white border border-slate-200 p-2 sm:p-2.5 shadow-xs rounded-[3px]">
           <!-- Baris Judul & Tombol-tombol Aksi Utama SA -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -2224,7 +2297,7 @@
             <!-- Tampilan Laptop / Desktop (Tabel Lengkap dengan sticky header) -->
             <div class="hidden md:block overflow-x-auto">
               <table class="w-full text-left text-xs min-w-[880px] border-collapse">
-                <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200 text-[11px] sticky top-0 z-10 shadow-xs">
+                <thead class="bg-slate-100 text-black uppercase font-bold border-b border-slate-200 text-[11px] sticky top-0 z-10 shadow-xs">
                   <tr>
                     <th class="py-2.5 px-3 bg-slate-100">No. Antrian</th>
                     <th class="py-2.5 px-3 bg-slate-100">Status Saat Ini</th>
@@ -2254,35 +2327,36 @@
         <!-- ============================================================== -->
         <!-- AREA KONTEN SA: QUEUE CONTROL UNTUK ELEKTRONIK & DOKUMEN       -->
         <!-- ============================================================== -->
-        <div id="saQueueControlContainer" class="hidden flex-1 min-h-0 overflow-y-auto space-y-3 pr-0.5 pb-8">
+        <div id="saQueueControlContainer" class="hidden flex-1 min-h-0 flex flex-col space-y-2 overflow-hidden pb-4">
           
-          <!-- PANEL PANGGILAN AKTIF SA (MAJU, MUNDUR, ULANGI, SELESAI) -->
-          <div class="bg-white border border-slate-200 p-4 rounded-[3px] shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+          <!-- PANEL PANGGILAN AKTIF SA (DIAM DI ATAS, TIDAK BISA DI-SCROLL) -->
+          <div class="flex-shrink-0 bg-white border border-slate-200 p-3 sm:p-4 rounded-[3px] shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
             <div class="flex items-center gap-4 w-full md:w-auto">
-              <div class="px-4 py-3 bg-slate-900 text-white rounded-[3px] text-center min-w-[130px] shadow-sm">
+              <div class="px-4 py-3 bg-slate-900 text-white rounded-[3px] text-center min-w-[130px] shadow-sm flex-shrink-0">
                 <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Nomor Dilayani</span>
                 <span id="saActiveCallNum" class="text-3xl font-mono font-black text-amber-400">-</span>
               </div>
               <div>
-                <div class="flex items-center gap-2">
-                  <span id="saActiveCallCategoryBadge" class="px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase rounded-[2px]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span id="saActiveCallCategoryBadge" class="font-bold text-xs text-black uppercase">
                     SERVIS ELEKTRONIK
                   </span>
-                  <span id="saActiveCallStatusBadge" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase rounded-[2px]">
+                  <span class="text-slate-400 font-bold">&bull;</span>
+                  <span id="saActiveCallStatusBadge" class="font-bold text-xs text-black uppercase">
                     Siap Panggil
                   </span>
                 </div>
-                <h3 id="saActiveCallName" class="text-lg font-black text-slate-900 mt-1 uppercase">
+                <h3 id="saActiveCallName" class="text-base sm:text-lg font-bold text-black mt-1 uppercase">
                   Belum Ada Panggilan Aktif
                 </h3>
-                <p id="saActiveCallTime" class="text-xs text-slate-500 font-semibold">
+                <p id="saActiveCallTime" class="text-xs text-black font-medium">
                   Gunakan tombol kontrol di kanan atau pilih konsumen pada daftar di bawah
                 </p>
               </div>
             </div>
 
             <!-- TOMBOL KONTROL ANTREAN SA (MUNDUR, ULANGI, MAJU, SELESAI) -->
-            <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+            <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap flex-shrink-0">
               <button onclick="saQueueAction('prev')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-[2px] font-bold text-xs flex items-center gap-1.5 transition shadow-xs" title="Panggil Antrian Sebelumnya">
                 <i data-lucide="chevron-left" class="w-4 h-4"></i>
                 <span>◀ Mundur</span>
@@ -2302,23 +2376,23 @@
             </div>
           </div>
 
-          <!-- TABEL DAFTAR ANTRIAN LENGKAP DENGAN PILIHAN PANGGIL PER KONSUMEN -->
-          <div class="bg-white border border-slate-200 rounded-[3px] shadow-xs overflow-hidden">
-            <div class="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+          <!-- TABEL DAFTAR ANTRIAN LENGKAP DENGAN PILIHAN PANGGIL PER KONSUMEN (AREA SCROLLABLE) -->
+          <div class="flex-1 min-h-0 bg-white border border-slate-200 rounded-[3px] shadow-xs overflow-hidden flex flex-col">
+            <div class="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10 flex-shrink-0">
               <div class="flex items-center gap-2">
-                <h4 id="saQueueTableTitle" class="text-xs sm:text-sm font-black text-slate-800 uppercase">
+                <h4 id="saQueueTableTitle" class="text-xs sm:text-sm font-bold text-black uppercase">
                   Daftar Antrian Servis Elektronik Hari Ini
                 </h4>
-                <span id="saQueueTableTotalBadge" class="px-2 py-0.5 bg-slate-200 text-slate-800 font-mono font-bold text-xs rounded-[2px]">0</span>
+                <span id="saQueueTableTotalBadge" class="font-mono font-bold text-xs text-black">0</span>
               </div>
               <span class="text-xs text-slate-500 font-semibold hidden sm:inline">
                 Klik tombol "Panggil" pada baris konsumen yang ingin dipanggil
               </span>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto flex-1 min-h-0 overflow-y-auto">
               <table class="w-full text-left text-xs min-w-[720px] border-collapse">
-                <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200 text-[11px] sticky top-0 z-10 shadow-xs">
+                <thead class="bg-slate-100 text-black uppercase font-bold border-b border-slate-200 text-[11px] sticky top-0 z-10 shadow-xs">
                   <tr>
                     <th class="py-2.5 px-3 bg-slate-100 w-12 text-center">No</th>
                     <th class="py-2.5 px-3 bg-slate-100">No. Antrian</th>
@@ -2627,11 +2701,12 @@
       <!-- ============================================================== -->
       <!-- MODUL KIOSK: LAYAR SENTUH INPUT ANTRIAN MANDIRI KONSUMEN       -->
       <!-- ============================================================== -->
-      <section id="role-section-kiosk" class="hidden fixed inset-0 w-screen h-screen max-w-[100vw] max-h-[100vh] flex flex-col justify-between p-2 sm:p-2.5 lg:p-3 select-none overflow-hidden box-border z-[100]">
+      <section id="role-section-kiosk" class="hidden fixed inset-0 w-screen h-screen max-w-[100vw] max-h-[100vh] flex flex-col justify-start lg:justify-between p-2 sm:p-2.5 lg:p-3 select-none overflow-y-auto lg:overflow-hidden box-border z-[100]">
         
-        <!-- HEADER KIOSK MANDIRI (KOMPAK, RAPI, SESUAI PERMINTAAN USER: 'KIOSK ANTRIAN') -->
-        <div class="kiosk-top-header w-full bg-slate-900/90 border border-slate-800 px-3 sm:px-4 py-2 sm:py-2.5 rounded-[3px] shadow-lg flex items-center justify-between gap-3 flex-shrink-0 transition-colors duration-200">
-          <div class="flex items-center gap-2.5 sm:gap-3">
+        <!-- HEADER KIOSK MANDIRI (JUDUL 'SILAHKAN PILIH KEPERLUAN ANDA' DISIMPAN DI ATAS DALAM CARD SAJA) -->
+        <div class="kiosk-top-header w-full bg-slate-900/90 border border-slate-800 px-3 sm:px-4 py-2 sm:py-2.5 rounded-[3px] shadow-lg flex flex-wrap md:flex-nowrap items-center justify-between gap-2.5 sm:gap-3 flex-shrink-0 transition-colors duration-200">
+          <!-- SISI KIRI: BRANDING & LOKASI -->
+          <div class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
             <div class="w-9 h-9 sm:w-10 sm:h-10 bg-red-600 rounded-[3px] flex items-center justify-center shadow-md shadow-red-600/30 flex-shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
@@ -2640,27 +2715,36 @@
             <div>
               <div class="flex items-center gap-1.5">
                 <span class="text-[10px] sm:text-xs font-black tracking-widest text-red-500 uppercase">POLYTRON SERVICE CENTER</span>
-
               </div>
-              <h1 class="text-base sm:text-lg font-black text-white tracking-tight uppercase mt-0.5 leading-tight">
+              <h1 class="text-xs sm:text-sm font-black text-white tracking-tight uppercase mt-0.5 leading-tight">
                 KIOSK ANTRIAN
               </h1>
-              <p class="text-[11px] text-slate-400 font-semibold leading-none mt-0.5" id="kioskBranchLabel">
+              <p class="text-[10px] sm:text-[11px] text-slate-400 font-semibold leading-none mt-0.5" id="kioskBranchLabel">
                 Memuat Area...
               </p>
             </div>
           </div>
 
-          <!-- Waktu Live & Kotak Menu Utama + Tema (Ukuran Sama Persis) -->
-          <div class="flex items-center gap-2 sm:gap-3">
+          <!-- SISI TENGAH: JUDUL KIOSK 'SILAHKAN PILIH KEPERLUAN ANDA' (DISIMPAN DI ATAS DALAM CARD SAJA) -->
+          <div class="order-last md:order-none w-full md:w-auto md:flex-1 flex flex-col items-center justify-center text-center px-1 sm:px-4 pt-1.5 md:pt-0 border-t border-slate-800/60 md:border-t-0 mt-1 md:mt-0">
+            <h2 class="kiosk-main-title text-sm sm:text-base lg:text-lg font-black text-white tracking-wide uppercase transition-colors duration-200 leading-tight">
+              SILAHKAN PILIH KEPERLUAN ANDA
+            </h2>
+            <span class="text-[10px] sm:text-[11px] text-slate-400 font-medium tracking-wide hidden sm:inline-block mt-0.5">
+              Sentuh salah satu pilihan layanan untuk mengambil nomor antrean
+            </span>
+          </div>
+
+          <!-- SISI KANAN: WAKTU LIVE & KONTROL (MENU UTAMA & TEMA) -->
+          <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0 ml-auto md:ml-0">
             <!-- 1. KOTAK WAKTU & JAM -->
-            <div id="kioskClockBox" class="flex flex-col justify-center items-end bg-slate-950/80 border border-slate-800 px-3 py-1 sm:py-1.5 rounded-[3px] h-[48px] sm:h-[50px] min-w-[125px] shadow-inner transition-colors duration-200">
+            <div id="kioskClockBox" class="hidden sm:flex flex-col justify-center items-end bg-slate-950/80 border border-slate-800 px-3 py-1 sm:py-1.5 rounded-[3px] h-[44px] sm:h-[48px] min-w-[125px] shadow-inner transition-colors duration-200">
               <div id="kioskLiveDate" class="text-[10px] font-bold text-slate-400 uppercase tracking-wide leading-tight">-</div>
               <div id="kioskLiveTime" class="text-sm sm:text-base font-mono font-black text-white tracking-wider leading-none mt-0.5">-</div>
             </div>
 
-            <!-- 2. KOTAK TOMBOL MENU UTAMA & TEMA (UKURAN SAMA PERSIS DENGAN KOTAK JAM) -->
-            <div id="kioskControlBox" class="flex items-center gap-1.5 sm:gap-2 bg-slate-950/80 border border-slate-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-[3px] h-[48px] sm:h-[50px] shadow-inner transition-colors duration-200">
+            <!-- 2. KOTAK TOMBOL MENU UTAMA & TEMA -->
+            <div id="kioskControlBox" class="flex items-center gap-1.5 sm:gap-2 bg-slate-950/80 border border-slate-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-[3px] h-[44px] sm:h-[48px] shadow-inner transition-colors duration-200">
               <!-- Tombol Home / Menu Utama -->
               <button onclick="switchRole('portal')" class="h-full px-2.5 sm:px-3 bg-slate-800/90 hover:bg-red-600 text-slate-200 hover:text-white border border-slate-700 hover:border-red-500 rounded-[2px] text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer" title="Kembali ke Portal Menu Utama">
                 <i data-lucide="home" class="w-4 h-4 text-red-400"></i>
@@ -2681,30 +2765,25 @@
           </div>
         </div>
 
-        <!-- JUDUL MENU KIOSK (SESUAI PERMINTAAN USER: LANGSUNG 'SILAHKAN PILIH KEPERLUAN ANDA') -->
-        <div class="text-center my-1 sm:my-1.5 flex-shrink-0">
-          <h2 class="kiosk-main-title text-base sm:text-lg lg:text-xl font-black text-white tracking-tight uppercase transition-colors duration-200">
-            SILAHKAN PILIH KEPERLUAN ANDA
-          </h2>
-        </div>
-
-        <!-- AREA 4 PILIHAN UTAMA KIOSK KONSUMEN (FLEX-1 MENGISI LAYAR PENUH TANPA OVERFLOW) -->
-        <div class="w-full max-w-7xl mx-auto flex-1 min-h-0 flex flex-col justify-center px-0.5 my-0.5">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-3.5 h-full max-h-full items-stretch">
+        <!-- AREA 4 PILIHAN UTAMA KIOSK KONSUMEN (FLEX-1 MENGISI LAYAR PENUH TANPA OVERFLOW DI PC & SCROLLABLE DI HP) -->
+        <div class="w-full max-w-7xl mx-auto flex-1 lg:min-h-0 flex flex-col justify-start lg:justify-center px-0.5 my-0.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-3.5 lg:h-full lg:max-h-full items-stretch">
             
             <!-- 1. BOKING EV -->
             <div onclick="openKioskBookingEv()" class="kiosk-action-card group cursor-pointer bg-slate-900/90 hover:bg-slate-850 border-2 border-red-500/30 hover:border-red-500 p-3 sm:p-3.5 lg:p-4 flex flex-col justify-between transition-all duration-200 rounded-[3px] shadow-xl hover:shadow-red-500/10 overflow-hidden">
-              <div>
-                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-red-600/20 text-red-500 group-hover:bg-red-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-2 shadow-sm">
+              <div class="flex sm:block items-start gap-3">
+                <div class="w-10 h-10 sm:w-10 sm:h-10 bg-red-600/20 text-red-500 group-hover:bg-red-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-0 sm:mb-2 shadow-sm flex-shrink-0">
                   <i data-lucide="calendar-plus" class="w-5 h-5"></i>
                 </div>
-                <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-red-600/20 text-red-400 rounded-[2px] tracking-wider">Layanan Baru</span>
-                <h3 class="text-sm sm:text-base font-black text-white group-hover:text-red-400 transition mt-1 uppercase tracking-wide">
-                  BOKING EV
-                </h3>
-                <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
-                  Pendaftaran jadwal baru servis berkala motor listrik Polytron Fox-R, Fox-S, & T-Rex.
-                </p>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-red-600/20 text-red-400 rounded-[2px] tracking-wider inline-block">Layanan Baru</span>
+                  <h3 class="text-sm sm:text-base font-black text-white group-hover:text-red-400 transition mt-1 uppercase tracking-wide">
+                    BOKING EV
+                  </h3>
+                  <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
+                    Pendaftaran jadwal baru servis berkala motor listrik Fox-R, Fox-S, & T-Rex.
+                  </p>
+                </div>
               </div>
               <div class="mt-2 pt-2 border-t border-slate-800/80">
                 <div class="w-full py-2 bg-red-600 group-hover:bg-red-700 text-white font-black text-xs rounded-[3px] flex items-center justify-center gap-1.5 tracking-wide uppercase transition shadow-md">
@@ -2716,17 +2795,19 @@
 
             <!-- 2. CEK IN BOKING EV -->
             <div onclick="openKioskCheckinModal()" class="kiosk-action-card group cursor-pointer bg-slate-900/90 hover:bg-slate-850 border-2 border-emerald-500/30 hover:border-emerald-500 p-3 sm:p-3.5 lg:p-4 flex flex-col justify-between transition-all duration-200 rounded-[3px] shadow-xl hover:shadow-emerald-500/10 overflow-hidden">
-              <div>
-                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-emerald-600/20 text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-2 shadow-sm">
+              <div class="flex sm:block items-start gap-3">
+                <div class="w-10 h-10 sm:w-10 sm:h-10 bg-emerald-600/20 text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-0 sm:mb-2 shadow-sm flex-shrink-0">
                   <i data-lucide="qr-code" class="w-5 h-5"></i>
                 </div>
-                <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-emerald-600/20 text-emerald-400 rounded-[2px] tracking-wider">Sudah Punya Booking</span>
-                <h3 class="text-sm sm:text-base font-black text-white group-hover:text-emerald-400 transition mt-1 uppercase tracking-wide">
-                  CEK IN BOKING EV
-                </h3>
-                <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
-                  Konfirmasi kedatangan Anda dengan Scan QR / Barcode atau ketik Kode Booking tiket Anda.
-                </p>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-emerald-600/20 text-emerald-400 rounded-[2px] tracking-wider inline-block">Sudah Punya Booking</span>
+                  <h3 class="text-sm sm:text-base font-black text-white group-hover:text-emerald-400 transition mt-1 uppercase tracking-wide">
+                    CEK IN BOKING EV
+                  </h3>
+                  <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
+                    Konfirmasi kedatangan Anda dengan Scan QR / Barcode atau ketik Kode Booking tiket Anda.
+                  </p>
+                </div>
               </div>
               <div class="mt-2 pt-2 border-t border-slate-800/80">
                 <button type="button" onclick="openKioskCheckinModal()" class="w-full py-2 bg-emerald-600 group-hover:bg-emerald-700 text-white font-black text-xs rounded-[3px] flex items-center justify-center gap-1.5 tracking-wide uppercase transition shadow-md cursor-pointer">
@@ -2738,20 +2819,22 @@
 
             <!-- 3. ANTRI SERVICE ELEKTRONIK -->
             <div onclick="openKioskQueueModal('elektronik')" class="kiosk-action-card group cursor-pointer bg-slate-900/90 hover:bg-slate-850 border-2 border-amber-500/30 hover:border-amber-500 p-3 sm:p-3.5 lg:p-4 flex flex-col justify-between transition-all duration-200 rounded-[3px] shadow-xl hover:shadow-amber-500/10 overflow-hidden">
-              <div>
-                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-amber-600/20 text-amber-400 group-hover:bg-amber-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-2 shadow-sm">
+              <div class="flex sm:block items-start gap-3">
+                <div class="w-10 h-10 sm:w-10 sm:h-10 bg-amber-600/20 text-amber-400 group-hover:bg-amber-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-0 sm:mb-2 shadow-sm flex-shrink-0">
                   <i data-lucide="tv" class="w-5 h-5"></i>
                 </div>
-                <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-amber-600/20 text-amber-400 rounded-[2px] tracking-wider">Walk-In Langsung</span>
-                <h3 class="text-sm sm:text-base font-black text-white group-hover:text-amber-400 transition mt-1 uppercase tracking-wide">
-                  ANTRI SERVIS ELEKTRONIK
-                </h3>
-                <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
-                  Perbaikan Televisi, Audio Speaker, Kulkas, AC, Mesin Cuci & Elektronik Rumah Tangga.
-                </p>
-                <div class="kiosk-waiting-badge kiosk-waiting-el">
-                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0"></span>
-                  <span>Menunggu: <b id="kioskWaitingEl">0</b> orang</span>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-amber-600/20 text-amber-400 rounded-[2px] tracking-wider inline-block">Walk-In Langsung</span>
+                  <h3 class="text-sm sm:text-base font-black text-white group-hover:text-amber-400 transition mt-1 uppercase tracking-wide">
+                    ANTRI SERVIS ELEKTRONIK
+                  </h3>
+                  <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
+                    Perbaikan Televisi, Audio Speaker, Kulkas, AC, Mesin Cuci & Elektronik.
+                  </p>
+                  <div class="kiosk-waiting-badge kiosk-waiting-el mt-1.5 sm:mt-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0"></span>
+                    <span>Menunggu: <b id="kioskWaitingEl">0</b> orang</span>
+                  </div>
                 </div>
               </div>
               <div class="mt-2 pt-2 border-t border-slate-800/80">
@@ -2764,20 +2847,22 @@
 
             <!-- 4. ANTRI AMBIL DOKUMEN -->
             <div onclick="openKioskQueueModal('dokumen')" class="kiosk-action-card group cursor-pointer bg-slate-900/90 hover:bg-slate-850 border-2 border-sky-500/30 hover:border-sky-500 p-3 sm:p-3.5 lg:p-4 flex flex-col justify-between transition-all duration-200 rounded-[3px] shadow-xl hover:shadow-sky-500/10 overflow-hidden">
-              <div>
-                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-sky-600/20 text-sky-400 group-hover:bg-sky-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-2 shadow-sm">
+              <div class="flex sm:block items-start gap-3">
+                <div class="w-10 h-10 sm:w-10 sm:h-10 bg-sky-600/20 text-sky-400 group-hover:bg-sky-600 group-hover:text-white rounded-[3px] flex items-center justify-center transition mb-0 sm:mb-2 shadow-sm flex-shrink-0">
                   <i data-lucide="file-check" class="w-5 h-5"></i>
                 </div>
-                <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-sky-600/20 text-sky-400 rounded-[2px] tracking-wider">Loket Dokumen</span>
-                <h3 class="text-sm sm:text-base font-black text-white group-hover:text-sky-400 transition mt-1 uppercase tracking-wide">
-                  ANTRI AMBIL DOKUMEN
-                </h3>
-                <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
-                  Pengambilan STNK, BPKB, Faktur Kendaraan, Surat Garansi & Dokumen Unit Motor.
-                </p>
-                <div class="kiosk-waiting-badge kiosk-waiting-dk">
-                  <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse flex-shrink-0"></span>
-                  <span>Menunggu: <b id="kioskWaitingDk">0</b> orang</span>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[9px] font-black uppercase px-1.5 py-0.5 bg-sky-600/20 text-sky-400 rounded-[2px] tracking-wider inline-block">Loket Dokumen</span>
+                  <h3 class="text-sm sm:text-base font-black text-white group-hover:text-sky-400 transition mt-1 uppercase tracking-wide">
+                    ANTRI AMBIL DOKUMEN
+                  </h3>
+                  <p class="text-[11px] text-slate-400 font-medium mt-1 leading-snug line-clamp-2">
+                    Pengambilan STNK, BPKB, Faktur Kendaraan, Surat Garansi & Dokumen.
+                  </p>
+                  <div class="kiosk-waiting-badge kiosk-waiting-dk mt-1.5 sm:mt-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse flex-shrink-0"></span>
+                    <span>Menunggu: <b id="kioskWaitingDk">0</b> orang</span>
+                  </div>
                 </div>
               </div>
               <div class="mt-2 pt-2 border-t border-slate-800/80">
@@ -2811,7 +2896,7 @@
   <!-- MODAL DETAIL / INPUT BOOKING MANUAL (UNTUK ADMIN / SA)          -->
   <!-- ============================================================== -->
   <div id="slotActionModal" onclick="if(event.target === this) closeSlotModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-2 sm:p-4 hidden">
-    <div class="bg-white border border-slate-200 w-full max-w-lg p-4 sm:p-5 shadow-2xl relative max-h-[90vh] overflow-y-auto rounded-[3px]">
+    <div class="bg-white border border-slate-200 w-full max-w-lg md:max-w-3xl lg:max-w-4xl p-4 sm:p-5 md:p-6 shadow-2xl relative max-h-[92vh] overflow-y-auto rounded-[3px]">
       <button onclick="closeSlotModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 p-1">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -2881,16 +2966,16 @@
       </div>
 
       <!-- Mode 2: Jika slot kosong (Tambah Walk-in Manual) -->
-      <div id="modalViewAvailable" class="space-y-2.5 hidden">
-        <p class="text-xs text-slate-600 mb-1">
+      <div id="modalViewAvailable" class="space-y-3 hidden">
+        <p class="text-xs text-slate-600">
           Form pendaftaran walk-in langsung oleh Service Advisor (SA). Tentukan stall dan jam kedatangan:
         </p>
 
-        <!-- Pilihan Stall & Jam (Disesuaikan oleh SA untuk walk-in: Senin-Jumat s.d. 15.30, Sabtu s.d. 13.30) -->
-        <div id="modalWalkinTargetGroup" class="grid grid-cols-2 gap-2 bg-slate-50 border border-slate-200 p-2 rounded-[3px]">
+        <!-- Pilihan Stall & Jam (Disesuaikan oleh SA untuk walk-in) -->
+        <div id="modalWalkinTargetGroup" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 bg-slate-50 border border-slate-200 p-2.5 rounded-[3px]">
           <div>
             <label class="text-[11px] text-slate-700 font-bold block mb-1">Pilihan Stall</label>
-            <select id="modalInputStall" onchange="handleModalStallChange(this.value)" class="w-full bg-white border border-slate-300 p-1.5 text-xs text-slate-900 rounded-[2px] font-bold outline-none cursor-pointer">
+            <select id="modalInputStall" onchange="handleModalStallChange(this.value)" class="w-full bg-white border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] font-bold outline-none cursor-pointer">
               <option value="stall1">Stall EV 1</option>
               <option value="stall2">Stall EV 2</option>
               <option value="express">Express Bay</option>
@@ -2898,53 +2983,62 @@
           </div>
           <div>
             <label class="text-[11px] text-slate-700 font-bold block mb-1">Jam Kedatangan</label>
-            <select id="modalInputSlot" class="w-full bg-white border border-slate-300 p-1.5 text-xs text-slate-900 rounded-[2px] font-bold outline-none cursor-pointer">
+            <select id="modalInputSlot" class="w-full bg-white border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] font-bold outline-none cursor-pointer">
               <!-- Populated via JS -->
             </select>
           </div>
         </div>
 
-        <div>
-          <label class="text-xs text-slate-700 font-bold block mb-1">Model / Type</label>
-          <select id="modalInputModel" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] font-semibold outline-none cursor-pointer">
-            <option value="Polytron Fox-R">Polytron Fox-R</option>
-            <option value="Polytron Fox-S">Polytron Fox-S</option>
-            <option value="Polytron Fox-500">Polytron Fox-500</option>
-            <option value="Polytron T-Rex">Polytron T-Rex</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-        </div>
+        <!-- Form 2 Kolom pada PC (Lebar, Rapi & Tidak Perlu Scroll) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 items-start">
+          <!-- Kolom Kiri: Data Kendaraan & Konsumen -->
+          <div class="space-y-2.5">
+            <div>
+              <label class="text-xs text-slate-700 font-bold block mb-1">Model / Type</label>
+              <select id="modalInputModel" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] font-semibold outline-none cursor-pointer">
+                <option value="Fox-R">Fox-R</option>
+                <option value="Fox-S">Fox-S</option>
+                <option value="Fox-500">Fox-500</option>
+                <option value="T-Rex">T-Rex</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
 
-        <div>
-          <label class="text-xs text-slate-700 font-bold block mb-1">Nomor Polisi / Plat</label>
-          <input type="text" id="modalInputPlate" placeholder="Contoh: D 9999 EV" class="w-full uppercase bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 font-black rounded-[2px] outline-none">
-        </div>
+            <div>
+              <label class="text-xs text-slate-700 font-bold block mb-1">Nomor Polisi / Plat</label>
+              <input type="text" id="modalInputPlate" placeholder="CONTOH: D 9999 EV" class="w-full uppercase bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 font-black rounded-[2px] outline-none">
+            </div>
 
-        <div>
-          <label class="text-xs text-slate-700 font-bold block mb-1">Nama Pemilik</label>
-          <input type="text" id="modalInputName" placeholder="Nama Pelanggan" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 font-semibold rounded-[2px] outline-none">
-        </div>
+            <div>
+              <label class="text-xs text-slate-700 font-bold block mb-1">Nama Pemilik</label>
+              <input type="text" id="modalInputName" placeholder="Nama Pelanggan" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 font-semibold rounded-[2px] outline-none">
+            </div>
 
-        <div>
-          <label class="text-xs text-slate-700 font-bold block mb-1">No. WhatsApp</label>
-          <input type="tel" id="modalInputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none font-mono">
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-700 font-bold block mb-1">Keluhan / Kendala Servis</label>
-          <select id="modalInputDamageMaster" onchange="handleModalDamageChange(this.value)" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none cursor-pointer font-semibold">
-            <!-- Populated via JS -->
-          </select>
-          <p id="modalTextDamageDesc" class="text-[10px] text-slate-500 italic mt-1 font-medium"></p>
-          <div id="modalDamageInfoCard" class="hidden">
-            <span id="modalBadgeDamageLevel"></span>
-            <span id="modalBadgeDamageHours"></span>
+            <div>
+              <label class="text-xs text-slate-700 font-bold block mb-1">No. WhatsApp</label>
+              <input type="tel" id="modalInputPhone" placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none font-mono">
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label class="text-xs text-slate-700 font-bold block mb-1">Catatan Tambahan</label>
-          <textarea id="modalInputNotes" rows="3" placeholder="Apabila ada kendala/keluhan lain yang ingin di perbaiki" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none font-medium resize-none leading-relaxed shadow-2xs"></textarea>
+          <!-- Kolom Kanan: Keluhan & Catatan Servis -->
+          <div class="space-y-2.5">
+            <div>
+              <label class="text-xs text-slate-700 font-bold block mb-1">Keluhan / Kendala Servis</label>
+              <select id="modalInputDamageMaster" onchange="handleModalDamageChange(this.value)" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none cursor-pointer font-semibold">
+                <!-- Populated via JS -->
+              </select>
+              <p id="modalTextDamageDesc" class="text-[10px] text-slate-500 italic mt-1 font-medium"></p>
+              <div id="modalDamageInfoCard" class="hidden">
+                <span id="modalBadgeDamageLevel"></span>
+                <span id="modalBadgeDamageHours"></span>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-xs text-slate-700 font-bold block mb-1">Catatan Tambahan</label>
+              <textarea id="modalInputNotes" rows="4" placeholder="Apabila ada kendala/keluhan lain yang ingin di perbaiki" class="w-full bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 rounded-[2px] outline-none font-medium resize-none leading-relaxed shadow-2xs"></textarea>
+            </div>
+          </div>
         </div>
 
         <button onclick="saveManualBooking()" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs mt-2 flex items-center justify-center gap-1.5 rounded-[3px] shadow-sm transition cursor-pointer">
@@ -3128,7 +3222,7 @@
           <span>Unduh Tiket</span>
         </button>
         <button type="button" onclick="closeTicketModal();" class="flex-1 py-2 px-3 bg-red-700 hover:bg-red-800 text-white font-black text-xs rounded-[3px] shadow transition cursor-pointer flex items-center justify-center">
-          <span>Tutup</span>
+          <span id="btnTicketCloseText">Tutup</span>
         </button>
       </div>
 
@@ -4019,6 +4113,15 @@
     // State Variables (Semua dideklarasikan di awal agar aman dari Temporal Dead Zone)
     let currentRole = 'portal'; // 'portal' | 'konsumen' | 'teknisi' | 'sa' | 'tv' | 'part'
     let partReturnSource = 'portal'; // 'portal' | 'konsumen-step2' | 'sa' | 'teknisi'
+    let bookingSourceRole = 'portal'; // 'portal' | 'kiosk'
+    try {
+      const storedSource = sessionStorage.getItem('POLYTRON_BOOKING_SOURCE_ROLE');
+      if (storedSource && ['portal', 'kiosk'].includes(storedSource)) {
+        bookingSourceRole = storedSource;
+      }
+    } catch(e) {}
+    window.bookingSourceRole = bookingSourceRole;
+    let ticketSuccessCountdownInterval = null;
     let currentBookingStep = 1;
     let currentSiteId = localStorage.getItem('POLYTRON_ACTIVE_SITE') || localStorage.getItem('POLYTRON_ACTIVE_SITE_ID') || (SITES.find(s => s.id.includes('tasik')) ? SITES.find(s => s.id.includes('tasik')).id : (SITES[0] ? SITES[0].id : 'tasik'));
     let currentDate = getLocalDateIso();
@@ -4629,13 +4732,10 @@
       return new Promise((resolve) => {
         try {
           const ctx = getAudioContext(true);
-          // NADA DING-DONG BANDARA (CHIME BANDARA SOEKARNO-HATTA / CHANGI)
-          // 4 nada harmonis lonceng bandara: C5 (523 Hz), E5 (659 Hz), G5 (784 Hz), C6 (1046 Hz)
+          // NADA DING-DONG 2-NADA KLASIK BANDARA / STASIUN (E5 -> C5)
           const notes = [
-            { freq: 523.25, time: 0.00, dur: 0.38 },
-            { freq: 659.25, time: 0.26, dur: 0.38 },
-            { freq: 783.99, time: 0.52, dur: 0.52 },
-            { freq: 1046.50, time: 0.80, dur: 0.75 }
+            { freq: 659.25, time: 0.00, dur: 0.75, gain: 0.24 },
+            { freq: 523.25, time: 0.42, dur: 1.25, gain: 0.28 }
           ];
 
           notes.forEach((n) => {
@@ -4651,12 +4751,12 @@
             harmonic.frequency.setValueAtTime(n.freq * 2, ctx.currentTime + n.time);
 
             gain.gain.setValueAtTime(0, ctx.currentTime + n.time);
-            gain.gain.linearRampToValueAtTime(0.28, ctx.currentTime + n.time + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.time + n.dur);
+            gain.gain.linearRampToValueAtTime(n.gain, ctx.currentTime + n.time + 0.025);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + n.time + n.dur);
 
             hGain.gain.setValueAtTime(0, ctx.currentTime + n.time);
-            hGain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + n.time + 0.02);
-            hGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.time + n.dur * 0.7);
+            hGain.gain.linearRampToValueAtTime(n.gain * 0.25, ctx.currentTime + n.time + 0.02);
+            hGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + n.time + n.dur * 0.7);
 
             osc.connect(gain);
             harmonic.connect(hGain);
@@ -4666,10 +4766,10 @@
             osc.start(ctx.currentTime + n.time);
             harmonic.start(ctx.currentTime + n.time);
             osc.stop(ctx.currentTime + n.time + n.dur);
-            harmonic.stop(ctx.currentTime + n.time + n.dur);
+            harmonic.stop(ctx.currentTime + n.time + n.dur * 0.7);
           });
 
-          setTimeout(resolve, 1550);
+          setTimeout(resolve, 1500);
         } catch (e) {
           resolve();
         }
@@ -4694,16 +4794,19 @@
         s = stall || '';
       }
 
-      let stallClean = String(s).trim();
-      if (/stall.*1/i.test(stallClean)) stallClean = 'STALL 1';
+      let sRaw = String(s || '').trim();
+      let serviceType = (typeof bookingOrQueue === 'object' && bookingOrQueue) ? (bookingOrQueue.serviceType || '') : '';
+      let isExp = /express/i.test(sRaw) || /express/i.test(serviceType);
+      let stallClean = sRaw;
+      if (isExp) stallClean = 'EXPRESS';
+      else if (/stall.*1/i.test(stallClean)) stallClean = 'STALL 1';
       else if (/stall.*2/i.test(stallClean)) stallClean = 'STALL 2';
-      else if (/express/i.test(stallClean)) stallClean = 'STALL EXPRESS';
 
       const parts = [];
       if (q) parts.push(q);
       if (n) parts.push(n);
       if (p) parts.push(p);
-      if (stallClean) parts.push(stallClean);
+      // stallClean sengaja ditiadakan sesuai instruksi user agar popup panggilan tidak menampilkan stall 1/2/express
 
       if (parts.length > 0) {
         bannerText.innerText = parts.join(' • ').toUpperCase();
@@ -4712,6 +4815,43 @@
 
     let lastAppVoiceCallKey = null;
     let lastAppVoiceCallTime = 0;
+
+    // PEMETAAN DIGIT SUARA (ANGKA DISEBUT 1 PER 1, ANTI SEBUTAN JUTA / TRILIUN)
+    const INDO_DIGIT_MAP = {
+      '0': 'nol',
+      '1': 'satu',
+      '2': 'dua',
+      '3': 'tiga',
+      '4': 'empat',
+      '5': 'lima',
+      '6': 'enam',
+      '7': 'tujuh',
+      '8': 'delapan',
+      '9': 'sembilan'
+    };
+
+    function formatNumbersForSpeech(rawText) {
+      if (!rawText) return '';
+      let str = String(rawText);
+
+      // 1. Bersihkan tanda strip / minus antar kode antrian atau booking agar tidak dibaca 'strip' atau 'kurang'
+      // contoh: EV-01 -> EV 01, REG-02 -> REG 02, BKG-20261021-001 -> BKG 20261021 001
+      str = str
+        .replace(/([A-Za-z0-9])\s*-\s*([A-Za-z0-9])/g, '$1 $2')
+        .replace(/([A-Za-z0-9])\s*-\s*([A-Za-z0-9])/g, '$1 $2');
+
+      // 2. Sebutkan setiap digit angka satu per satu (1 per 1),
+      // Mencegah TTS menyebutkan 'juta', 'triliun', 'miliar', atau 'ribu'.
+      // Kata-kata tetap utuh dan TIDAK dieja huruf demi huruf.
+      str = str.replace(/\d/g, function(d) {
+        return ' ' + (INDO_DIGIT_MAP[d] || d) + ' ';
+      });
+
+      // 3. Rapikan spasi berlebih dan tanda baca koma/titik
+      str = str.replace(/\s{2,}/g, ' ').replace(/\s+([,\.])/g, '$1').trim();
+      return str;
+    }
+    window.formatNumbersForSpeech = formatNumbersForSpeech;
 
     function announceVoice(text, booking, isRemote = false) {
       if (!text) return;
@@ -4783,13 +4923,16 @@
 
       if (!isSoundEnabled) return;
 
+      // Format teks ucapan: angka disebut 1 per 1, kata tidak dieja
+      const spokenText = formatNumbersForSpeech(text);
+
       playChime().then(() => {
         if ('speechSynthesis' in window) {
           window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(text);
+          const utterance = new SpeechSynthesisUtterance(spokenText);
           utterance.lang = 'id-ID';
-          utterance.rate = 0.92;
-          utterance.pitch = 1.08; // Nada cantik merdu khas penyiar bandara
+          utterance.rate = 1.02; // Suara wanita cerah & segar
+          utterance.pitch = 1.12; // Nada cerah bersahabat // Nada cantik merdu khas penyiar bandara
 
           const voices = window.speechSynthesis.getVoices();
           let idVoice = voices.find(v => (v.lang === 'id-ID' || v.lang.startsWith('id')) && /gadis|damayanti|female|wanita|putri|natural|online/i.test(v.name));
@@ -5393,8 +5536,8 @@
           window.speechSynthesis.cancel();
           const utterance = new SpeechSynthesisUtterance(spokenText);
           utterance.lang = 'id-ID';
-          utterance.rate = 0.92;
-          utterance.pitch = 1.08; // Nada cantik merdu khas penyiar bandara
+          utterance.rate = 1.02; // Suara wanita cerah & segar
+          utterance.pitch = 1.12; // Nada cerah bersahabat // Nada cantik merdu khas penyiar bandara
 
           const voices = window.speechSynthesis.getVoices();
           let idVoice = voices.find(v => (v.lang === 'id-ID' || v.lang.startsWith('id')) && /gadis|damayanti|female|wanita|putri|natural|online/i.test(v.name));
@@ -5492,14 +5635,17 @@
 
       const evContainer = document.getElementById('saEvContainer');
       const queueContainer = document.getElementById('saQueueControlContainer');
+      const saHeaderCard = document.getElementById('saHeaderActionCard');
 
       if (category === 'ev') {
         if (evContainer) evContainer.classList.remove('hidden');
         if (queueContainer) queueContainer.classList.add('hidden');
+        if (saHeaderCard) saHeaderCard.classList.remove('hidden');
         if (typeof renderSABoard === 'function') renderSABoard();
       } else {
         if (evContainer) evContainer.classList.add('hidden');
         if (queueContainer) queueContainer.classList.remove('hidden');
+        if (saHeaderCard) saHeaderCard.classList.add('hidden');
         renderSaQueueControlBoard();
       }
 
@@ -5578,7 +5724,7 @@
         if (callTime) callTime.innerText = `Dipanggil pada ${callingBooking.timeDisplay || 'Hari Ini'}`;
         if (callStatus) {
           callStatus.innerText = 'SEDANG DIPANGGIL';
-          callStatus.className = 'px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase rounded-[2px] animate-pulse';
+          callStatus.className = 'font-bold text-xs text-black uppercase';
         }
       } else {
         if (callNum) callNum.innerText = '-';
@@ -5586,7 +5732,7 @@
         if (callTime) callTime.innerText = 'Tekan "Maju" atau klik tombol "Panggil" pada baris antrian di bawah';
         if (callStatus) {
           callStatus.innerText = 'MENUNGGU PANGGILAN';
-          callStatus.className = 'px-2 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-extrabold uppercase rounded-[2px]';
+          callStatus.className = 'font-bold text-xs text-black uppercase';
         }
       }
 
@@ -5601,28 +5747,16 @@
 
       let rowsHtml = '';
       siteBookings.forEach((b, idx) => {
-        let statusBadge = '';
-        if (b.status === 'Dipanggil') {
-          statusBadge = '<span class="px-2 py-0.5 bg-amber-500 text-white font-extrabold rounded-[2px] text-[10px] uppercase animate-pulse">Dipanggil</span>';
-        } else if (b.status === 'Selesai') {
-          statusBadge = '<span class="px-2 py-0.5 bg-emerald-600 text-white font-extrabold rounded-[2px] text-[10px] uppercase">Selesai</span>';
-        } else if (b.status === 'Batal') {
-          statusBadge = '<span class="px-2 py-0.5 bg-slate-300 text-slate-700 font-extrabold rounded-[2px] text-[10px] uppercase">Batal</span>';
-        } else {
-          statusBadge = '<span class="px-2 py-0.5 bg-sky-100 text-sky-800 font-extrabold rounded-[2px] text-[10px] uppercase">Menunggu</span>';
-        }
-
-        const isCurrentActive = (callingBooking && callingBooking.id === b.id);
-        const rowBg = isCurrentActive ? 'bg-amber-50 font-bold' : (b.status === 'Selesai' ? 'bg-slate-50 opacity-75' : 'hover:bg-slate-50');
+        const rowBg = 'border-b border-slate-100 hover:bg-slate-50';
 
         rowsHtml += `
           <tr class="${rowBg} transition">
-            <td class="py-2.5 px-3 text-center font-bold text-slate-500">${idx + 1}</td>
-            <td class="py-2.5 px-3 font-mono font-black text-sm text-slate-900">${b.queueNumber}</td>
-            <td class="py-2.5 px-3 font-bold text-slate-900 uppercase">${b.name}</td>
-            <td class="py-2.5 px-3 text-slate-600 font-medium">${b.complaint || b.notes || '-'}</td>
-            <td class="py-2.5 px-3 font-mono text-slate-500 text-[11px]">${b.timeDisplay || '-'}</td>
-            <td class="py-2.5 px-3 text-center">${statusBadge}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-xs text-black">${idx + 1}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-xs text-black">${b.queueNumber}</td>
+            <td class="py-2.5 px-3 font-bold text-xs text-black uppercase">${b.name}</td>
+            <td class="py-2.5 px-3 font-bold text-xs text-black">${b.complaint || b.notes || '-'}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-xs text-black">${b.timeDisplay || '-'}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-xs text-black uppercase">${b.status}</td>
             <td class="py-2.5 px-3 text-right">
               <div class="inline-flex items-center gap-1.5">
                 <button onclick="saCallSpecificTicket('${b.id}')" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-[2px] font-bold text-[11px] transition shadow-xs flex items-center gap-1" title="Panggil Antrian Ini">
@@ -5903,6 +6037,9 @@
       if (activeSite) {
         currentSiteId = activeSite;
       }
+      bookingSourceRole = 'kiosk';
+      window.bookingSourceRole = 'kiosk';
+      try { sessionStorage.setItem('POLYTRON_BOOKING_SOURCE_ROLE', 'kiosk'); } catch(e) {}
       switchRole('konsumen');
       const bSite = document.getElementById('bookingSiteInput');
       if (bSite) {
@@ -5964,6 +6101,18 @@ function switchRole(role, replaceHistory = false) {
       if (!role || !['portal', 'konsumen', 'teknisi', 'sa', 'tv', 'part', 'kiosk'].includes(role)) {
         role = 'portal';
       }
+
+      // Catat menu asal booking: jika masuk dari Kiosk Mandiri, catat 'kiosk'; jika dari Menu Utama, catat 'portal'
+      if (role === 'konsumen') {
+        if (currentRole === 'kiosk') {
+          bookingSourceRole = 'kiosk';
+        } else if (currentRole === 'portal') {
+          bookingSourceRole = 'portal';
+        }
+        window.bookingSourceRole = bookingSourceRole;
+        try { sessionStorage.setItem('POLYTRON_BOOKING_SOURCE_ROLE', bookingSourceRole); } catch(e) {}
+      }
+
       currentRole = role;
       try { localStorage.setItem('LAST_ACTIVE_ROLE', role); } catch(e) {}
 
@@ -6120,11 +6269,16 @@ function switchRole(role, replaceHistory = false) {
 
     function handleBookingStepBack(fromStep) {
       if (fromStep <= 1) {
-        if (window.history.length > 1 && window.history.state && window.history.state.role === 'konsumen') {
-          window.history.back();
-        } else {
-          switchRole('portal', true);
-        }
+        let targetRole = bookingSourceRole || 'portal';
+        try {
+          const savedSource = sessionStorage.getItem('POLYTRON_BOOKING_SOURCE_ROLE');
+          if (savedSource && ['kiosk', 'portal'].includes(savedSource)) {
+            targetRole = savedSource;
+          }
+        } catch(e) {}
+        if (targetRole !== 'kiosk') targetRole = 'portal';
+
+        switchRole(targetRole, true);
         return;
       }
       if (window.history && window.history.state && window.history.state.role === 'konsumen' && window.history.state.step === fromStep) {
@@ -6221,9 +6375,7 @@ function switchRole(role, replaceHistory = false) {
 
       const ticketModal = document.getElementById('ticketSuccessModal');
       if (ticketModal && (!ticketModal.classList.contains('hidden') || ticketModal.style.display === 'flex')) {
-        ticketModal.classList.add('hidden');
-        ticketModal.style.setProperty('display', 'none', 'important');
-        popModalHistoryState('ticketSuccessModal');
+        closeTicketModal();
         return true;
       }
 
@@ -6276,7 +6428,8 @@ function switchRole(role, replaceHistory = false) {
         // Jika sedang berada di Tahap 1 (Pilih Lokasi Service) dan tombol Back HP ditekan,
         // atau state yang diterima tetap Tahap 1, larikan langsung ke Menu Utama (portal)!
         if (currentRole === 'konsumen' && currentBookingStep === 1 && st.step === 1) {
-          switchRole('portal', true);
+          const returnTarget = (bookingSourceRole === 'kiosk') ? 'kiosk' : 'portal';
+          switchRole(returnTarget, true);
           return;
         }
         goToBookingStep(st.step, false);
@@ -7172,14 +7325,14 @@ function switchRole(role, replaceHistory = false) {
 
     function updateLiveClock() {
       const now = new Date();
-      const timeStr = now.toLocaleTimeString('id-ID', { hour12: false });
+      const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, timeZone: 'Asia/Jakarta' });
       const clockEl = document.getElementById('liveClock');
       if (clockEl) clockEl.innerText = `${timeStr} WIB`;
 
       // Update Tanggal Today di sebelah jam (Bahasa Indonesia: e.g. Jumat, 16 Oktober 2026)
       const dateEl = document.getElementById('liveDateTodayText');
       if (dateEl) {
-        const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta' };
         const dateTodayStr = now.toLocaleDateString('id-ID', dateOptions);
         if (dateEl.innerText !== dateTodayStr) {
           dateEl.innerText = dateTodayStr;
@@ -7190,8 +7343,8 @@ function switchRole(role, replaceHistory = false) {
       const tvDayEl = document.getElementById('tvDayNameDisplay');
       const tvDateEl = document.getElementById('tvFullDateDisplay');
       if (tvDayEl || tvDateEl) {
-        const dayName = now.toLocaleDateString('id-ID', { weekday: 'long' }).toUpperCase();
-        const fullDate = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+        const dayName = now.toLocaleDateString('id-ID', { weekday: 'long', timeZone: 'Asia/Jakarta' }).toUpperCase();
+        const fullDate = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta' }).toUpperCase();
         if (tvDayEl && tvDayEl.innerText !== `${dayName}, `) {
           tvDayEl.innerText = `${dayName}, `;
         }
@@ -7328,14 +7481,7 @@ function switchRole(role, replaceHistory = false) {
           if (b.status === 'In Progress') statusBadge = 'bg-sky-50 text-sky-700 border border-sky-300 font-bold';
           if (b.status === 'Done') statusBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold';
 
-          let dateBadge = '';
-          if (isSameDate(b.date, todayIso)) {
-            dateBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Hari Ini</span>`;
-          } else if (isSameDate(b.date, tomorrowIso)) {
-            dateBadge = `<span class="bg-blue-50 text-blue-700 border border-blue-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Besok (${formatDateIndo(b.date, true)})</span>`;
-          } else {
-            dateBadge = `<span class="bg-purple-50 text-purple-700 border border-purple-200 font-bold px-1.5 py-0.5 rounded text-[10px]">${formatDateIndo(b.date, true)}</span>`;
-          }
+          let dateBadge = ''; // Ditiadakan sesuai instruksi user (hilangkan Hari Ini, Besok)
 
           const isBookingToday = isSameDate(b.date, todayIso);
           let actionButtonsHtml = '';
@@ -7439,7 +7585,8 @@ function switchRole(role, replaceHistory = false) {
           }
 
           const siteObj = SITES.find(s => isSameSite(s.id, b.siteId));
-          const siteBadge = siteObj ? `<span class="bg-slate-100 text-slate-700 border border-slate-300 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider">${siteObj.city}</span>` : '';
+          const siteBadge = ''; // Ditiadakan sesuai instruksi user (hilangkan kata TASIK)
+          const displayModel = String(b.model || '').replace(/polytron\s*/gi, '').trim() || b.model;
 
           newHtml += `
             <div class="bg-white border-2 border-slate-300 border-t-4 border-t-red-600 py-2.5 px-[2mm] space-y-2 shadow-xs rounded-[3px] teknisi-card transition hover:shadow-md">
@@ -7461,7 +7608,7 @@ function switchRole(role, replaceHistory = false) {
               <div class="space-y-1.5 text-xs">
                 <div class="flex justify-between items-start gap-2">
                   <span class="text-slate-500 font-medium shrink-0">Kendaraan:</span>
-                  <span class="font-extrabold text-slate-900 text-right whitespace-normal break-words">${b.model} (${b.plate})</span>
+                  <span class="font-extrabold text-slate-900 text-right whitespace-normal break-words">${displayModel} (${b.plate})</span>
                 </div>
                 <div class="flex justify-between items-center gap-2">
                   <span class="text-slate-500 font-medium shrink-0">Jam Slot:</span>
@@ -7694,17 +7841,10 @@ function switchRole(role, replaceHistory = false) {
         if (b.status === 'Done') statusBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold';
         if (b.status === 'Batal') statusBadge = 'bg-rose-100 text-rose-800 border border-rose-300 font-black';
 
-        let dateBadge = '';
-        if (isSameDate(b.date, todayIso)) {
-          dateBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Hari Ini</span>`;
-        } else if (isSameDate(b.date, tomorrowIso)) {
-          dateBadge = `<span class="bg-blue-50 text-blue-700 border border-blue-200 font-bold px-1.5 py-0.5 rounded text-[10px]">Besok (${formatDateIndo(b.date, true)})</span>`;
-        } else {
-          dateBadge = `<span class="bg-purple-50 text-purple-700 border border-purple-200 font-bold px-1.5 py-0.5 rounded text-[10px]">${formatDateIndo(b.date, true)}</span>`;
-        }
-
+        let dateBadge = ''; // Ditiadakan sesuai instruksi user (hilangkan Hari Ini, Besok)
         const siteObj = SITES.find(s => isSameSite(s.id, b.siteId));
-        const siteBadge = siteObj ? `<span class="bg-slate-100 text-slate-700 border border-slate-300 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider">${siteObj.city}</span>` : '';
+        const siteBadge = ''; // Ditiadakan sesuai instruksi user (hilangkan kata TASIK)
+        const displayModel = String(b.model || '').replace(/polytron\s*/gi, '').trim() || b.model;
 
         const isBookingToday = isSameDate(b.date, todayIso);
         let actionButtonsHtml = '';
@@ -7719,7 +7859,7 @@ function switchRole(role, replaceHistory = false) {
             </div>
           `;
         } else if (isBatal) {
-          actionButtonsHtml = `<span class="px-2.5 py-1 text-[11px] font-bold text-rose-700 bg-rose-100 border border-rose-300 rounded-[2px]">BATAL</span>`;
+          actionButtonsHtml = `<span class="font-bold text-xs text-black uppercase">BATAL</span>`;
         } else {
           let hadirBtn = '';
           let prosesBtn = '';
@@ -7806,72 +7946,67 @@ function switchRole(role, replaceHistory = false) {
           actionButtonsHtml = `<div class="flex items-center justify-end gap-1 flex-wrap">${hadirBtn}${prosesBtn}${selesaiBtn}</div>`;
         }
 
-        // 1. Tampilan Laptop (Row Tabel dengan Teks Gelap Kontras Tinggi & Wrap Teks ke Bawah)
+        // 1. Tampilan Laptop (Warna Teks Hitam & Tanpa Kotak-Kotak Kecuali Tombol)
         rowsHtml += `
           <tr class="${trClass}">
-            <td class="py-1.5 px-2.5 font-mono font-black text-sm whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</td>
-            <td class="py-1.5 px-2.5">
-              <span class="px-2 py-0.5 text-[10px] font-bold inline-block ${statusBadge}">
-                ${b.status}
-              </span>
-              ${isBatal ? `<div class="text-[9px] text-rose-600 font-semibold mt-0.5">&gt;15 Mnt Tidak Hadir</div>` : ''}
+            <td class="py-2.5 px-3 font-mono font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-black'}">${b.queueNumber}</td>
+            <td class="py-2.5 px-3 font-bold text-xs whitespace-normal break-words text-black">
+              ${b.status}
+              ${isBatal ? `<div class="text-[9px] text-slate-400 font-semibold mt-0.5">&gt;15 Mnt Tidak Hadir</div>` : ''}
             </td>
-            <td class="py-1.5 px-2.5">
-              <div class="flex items-center gap-1 mb-0.5 flex-wrap">${siteBadge}${dateBadge}</div>
-              <div class="font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${stallLabel}</div>
-              <div class="text-[11px] whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-red-600 font-extrabold'}">${b.slot} WIB</div>
+            <td class="py-2.5 px-3">
+              <div class="font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-black'}">${stallLabel}</div>
+              <div class="text-xs whitespace-normal break-words font-bold ${isBatal ? 'text-slate-400' : 'text-black'}">${b.slot} WIB</div>
             </td>
-            <td class="py-1.5 px-2.5">
-              <div class="font-black text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.plate}</div>
-              <div class="text-[11px] text-slate-500 font-medium whitespace-normal break-words">${b.model}</div>
+            <td class="py-2.5 px-3">
+              <div class="font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-black'}">${b.plate}</div>
+              <div class="text-xs font-bold whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-black'}">${displayModel}</div>
             </td>
-            <td class="py-1.5 px-2.5">
-              <div class="font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-slate-900'}">${b.name}</div>
-              <div class="text-[10px] text-slate-500 font-mono whitespace-normal break-words">${b.phone || '-'}</div>
+            <td class="py-2.5 px-3">
+              <div class="font-bold text-xs whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-black'}">${b.name}</div>
+              <div class="text-[11px] font-bold font-mono whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-black'}">${b.phone || '-'}</div>
             </td>
-            <td class="py-1.5 px-2.5 min-w-[200px]">
-              <div class="flex items-start gap-1 flex-wrap">
-                ${b.level ? `<span class="shrink-0 px-1.5 py-0.2 text-[9px] font-bold ${isBatal ? 'bg-slate-100 text-slate-500 border border-slate-200' : (b.level === 'Level 3' ? 'bg-rose-50 text-rose-700 border border-rose-200 font-bold' : (b.level === 'Level 2' ? 'bg-amber-50 text-amber-800 border border-amber-200 font-bold' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold'))}">${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + 'J' : '<30m') : '1J'})</span>` : ''}
-                <span class="font-semibold ${isBatal ? 'text-slate-400' : 'text-slate-800'} text-xs whitespace-normal break-words leading-tight">${b.complaint || b.notes || '-'}</span>
+            <td class="py-2.5 px-3 min-w-[200px]">
+              <div class="flex items-start gap-1 flex-wrap font-bold text-xs ${isBatal ? 'text-slate-400' : 'text-black'} leading-tight">
+                ${b.level ? `<span>${b.level} (${b.estimatedHours ? (b.estimatedHours >= 1 ? b.estimatedHours + 'J' : '<30m') : '1J'}) &bull;</span>` : ''}
+                <span>${b.complaint || b.notes || '-'}</span>
               </div>
-              ${b.notes && b.notes !== b.complaint ? `<div class="text-[10px] text-slate-500 italic whitespace-normal break-words mt-1">${b.notes}</div>` : ''}
+              ${b.notes && b.notes !== b.complaint ? `<div class="text-[11px] font-bold ${isBatal ? 'text-slate-400' : 'text-black'} mt-1">${b.notes}</div>` : ''}
             </td>
-            <td class="py-1.5 px-2.5 text-right">
+            <td class="py-2.5 px-3 text-right">
               ${actionButtonsHtml}
             </td>
           </tr>
         `;
 
-        // 2. Tampilan HP (Daftar Kartu Antrian Rapi Vertikal & Wrap Teks)
+        // 2. Tampilan HP (Warna Teks Hitam & Tanpa Kotak-Kotak Kecuali Tombol)
         cardsHtml += `
           <div class="py-2 px-[2mm] bg-white border-2 border-slate-300 border-t-4 border-t-red-600 rounded-[3px] shadow-xs space-y-1.5 transition sa-card ${isBatal ? 'opacity-60 bg-rose-50/40 border-rose-300' : ''}">
             <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="font-mono font-black text-sm whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.queueNumber}</span>
-                <span class="px-2 py-0.5 text-[10px] font-bold inline-block ${statusBadge}">${b.status}</span>
-                ${siteBadge}
-                ${dateBadge}
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-mono font-bold text-sm whitespace-normal break-words text-black">${b.queueNumber}</span>
+                <span class="font-bold text-xs text-black">${b.status}</span>
               </div>
-              <div class="text-[11px] font-extrabold whitespace-normal break-words ${isBatal ? 'text-slate-400' : 'text-red-600'}">${stallLabel} &bull; ${b.slot} WIB</div>
+              <div class="text-xs font-bold whitespace-normal break-words text-black">${stallLabel} &bull; ${b.slot} WIB</div>
             </div>
             
             <div class="flex items-start justify-between gap-2 text-xs">
               <div>
-                <div class="font-black text-sm whitespace-normal break-words ${isBatal ? 'text-slate-400 line-through' : 'text-slate-900'}">${b.plate}</div>
-                <div class="text-slate-500 text-[11px] font-medium whitespace-normal break-words">${b.model}</div>
+                <div class="font-bold text-sm whitespace-normal break-words text-black">${b.plate}</div>
+                <div class="text-black text-xs font-bold whitespace-normal break-words">${displayModel}</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-slate-900 whitespace-normal break-words">${b.name}</div>
-                <div class="text-slate-500 text-[11px] font-mono whitespace-normal break-words">${b.phone || '-'}</div>
+                <div class="font-bold text-black whitespace-normal break-words">${b.name}</div>
+                <div class="text-black text-xs font-bold font-mono whitespace-normal break-words">${b.phone || '-'}</div>
               </div>
             </div>
 
-            <div class="bg-slate-50 border border-slate-200 p-2 rounded-[2px] text-[11px] text-slate-700">
+            <div class="bg-slate-50 border border-slate-200 p-2 rounded-[2px] text-xs font-bold text-black">
               <div class="flex items-start gap-1.5 flex-wrap">
-                ${b.level ? `<span class="shrink-0 px-1.5 py-0.5 text-[9px] font-bold bg-white border border-slate-300 text-slate-700 rounded-[2px]">${b.level}</span>` : ''}
-                <span class="font-semibold text-slate-800 whitespace-normal break-words leading-tight">${b.complaint || b.notes || '-'}</span>
+                ${b.level ? `<span>${b.level} &bull;</span>` : ''}
+                <span>${b.complaint || b.notes || '-'}</span>
               </div>
-              ${b.notes && b.notes !== b.complaint ? `<div class="text-[10px] text-slate-500 italic whitespace-normal break-words mt-1">${b.notes}</div>` : ''}
+              ${b.notes && b.notes !== b.complaint ? `<div class="text-[11px] font-bold text-black mt-1">${b.notes}</div>` : ''}
             </div>
 
             <div class="pt-1 flex items-center justify-end gap-1.5 flex-wrap">
@@ -8123,8 +8258,8 @@ function switchRole(role, replaceHistory = false) {
       const tvDayEl = document.getElementById('tvDayNameDisplay');
       const tvDateEl = document.getElementById('tvFullDateDisplay');
       if (tvDayEl || tvDateEl) {
-        const dayName = now.toLocaleDateString('id-ID', { weekday: 'long' }).toUpperCase();
-        const fullDate = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+        const dayName = now.toLocaleDateString('id-ID', { weekday: 'long', timeZone: 'Asia/Jakarta' }).toUpperCase();
+        const fullDate = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta' }).toUpperCase();
         if (tvDayEl && tvDayEl.innerText !== `${dayName}, `) {
           tvDayEl.innerText = `${dayName}, `;
         }
@@ -8482,20 +8617,20 @@ function switchRole(role, replaceHistory = false) {
       // Cek Batas Jam Booking (Sabtu/Minggu max 11.30, Senin-Jumat max 14.30)
       if (isSat) {
         if (selectedBookingService === 'reguler' && selectedBookingSlot > '11.30') {
-          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB.', 'Batas Jam Booking', 'warning');
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking maksimal pukul 11.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
         if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 6) {
-          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB.', 'Batas Jam Booking', 'warning');
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking maksimal pukul 11.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
       } else {
         if (selectedBookingService === 'reguler' && selectedBookingSlot > '14.30') {
-          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.', 'Batas Jam Booking', 'warning');
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking maksimal pukul 14.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
         if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 12) {
-          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.', 'Batas Jam Booking', 'warning');
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking maksimal pukul 14.30 WIB.', 'Batas Jam Booking', 'warning');
           return;
         }
       }
@@ -8713,12 +8848,12 @@ function switchRole(role, replaceHistory = false) {
       const stallContainer = document.getElementById('stallPickerContainer');
 
       if (type === 'reguler') {
-        optReg.className = 'cursor-pointer border-2 border-red-500 bg-red-50/80 rounded-[3px] p-4 sm:p-5 transition flex flex-col justify-between shadow-sm hover:border-red-600';
-        optExp.className = 'cursor-pointer border border-slate-200 bg-white hover:bg-slate-50 rounded-[3px] p-4 sm:p-5 transition flex flex-col justify-between shadow-sm hover:border-slate-300';
+        optReg.className = 'cursor-pointer border-2 border-red-500 bg-red-50/80 rounded-[3px] p-3 sm:p-3.5 transition flex flex-col justify-between shadow-sm hover:border-red-600';
+        optExp.className = 'cursor-pointer border border-slate-200 bg-white hover:bg-slate-50 rounded-[3px] p-3 sm:p-3.5 transition flex flex-col justify-between shadow-sm hover:border-slate-300';
         if (stallContainer) stallContainer.classList.remove('hidden');
       } else {
-        optExp.className = 'cursor-pointer border-2 border-red-500 bg-red-50/80 rounded-[3px] p-4 sm:p-5 transition flex flex-col justify-between shadow-sm hover:border-red-600';
-        optReg.className = 'cursor-pointer border border-slate-200 bg-white hover:bg-slate-50 rounded-[3px] p-4 sm:p-5 transition flex flex-col justify-between shadow-sm hover:border-slate-300';
+        optExp.className = 'cursor-pointer border-2 border-red-500 bg-red-50/80 rounded-[3px] p-3 sm:p-3.5 transition flex flex-col justify-between shadow-sm hover:border-red-600';
+        optReg.className = 'cursor-pointer border border-slate-200 bg-white hover:bg-slate-50 rounded-[3px] p-3 sm:p-3.5 transition flex flex-col justify-between shadow-sm hover:border-slate-300';
         if (stallContainer) stallContainer.classList.add('hidden');
       }
 
@@ -8834,7 +8969,7 @@ function switchRole(role, replaceHistory = false) {
 
           let reason = '';
           if (isBeyondOps) {
-            reason = `slot jam kerja berikutnya (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+            reason = `slot jam kerja berikutnya (${nextTime || 'melebihi'}) di luar batas booking (${maxLimit} WIB)`;
           } else if (bookedNext) {
             reason = `slot jam kerja berikutnya (${nextTime} WIB) sudah dipesan antrian lain`;
           } else {
@@ -8880,11 +9015,11 @@ function switchRole(role, replaceHistory = false) {
 
           let reason = '';
           if (!isSlot2Ok) {
-            if (isBeyondOps2) reason = `slot jam kerja ke-2 (${nextTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+            if (isBeyondOps2) reason = `slot jam kerja ke-2 (${nextTime || 'melebihi'}) di luar batas booking (${maxLimit} WIB)`;
             else if (booked2) reason = `slot jam kerja ke-2 (${nextTime} WIB) sudah dipesan antrian lain`;
             else reason = `slot jam kerja ke-2 (${nextTime} WIB) sudah terlewati untuk hari ini`;
           } else {
-            if (isBeyondOps3) reason = `slot jam kerja ke-3 (${thirdTime || 'melebihi'}) di luar batas booking servis (${maxLimit} WIB)`;
+            if (isBeyondOps3) reason = `slot jam kerja ke-3 (${thirdTime || 'melebihi'}) di luar batas booking (${maxLimit} WIB)`;
             else if (booked3) reason = `slot jam kerja ke-3 (${thirdTime} WIB) sudah dipesan antrian lain`;
             else reason = `slot jam kerja ke-3 (${thirdTime} WIB) sudah terlewati untuk hari ini`;
           }
@@ -9197,7 +9332,7 @@ function switchRole(role, replaceHistory = false) {
       // VALIDASI: OPERASIONAL KHUSUS HARI SABTU & HARI BIASA
       if (isSaturday(bookingDate)) {
         if (selectedBookingService === 'reguler' && selectedBookingSlot > '11.30') {
-          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB.\n\nSilakan pilih slot yang tersedia.', 'Jam Operasional Sabtu', 'warning');
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking maksimal pukul 11.30 WIB.\n\nSilakan pilih slot yang tersedia.', 'Jam Operasional Sabtu', 'warning');
           selectedBookingSlot = null;
           selectedBookingSecondarySlot = null;
           selectedBookingTertiarySlot = null;
@@ -9208,7 +9343,7 @@ function switchRole(role, replaceHistory = false) {
           return;
         }
         if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 6) {
-          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking servis maksimal pukul 11.30 WIB (Pilihan slot express terakhir pukul 11.30 WIB).\n\nSilakan pilih slot sebelum pukul 11.30 WIB.', 'Jam Operasional Sabtu', 'warning');
+          showPopup('Untuk hari operasional akhir pekan (Sabtu/Minggu), batas booking maksimal pukul 11.30 WIB (Pilihan slot express terakhir pukul 11.30 WIB).\n\nSilakan pilih slot sebelum pukul 11.30 WIB.', 'Jam Operasional Sabtu', 'warning');
           selectedBookingSlot = null;
           selectedBookingSecondarySlot = null;
           selectedBookingTertiarySlot = null;
@@ -9220,7 +9355,7 @@ function switchRole(role, replaceHistory = false) {
         }
       } else {
         if (selectedBookingService === 'reguler' && selectedBookingSlot > '14.30') {
-          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking maksimal pukul 14.30 WIB.\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
           selectedBookingSlot = null;
           selectedBookingSecondarySlot = null;
           selectedBookingTertiarySlot = null;
@@ -9231,7 +9366,7 @@ function switchRole(role, replaceHistory = false) {
           return;
         }
         if (selectedBookingService === 'express' && parseInt(selectedBookingSlot, 10) > 12) {
-          showPopup('Untuk hari biasa (Senin - Jumat), batas booking servis maksimal pukul 14.30 WIB.\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
+          showPopup('Untuk hari biasa (Senin - Jumat), batas booking maksimal pukul 14.30 WIB.\n\nSilakan pilih slot sebelum pukul 14.30 WIB.', 'Slot Tidak Tersedia', 'warning');
           selectedBookingSlot = null;
           selectedBookingSecondarySlot = null;
           selectedBookingTertiarySlot = null;
@@ -9594,6 +9729,28 @@ function switchRole(role, replaceHistory = false) {
         } catch(e) {}
       }
 
+      // Hitung mundur otomatis bila booking diinput dari layar Kiosk Mandiri (agar tidak tertahan jika ditinggal)
+      if (ticketSuccessCountdownInterval) {
+        clearInterval(ticketSuccessCountdownInterval);
+        ticketSuccessCountdownInterval = null;
+      }
+      const closeBtnText = document.getElementById('btnTicketCloseText');
+      if (bookingSourceRole === 'kiosk') {
+        let secLeft = 25;
+        if (closeBtnText) closeBtnText.innerText = `Tutup (${secLeft}s)`;
+        ticketSuccessCountdownInterval = setInterval(() => {
+          secLeft--;
+          if (closeBtnText) closeBtnText.innerText = `Tutup (${secLeft}s)`;
+          if (secLeft <= 0) {
+            clearInterval(ticketSuccessCountdownInterval);
+            ticketSuccessCountdownInterval = null;
+            closeTicketModal();
+          }
+        }, 1000);
+      } else {
+        if (closeBtnText) closeBtnText.innerText = 'Tutup';
+      }
+
       // Bersihkan formulir input
       document.getElementById('inputPlateNumber').value = '';
       document.getElementById('inputOwnerName').value = '';
@@ -9608,16 +9765,44 @@ function switchRole(role, replaceHistory = false) {
     }
 
     function closeTicketModal() {
+      if (ticketSuccessCountdownInterval) {
+        clearInterval(ticketSuccessCountdownInterval);
+        ticketSuccessCountdownInterval = null;
+      }
+
       const modal = document.getElementById('ticketSuccessModal');
       if (modal) {
         modal.classList.add('hidden');
         modal.style.setProperty('display', 'none', 'important');
-        popModalHistoryState();
+        popModalHistoryState('ticketSuccessModal');
       }
-      switchRole('konsumen', true);
-      goToBookingStep(1, false);
+
+      // Pastikan formulir booking di-reset kembali ke Tahap 1
+      if (typeof goToBookingStep === 'function') {
+        goToBookingStep(1, false);
+      }
+
+      // Tentukan menu asal booking: Kiosk jika masuk lewat Kiosk, atau Portal jika dari Menu Utama
+      let targetRole = bookingSourceRole || 'portal';
+      try {
+        const savedSource = sessionStorage.getItem('POLYTRON_BOOKING_SOURCE_ROLE');
+        if (savedSource && ['kiosk', 'portal'].includes(savedSource)) {
+          targetRole = savedSource;
+        }
+      } catch(e) {}
+
+      if (targetRole !== 'kiosk') {
+        targetRole = 'portal';
+      }
+
+      // Reset status bookingSourceRole
+      bookingSourceRole = targetRole;
+      window.bookingSourceRole = targetRole;
+
+      // Kembalikan ke menu asal (Kiosk Mandiri atau Menu Utama)
+      switchRole(targetRole, true);
       if (window.history && window.history.replaceState) {
-        window.history.replaceState({ role: 'konsumen', step: 1 }, '', '?role=konsumen&step=1');
+        window.history.replaceState({ role: targetRole }, '', targetRole === 'portal' ? window.location.pathname : `?role=${targetRole}`);
       }
     }
 
