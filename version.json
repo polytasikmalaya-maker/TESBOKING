@@ -1,5 +1,5 @@
 {
-  "version": "20261021_v180",
-  "updatedAt": "2026-10-21T13:48:00+07:00",
-  "description": "Pemindahan judul Kiosk 'SILAHKAN PILIH KEPERLUAN ANDA' ke bagian atas di dalam card header saja, menghilangkan judul mengambang di latar belakang merah"
+  "version": "20261021_v181",
+  "updatedAt": "2026-10-21T17:30:00+07:00",
+  "description": "Standardisasi suara panggilan Text-to-Speech: Nomor polisi / plat nomor kendaraan wajib dieja lengkap huruf demi huruf dan angka demi angka satu per satu"
 }

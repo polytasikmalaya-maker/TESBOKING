@@ -4830,24 +4830,62 @@
       '9': 'sembilan'
     };
 
-    function formatNumbersForSpeech(rawText) {
+    // PENGECORAN & EJAAN LENGKAP NOMOR POLISI / PLAT NOMOR:
+    // Wajib dieja semua huruf dan angkanya satu per satu (contoh: D 1234 ABC -> D , satu , dua , tiga , empat , A , B , C)
+    function formatPlateForSpeech(plateText) {
+      if (!plateText) return '';
+      const clean = String(plateText).replace(/[^A-Za-z0-9]/g, ' ').toUpperCase().trim();
+      if (!clean) return '';
+      const tokens = [];
+      for (let i = 0; i < clean.length; i++) {
+        const ch = clean[i];
+        if (ch === ' ') continue;
+        if (/\d/.test(ch)) {
+          tokens.push(INDO_DIGIT_MAP[ch] || ch);
+        } else if (/[A-Z]/.test(ch)) {
+          tokens.push(ch);
+        }
+      }
+      return tokens.join(' , ');
+    }
+    window.formatPlateForSpeech = formatPlateForSpeech;
+
+    function formatNumbersForSpeech(rawText, bookingPlate = '') {
       if (!rawText) return '';
       let str = String(rawText);
 
-      // 1. Bersihkan tanda strip / minus antar kode antrian atau booking agar tidak dibaca 'strip' atau 'kurang'
-      // contoh: EV-01 -> EV 01, REG-02 -> REG 02, BKG-20261021-001 -> BKG 20261021 001
+      // 0. EJAAN KHUSUS PLAT DARI OBJEK BOOKING JIKA DISEDIAKAN
+      if (bookingPlate) {
+        const cleanBp = String(bookingPlate).trim();
+        if (cleanBp) {
+          const escaped = cleanBp.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          str = str.replace(new RegExp(escaped, 'gi'), formatPlateForSpeech(cleanBp));
+        }
+      }
+
+      // 1. Deteksi plat nomor / nopol dalam kalimat (contoh: 'plat Z 1482 ABZ', 'nopol D 1234 ABC')
+      // Wajib dieja semua huruf dan angkanya satu per satu sesuai instruksi operasional
+      str = str.replace(/((?:dengan\s+)?(?:nomor\s+)?plat(?:\s+nomor)?|nopol|nomor\s+polisi)\s*[:\s\-]?\s*([A-Za-z]{1,2}[\s\-]*\d{1,4}[\s\-]*[A-Za-z]{1,3})/gi, function(match, prefix, pGroup) {
+        return prefix + ' ' + formatPlateForSpeech(pGroup);
+      });
+
+      // Deteksi plat nomor berformat baku yang berdiri sendiri dengan spasi (misal: 'Z 1482 ABZ', 'B 9999 EV')
+      str = str.replace(/\b([A-Za-z]{1,2}\s+\d{1,4}\s+[A-Za-z]{1,3})\b/g, function(match) {
+        return formatPlateForSpeech(match);
+      });
+
+      // 2. Bersihkan tanda strip / minus antar kode antrian atau booking agar tidak dibaca 'strip' atau 'kurang'
       str = str
         .replace(/([A-Za-z0-9])\s*-\s*([A-Za-z0-9])/g, '$1 $2')
         .replace(/([A-Za-z0-9])\s*-\s*([A-Za-z0-9])/g, '$1 $2');
 
-      // 2. Sebutkan setiap digit angka satu per satu (1 per 1),
+      // 3. Sebutkan setiap digit angka yang tersisa satu per satu (1 per 1),
       // Mencegah TTS menyebutkan 'juta', 'triliun', 'miliar', atau 'ribu'.
-      // Kata-kata tetap utuh dan TIDAK dieja huruf demi huruf.
       str = str.replace(/\d/g, function(d) {
         return ' ' + (INDO_DIGIT_MAP[d] || d) + ' ';
       });
 
-      // 3. Rapikan spasi berlebih dan tanda baca koma/titik
+      // 4. Rapikan spasi berlebih dan tanda baca koma/titik
       str = str.replace(/\s{2,}/g, ' ').replace(/\s+([,\.])/g, '$1').trim();
       return str;
     }
@@ -4923,8 +4961,9 @@
 
       if (!isSoundEnabled) return;
 
-      // Format teks ucapan: angka disebut 1 per 1, kata tidak dieja
-      const spokenText = formatNumbersForSpeech(text);
+      // Format teks ucapan: Plat nomor wajib dieja huruf dan angkanya 1 per 1, angka disebut per digit
+      const bookingPlate = (booking && (booking.plate || booking.license_plate)) || '';
+      const spokenText = formatNumbersForSpeech(text, bookingPlate);
 
       playChime().then(() => {
         if ('speechSynthesis' in window) {
