@@ -29057,6 +29057,14 @@
 
 
         </div>
+        <div class="flex items-center justify-between pb-1 border-b border-amber-200/60">
+          <span class="text-slate-500 font-semibold">Plat Motor:</span>
+          <span id="conflictPlate" class="font-mono font-bold text-slate-900 bg-white px-1.5 py-0.5 rounded-[2px] border border-amber-200">-</span>
+        </div>
+        <div class="flex items-center justify-between pb-1 border-b border-amber-200/60">
+          <span class="text-slate-500 font-semibold">Nama Pemilik:</span>
+          <span id="conflictName" class="font-bold text-slate-900">-</span>
+        </div>
 
 
 
@@ -67393,214 +67401,19 @@
 
 
 
-      const normInputPhone = normalizePhoneDigits(phone);
-
-
-
-
-
-
-
-      if (normInputPhone && normInputPhone.length >= 8) {
-
-
-
-
-
-
-
-        const activePhoneConflict = currentBookings.find(b => {
-
-
-
-
-
-
-
-          if (!b) return false;
-
-
-
-
-
-
-
-          const bPhoneRaw = String(b.phone || b.phone_number || '').trim();
-
-
-
-
-
-
-
-          const bNormPhone = normalizePhoneDigits(bPhoneRaw);
-
-
-
-
-
-
-
-          if (!bNormPhone) return false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          const isSamePhone = (bNormPhone === normInputPhone) ||
-
-
-
-
-
-
-
-                              (bNormPhone.length >= 8 && normInputPhone.length >= 8 && (bNormPhone.endsWith(normInputPhone.slice(-8)) || normInputPhone.endsWith(bNormPhone.slice(-8))));
-
-
-
-
-
-
-
-          if (!isSamePhone) return false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          const st = String(b.status || '').toLowerCase().trim();
-
-
-
-
-
-
-
-          const isDoneOrCancelled = (st === 'done' || st === 'selesai' || st === 'batal' || st === 'dibatalkan' || st === 'cancelled' || st === 'completed');
-
-
-
-
-
-
-
-          return !isDoneOrCancelled;
-
-
-
-
-
-
-
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (activePhoneConflict) {
-
-
-
-
-
-
-
-          if (btnNext4) {
-
-
-
-
-
-
-
-            btnNext4.disabled = false;
-
-
-
-
-
-
-
-            btnNext4.innerHTML = originalBtn4;
-
-
-
-
-
-
-
-            if (window.lucide && lucide.createIcons) lucide.createIcons();
-
-
-
-
-
-
-
-          }
-
-
-
-
-
-
-
-          showActiveBookingConflictPopup(activePhoneConflict, phone);
-
-
-
-
-
-
-
-          return;
-
-
-
-
-
-
-
+      // ==============================================================
+      // VALIDASI ANTI DOUBLE-BOOKING JIKA STATUS MASIH AKTIF
+      // (Cek Motor/Plat Nomor, No. HP, dan Nama)
+      // ==============================================================
+      const activeConflict = findActiveBookingConflict(phone, plate, name, currentBookings);
+      if (activeConflict) {
+        if (btnNext4) {
+          btnNext4.disabled = false;
+          btnNext4.innerHTML = originalBtn4;
+          if (window.lucide && lucide.createIcons) lucide.createIcons();
         }
-
-
-
-
-
-
-
+        showActiveBookingConflictPopup(activeConflict, phone, plate, name);
+        return;
       }
 
 
@@ -68976,239 +68789,25 @@
 
 
 
-
-      const normInputPhoneExec = normalizePhoneDigits(phone);
-
-
-
-
-
-
-
-      if (normInputPhoneExec && normInputPhoneExec.length >= 8) {
-
-
-
-
-
-
-
-        const activePhoneConflictExec = bookings.find(b => {
-
-
-
-
-
-
-
-          if (!b) return false;
-
-
-
-
-
-
-
-          const bPhoneRaw = String(b.phone || b.phone_number || '').trim();
-
-
-
-
-
-
-
-          const bNormPhone = normalizePhoneDigits(bPhoneRaw);
-
-
-
-
-
-
-
-          if (!bNormPhone) return false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          const isSamePhone = (bNormPhone === normInputPhoneExec) ||
-
-
-
-
-
-
-
-                              (bNormPhone.length >= 8 && normInputPhoneExec.length >= 8 && (bNormPhone.endsWith(normInputPhoneExec.slice(-8)) || normInputPhoneExec.endsWith(bNormPhone.slice(-8))));
-
-
-
-
-
-
-
-          if (!isSamePhone) return false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          const st = String(b.status || '').toLowerCase().trim();
-
-
-
-
-
-
-
-          const isDoneOrCancelled = (st === 'done' || st === 'selesai' || st === 'batal' || st === 'dibatalkan' || st === 'cancelled' || st === 'completed');
-
-
-
-
-
-
-
-          return !isDoneOrCancelled;
-
-
-
-
-
-
-
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (activePhoneConflictExec) {
-
-
-
-
-
-
-
-          const confirmModal = document.getElementById('bookingConfirmModal');
-
-
-
-
-
-
-
-          if (confirmModal) {
-
-
-
-
-
-
-
-            confirmModal.classList.add('hidden');
-
-
-
-
-
-
-
-            confirmModal.style.setProperty('display', 'none', 'important');
-
-
-
-
-
-
-
-          }
-
-
-
-
-
-
-
-          const cIdx = openModalStack.indexOf('bookingConfirmModal');
-
-
-
-
-
-
-
-          if (cIdx !== -1) openModalStack.splice(cIdx, 1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          showActiveBookingConflictPopup(activePhoneConflictExec, phone);
-
-
-
-
-
-
-
-          return;
-
-
-
-
-
-
-
+      // ==============================================================
+      // VALIDASI ANTI DOUBLE-BOOKING (FAIL-SAFE EKSEKUSI)
+      // (Cek Motor/Plat Nomor, No. HP, dan Nama)
+      // ==============================================================
+      const activeConflictExec = findActiveBookingConflict(phone, plate, name, bookings);
+      if (activeConflictExec) {
+        const confirmModal = document.getElementById("bookingConfirmModal");
+        if (confirmModal) {
+          confirmModal.classList.add("hidden");
+          confirmModal.style.setProperty("display", "none", "important");
         }
-
-
-
-
-
-
-
+        const cIdx = openModalStack.indexOf("bookingConfirmModal");
+        if (cIdx !== -1) openModalStack.splice(cIdx, 1);
+        if (btnSubmit) {
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = originalSubmitText;
+        }
+        showActiveBookingConflictPopup(activeConflictExec, phone, plate, name);
+        return;
       }
 
 
@@ -71378,61 +70977,71 @@
 
 
     function normalizePhoneDigits(phone) {
-
-
-
-
-
-
-
       if (!phone) return '';
-
-
-
-
-
-
-
       let digits = String(phone).replace(/\D/g, '');
-
-
-
-
-
-
-
       if (digits.startsWith('62')) {
-
-
-
-
-
-
-
         digits = '0' + digits.slice(2);
-
-
-
-
-
-
-
+      } else if (digits.startsWith('8')) {
+        digits = '0' + digits;
       }
-
-
-
-
-
-
-
       return digits;
+    }
 
+    function isSamePhoneNumber(p1, p2) {
+      if (!p1 || !p2) return false;
+      const s1 = String(p1).trim().toLowerCase();
+      const s2 = String(p2).trim().toLowerCase();
+      if (s1 === s2) return true;
+      const n1 = normalizePhoneDigits(p1);
+      const n2 = normalizePhoneDigits(p2);
+      if (n1 && n2) {
+        if (n1 === n2) return true;
+        if (n1.length >= 7 && n2.length >= 7) {
+          const minLen = Math.min(n1.length, n2.length, 8);
+          return n1.slice(-minLen) === n2.slice(-minLen);
+        }
+      }
+      return false;
+    }
 
+    function isSamePlateNumber(plate1, plate2) {
+      if (!plate1 || !plate2) return false;
+      const p1 = String(plate1).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+      const p2 = String(plate2).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+      if (!p1 || !p2) return false;
+      return p1 === p2;
+    }
 
+    function isBookingStatusActive(status) {
+      const st = String(status || '').toLowerCase().trim();
+      const isInactive = (st === 'done' || st === 'selesai' || st === 'batal' || st === 'dibatalkan' || st === 'cancelled' || st === 'completed');
+      return !isInactive;
+    }
 
+    function findActiveBookingConflict(phone, plate, nameOrBookings, maybeBookings) {
+      const bookings = Array.isArray(nameOrBookings) ? nameOrBookings : maybeBookings;
+      if (!bookings || !Array.isArray(bookings)) return null;
+      const cleanPhone = String(phone || '').trim();
+      const cleanPlate = String(plate || '').trim();
 
+      return bookings.find(b => {
+        if (!b) return false;
+        // Hanya cek jika status booking belum selesai dan belum batal (bukan Done/Batal)
+        if (!isBookingStatusActive(b.status)) return false;
 
+        // 1. Validasi Plat Nomor Motor (EV)
+        if (cleanPlate && b.plate && isSamePlateNumber(cleanPlate, b.plate)) {
+          return true;
+        }
 
+        // 2. Validasi Nomor HP / WhatsApp
+        const bPhone = String(b.phone || b.phone_number || '').trim();
+        if (cleanPhone && bPhone && isSamePhoneNumber(cleanPhone, bPhone)) {
+          return true;
+        }
+
+        return false;
+      }) || null;
     }
 
 
@@ -72050,85 +71659,16 @@
 
 
       const cleanDigits = rawInput.replace(/\D/g, '');
+      const cleanAlphaNum = rawInput.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      if (!cleanDigits || cleanDigits.length < 4) {
-
-
-
-
-
-
-
+      if (cleanDigits.length < 3 && cleanAlphaNum.length < 3) {
         if (typeof showToast === 'function') {
-
-
-
-
-
-
-
-          showToast('Masukkan minimal 4 digit nomor HP / WhatsApp', 3000);
-
-
-
-
-
-
-
+          showToast('Masukkan minimal 3 karakter Plat Motor atau No. HP', 3000);
         } else {
-
-
-
-
-
-
-
-          alert('Masukkan minimal 4 digit nomor HP / WhatsApp');
-
-
-
-
-
-
-
+          alert('Masukkan minimal 3 karakter Plat Motor atau No. HP');
         }
-
-
-
-
-
-
-
         if (phoneInput) phoneInput.focus();
-
-
-
-
-
-
-
         return;
-
-
-
-
-
-
-
       }
 
 
@@ -72506,125 +72046,31 @@
 
 
       const matched = allList.filter(b => {
+        if (!b) return false;
 
+        // 1. Cocokkan Plat Nomor Motor
+        if (cleanAlphaNum && b.plate) {
+          const bPlateClean = String(b.plate).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+          if (bPlateClean.includes(cleanAlphaNum) || cleanAlphaNum.includes(bPlateClean)) return true;
+        }
 
+        // 2. Cocokkan Kode Booking
+        if (cleanAlphaNum && b.id) {
+          const bIdClean = String(b.id).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+          if (bIdClean.includes(cleanAlphaNum)) return true;
+        }
 
-
-
-
-
-        const bPhoneRaw = String(b.phone || '').trim();
-
-
-
-
-
-
-
+        // 3. Cocokkan Nomor HP / WhatsApp
+        const bPhoneRaw = String(b.phone || b.phone_number || '').trim();
         const bPhoneNormalized = normalizePhoneDigits(bPhoneRaw);
-
-
-
-
-
-
-
-        if (!bPhoneNormalized) return false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // Cocokkan nomor normalisasi atau substring
-
-
-
-
-
-
-
-        if (bPhoneNormalized.includes(normalizedInput)) return true;
-
-
-
-
-
-
-
-        if (normalizedInput.includes(bPhoneNormalized)) return true;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // Cocokkan 8 digit terakhir
-
-
-
-
-
-
-
-        const last8Input = normalizedInput.slice(-8);
-
-
-
-
-
-
-
-        const last8B = bPhoneNormalized.slice(-8);
-
-
-
-
-
-
-
-        if (last8Input && last8B && last8Input === last8B) return true;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if (bPhoneNormalized && normalizedInput) {
+          if (bPhoneNormalized.includes(normalizedInput) || normalizedInput.includes(bPhoneNormalized)) return true;
+          const last8Input = normalizedInput.slice(-8);
+          const last8B = bPhoneNormalized.slice(-8);
+          if (last8Input && last8B && last8Input === last8B) return true;
+        }
 
         return false;
-
-
-
-
-
-
-
       });
 
 
@@ -73449,286 +72895,52 @@
 
 
 
-    function showActiveBookingConflictPopup(booking, phone) {
+    let currentConflictPlate = '';
 
-
-
-
-
-
-
-      currentConflictPhone = phone || '';
-
-
-
-
-
-
-
+    function showActiveBookingConflictPopup(booking, phone, plate, name) {
+      currentConflictPhone = phone || (booking ? booking.phone : '') || '';
+      currentConflictPlate = plate || (booking ? booking.plate : '') || '';
       const modal = document.getElementById('bookingConflictModal');
-
-
-
-
-
-
+      const code = booking ? (booking.id || booking.booking_id || '-') : '-';
+      const status = booking ? (booking.status || 'Terjadwal') : 'Terjadwal';
+      const bPlate = booking ? (booking.plate || plate || '-') : (plate || '-');
+      const bPhone = phone || (booking ? booking.phone : '-') || '-';
+      const bName = (booking ? booking.name : name) || '-';
 
       if (!modal) {
-
-
-
-
-
-
-
-        const code = booking ? (booking.id || booking.booking_id || '-') : '-';
-
-
-
-
-
-
-
-        const status = booking ? (booking.status || 'Terjadwal') : 'Terjadwal';
-
-
-
-
-
-
-
         showPopup(
-
-
-
-
-
-
-
-          `Sudah terdapat booking dengan nomor <b>${code}</b> (Status: <b>${status}</b>).<br><br>Silakan cek riwayat untuk melihat atau membatalkan booking.`,
-
-
-
-
-
-
-
+          `Sudah terdapat booking dengan nomor <b>${code}</b> (Plat: <b>${bPlate}</b>, No HP: <b>${bPhone}</b>, Status: <b>${status}</b>).<br><br>Silakan cek riwayat untuk melihat atau membatalkan booking.`,
           'Booking Sudah Terdaftar',
-
-
-
-
-
-
-
           'warning'
-
-
-
-
-
-
-
         );
-
-
-
-
-
-
-
         return;
-
-
-
-
-
-
-
       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       const codeEl = document.getElementById('conflictBookingCode');
-
-
-
-
-
-
-
+      const plateEl = document.getElementById('conflictPlate');
+      const nameEl = document.getElementById('conflictName');
       const phoneEl = document.getElementById('conflictPhone');
-
-
-
-
-
-
-
       const statusEl = document.getElementById('conflictStatus');
-
-
-
-
-
-
-
       const schedEl = document.getElementById('conflictSchedule');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      if (codeEl) codeEl.innerText = booking ? (booking.id || booking.booking_id || '-') : '-';
-
-
-
-
-
-
-
-      if (phoneEl) phoneEl.innerText = phone || (booking ? booking.phone : '-');
-
-
-
-
-
-
-
-      if (statusEl) statusEl.innerText = booking ? (booking.status || 'Terjadwal') : 'Terjadwal';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      if (codeEl) codeEl.innerText = code;
+      if (plateEl) plateEl.innerText = bPlate;
+      if (nameEl) nameEl.innerText = bName;
+      if (phoneEl) phoneEl.innerText = bPhone;
+      if (statusEl) statusEl.innerText = status;
 
       let schedText = '-';
-
-
-
-
-
-
-
       if (booking) {
-
-
-
-
-
-
-
         const d = booking.date || '';
-
-
-
-
-
-
-
         const s = booking.timeDisplay || booking.slot || '';
-
-
-
-
-
-
-
         schedText = d ? `${d} • ${s}` : s || '-';
-
-
-
-
-
-
-
       }
-
-
-
-
-
-
-
       if (schedEl) schedEl.innerText = schedText;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       modal.classList.remove('hidden');
-
-
-
-
-
-
-
       modal.style.setProperty('display', 'flex', 'important');
-
-
-
-
-
-
-
       pushModalHistoryState('bookingConflictModal');
-
-
-
-
-
-
-
       if (window.lucide && lucide.createIcons) lucide.createIcons();
-
-
-
-
-
-
-
     }
 
 
@@ -73818,37 +73030,9 @@
 
 
     function viewConflictBookingHistory() {
-
-
-
-
-
-
-
-      const phoneToSearch = currentConflictPhone;
-
-
-
-
-
-
-
+      const keywordToSearch = currentConflictPhone || currentConflictPlate || '';
       closeBookingConflictModal();
-
-
-
-
-
-
-
-      openBookingHistoryModal(phoneToSearch);
-
-
-
-
-
-
-
+      openBookingHistoryModal(keywordToSearch);
     }
 
 
@@ -89535,38 +88719,14 @@
 
 
 
-          // Jika Supabase kosong (0 data), cache lokal disinkronkan
-
-
-
-
-
-
-
+          // Jika Supabase kosong (0 data), pertahankan data cache lokal dan sinkronkan ke Supabase
           if (localList.length > 0) {
-
-
-
-
-
-
-
-            saveBookings([]);
-
-
-
-
-
-
-
-            console.log('✅ [Supabase Bookings App] Supabase kosong (0 data). Cache lokal dibersihkan.');
-
-
-
-
-
-
-
+            console.log(`ℹ️ [Supabase Bookings App] Supabase kosong (0 data). Mempertahankan ${localList.length} data cache lokal.`);
+            localList.forEach(b => {
+              if (b && b.id && typeof syncBookingToSupabase === "function") {
+                syncBookingToSupabase(b);
+              }
+            });
           }
 
 
