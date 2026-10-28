@@ -42964,29 +42964,6 @@
           }
         } catch (e) {}
       }
-
-
-
-
-
-
-
-        } catch (e) {}
-
-
-
-
-
-
-
-      }
-
-
-
-
-
-
-
     }
 
 
@@ -47229,16 +47206,27 @@
         modal.style.setProperty('display', 'flex', 'important');
       }
 
-      setTimeout(() => {
-        try {
-          window.print();
-        } catch(e) {
-          console.warn('Auto print error:', e);
+      // Auto-countdown tanpa memunculkan dialog cetak (window.print)
+      if (kioskTicketCountdownInterval) clearInterval(kioskTicketCountdownInterval);
+      let timeLeft = 8;
+      const countEl = document.getElementById('kioskTicketCountdown');
+      if (countEl) countEl.innerText = timeLeft;
+      kioskTicketCountdownInterval = setInterval(() => {
+        timeLeft--;
+        if (countEl) countEl.innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(kioskTicketCountdownInterval);
+          kioskTicketCountdownInterval = null;
+          closeKioskTicketModal();
         }
-      }, 400);
+      }, 1000);
     }
 
     function closeKioskTicketModal() {
+      if (kioskTicketCountdownInterval) {
+        clearInterval(kioskTicketCountdownInterval);
+        kioskTicketCountdownInterval = null;
+      }
       const modal = document.getElementById('kioskTicketModal');
       if (modal) {
         modal.classList.add('hidden');
@@ -49254,19 +49242,20 @@
 
 
 
-      setTimeout(() => {
-
-        try {
-
-          window.print();
-
-        } catch(e) {
-
-          console.warn('Print checkin queue ticket failed:', e);
-
+      // Auto-countdown tanpa memunculkan dialog cetak (window.print)
+      if (kioskTicketCountdownInterval) clearInterval(kioskTicketCountdownInterval);
+      let timeLeft = 8;
+      const countEl = document.getElementById('kioskTicketCountdown');
+      if (countEl) countEl.innerText = timeLeft;
+      kioskTicketCountdownInterval = setInterval(() => {
+        timeLeft--;
+        if (countEl) countEl.innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(kioskTicketCountdownInterval);
+          kioskTicketCountdownInterval = null;
+          closeKioskTicketModal();
         }
-
-      }, 300);
+      }, 1000);
 
     }
 
