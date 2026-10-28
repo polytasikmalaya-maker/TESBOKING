@@ -42747,6 +42747,20 @@
 
 
 
+    let appVoiceBroadcastChannel = null;
+    function getAppVoiceBroadcastChannel() {
+      if (!supabaseClient) return null;
+      if (!appVoiceBroadcastChannel) {
+        try {
+          appVoiceBroadcastChannel = supabaseClient.channel('polytron-voice-broadcast');
+          appVoiceBroadcastChannel.subscribe(function(status) {
+            console.log('[Supabase App Voice Channel] Status:', status);
+          });
+        } catch(e) {}
+      }
+      return appVoiceBroadcastChannel;
+    }
+
     function broadcastVoiceCall(text, booking) {
 
 
@@ -42923,34 +42937,33 @@
 
 
 
-      // Broadcast ke perangkat lain (HP -> TV Monitor) via MQTT
+      // JALUR UTAMA 1: Supabase Realtime Broadcast (WebSocket TLS resmi, stabil 99.9%, tanpa jeda)
+      try {
+        const ch = getAppVoiceBroadcastChannel();
+        if (ch) {
+          ch.send({
+            type: 'broadcast',
+            event: 'voice_call',
+            payload: payload
+          }).then(function(res) {
+            console.log('Voice call broadcast sent via Supabase:', res);
+          }).catch(function(err) {
+            console.warn('Supabase Broadcast Error:', err);
+          });
+        }
+      } catch (e) {
+        console.warn('Supabase Broadcast Exception:', e);
+      }
 
-
-
-
-
-
-
+      // JALUR UTAMA 2: Broadcast ke perangkat lain (HP -> TV Monitor) via MQTT (Redundansi Ganda)
       if (mqttClient && mqttClient.connected) {
-
-
-
-
-
-
-
         try {
-
-
-
-
-
-
-
           mqttClient.publish('polytron/ev_service/voice_call', JSON.stringify(payload));
           if (payload.siteCode) {
             try { mqttClient.publish('polytron/ev/' + payload.siteCode + '/call', JSON.stringify(payload)); } catch(e) {}
           }
+        } catch (e) {}
+      }
 
 
 
@@ -44646,7 +44659,7 @@
 
 
 
-      if (lastAppVoiceCallKey === callKey && (now - lastAppVoiceCallTime < 8000)) {
+      if (lastAppVoiceCallKey === callKey && (now - lastAppVoiceCallTime < 2500)) {
 
 
 
@@ -90123,6 +90136,7 @@
 
 
       if (!supabaseClient) return;
+      try { getAppVoiceBroadcastChannel(); } catch(e) {}
 
 
 
