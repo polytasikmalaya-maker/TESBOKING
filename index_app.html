@@ -50041,6 +50041,12 @@
         handleModalDamageChange(selectModal.value);
       }
     }
+    function populateModalDamageDropdown() {
+      populateDamageDropdowns();
+    }
+    window.populateModalDamageDropdown = populateModalDamageDropdown;
+    window.populateDamageDropdowns = populateDamageDropdowns;
+
 
     function handleStage2DamageChange(damageId) {
       const selectConsumer = document.getElementById('inputDamageMaster');
@@ -57582,7 +57588,7 @@
 
 
 
-      populateModalDamageDropdown();
+      populateDamageDropdowns();
 
 
 
@@ -82380,7 +82386,7 @@
 
 
 
-        populateModalDamageDropdown();
+        populateDamageDropdowns();
 
 
 
@@ -82812,7 +82818,7 @@
 
 
 
-        populateModalDamageDropdown();
+        populateDamageDropdowns();
 
 
 
