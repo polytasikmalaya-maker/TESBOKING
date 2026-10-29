@@ -1,8 +1,9 @@
 {
-  "name": "Polytron EV Service Booking",
-  "short_name": "Polytron EV",
+  "name": "Aplikasi Booking & Operasional Antrean - POLYTRON EV",
+  "short_name": "Booking EV",
   "start_url": "./index.html",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "background_color": "#0f172a",
   "theme_color": "#dc2626",
   "orientation": "portrait-primary",
